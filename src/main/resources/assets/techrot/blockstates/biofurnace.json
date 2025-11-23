@@ -1,0 +1,15 @@
+{
+  "forge_marker":1,
+  "variants": {
+    "normal" : {
+      "model": "techrot:biofurnace"
+    },
+    "inventory": {
+      "model": "techrot:biofurnace"
+    },
+    "facing=north": { "model": "techrot:biofurnace" },
+    "facing=south": { "model": "techrot:biofurnace", "y": 180 },
+    "facing=west":  { "model": "techrot:biofurnace", "y": 270 },
+    "facing=east":  { "model": "techrot:biofurnace", "y": 90 }
+  }
+}
