@@ -4,7 +4,7 @@
 	"parent": "biofleshcloner",
 	"texture_size": [64, 64],
 	"textures": {
-		"1": "1A-Minecraft_Textures/1.12MODJAM/blocks/biofleshcloner",
+		"1": "techrot:block/biofleshcloner",
 		"particle": "biofleshcloner"
 	},
 	"elements": [
