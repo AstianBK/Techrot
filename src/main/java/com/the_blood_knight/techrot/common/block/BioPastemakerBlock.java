@@ -1,6 +1,7 @@
 package com.the_blood_knight.techrot.common.block;
 
 import com.the_blood_knight.techrot.Techrot;
+import com.the_blood_knight.techrot.common.TRegistry;
 import com.the_blood_knight.techrot.common.tile_block.BioFurnaceTileBlock;
 import com.the_blood_knight.techrot.common.tile_block.BioPastemakerTileBlock;
 import net.minecraft.block.BlockHorizontal;
@@ -32,13 +33,13 @@ public class BioPastemakerBlock extends BlockTileBase{
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 
     }
+
     @SideOnly(Side.CLIENT)
     public BlockRenderLayer getRenderLayer()
     {
         return BlockRenderLayer.CUTOUT;
     }
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
-    {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (worldIn.isRemote)
         {
             return true;
@@ -48,8 +49,7 @@ public class BioPastemakerBlock extends BlockTileBase{
             TileEntity tileentity = worldIn.getTileEntity(pos);
 
 
-            if (tileentity instanceof BioPastemakerTileBlock)
-            {
+            if (tileentity instanceof BioPastemakerTileBlock) {
                 playerIn.openGui(Techrot.main,1,worldIn,pos.getX(),pos.getY(),pos.getZ());
                 //playerIn.addStat(StatList.FURNACE_INTERACTION);
             }
@@ -64,14 +64,12 @@ public class BioPastemakerBlock extends BlockTileBase{
     }
 
 
-    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
-    {
+    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
         return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
     }
 
 
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
-    {
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
 
         if (stack.hasDisplayName())
@@ -80,13 +78,33 @@ public class BioPastemakerBlock extends BlockTileBase{
         }
     }
 
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
-    {
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
 
 
         super.breakBlock(worldIn, pos, state);
     }
+    public boolean validConnectPipe(IBlockState state,EnumFacing facing){
+        switch (state.getValue(FACING)){
+            case EAST:{
+                return facing==EnumFacing.WEST || facing==EnumFacing.SOUTH || facing==EnumFacing.NORTH;
+            }
+            case WEST:{
+                return facing==EnumFacing.EAST   || facing==EnumFacing.SOUTH || facing==EnumFacing.NORTH;
 
+            }
+            case SOUTH:{
+                return facing==EnumFacing.WEST || facing==EnumFacing.EAST || facing==EnumFacing.NORTH;
+
+            }
+            case NORTH:{
+                return facing==EnumFacing.WEST || facing==EnumFacing.EAST || facing==EnumFacing.SOUTH;
+
+            }
+            default:{
+                return false;
+            }
+        }
+    }
 
     public boolean hasComparatorInputOverride(IBlockState state)
     {
@@ -94,29 +112,22 @@ public class BioPastemakerBlock extends BlockTileBase{
     }
 
 
-    public int getComparatorInputOverride(IBlockState blockState, World worldIn, BlockPos pos)
-    {
+    public int getComparatorInputOverride(IBlockState blockState, World worldIn, BlockPos pos) {
         return Container.calcRedstone(worldIn.getTileEntity(pos));
     }
 
     public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state)
     {
-        return new ItemStack(Blocks.FURNACE);
+        return new ItemStack(TRegistry.BIOPASTEMAKER);
     }
 
-    /**
-     * The type of render function called. MODEL for mixed tesr and static model, MODELBLOCK_ANIMATED for TESR-only,
-     * LIQUID for vanilla liquids, INVISIBLE to skip all rendering
-     * @deprecated call via {@link IBlockState#getRenderType()} whenever possible. Implementing/overriding is fine.
-     */
+
     public EnumBlockRenderType getRenderType(IBlockState state)
     {
         return EnumBlockRenderType.MODEL;
     }
 
-    /**
-     * Convert the given metadata into a BlockState for this Block
-     */
+
     public IBlockState getStateFromMeta(int meta)
     {
         EnumFacing enumfacing = EnumFacing.byIndex(meta);
@@ -129,37 +140,26 @@ public class BioPastemakerBlock extends BlockTileBase{
         return this.getDefaultState().withProperty(FACING, enumfacing);
     }
 
-    /**
-     * Convert the BlockState into the correct metadata value
-     */
+
     public int getMetaFromState(IBlockState state)
     {
         return ((EnumFacing)state.getValue(FACING)).getIndex();
     }
 
-    /**
-     * Returns the blockstate with the given rotation from the passed blockstate. If inapplicable, returns the passed
-     * blockstate.
-     * @deprecated call via {@link IBlockState#withRotation(Rotation)} whenever possible. Implementing/overriding is
-     * fine.
-     */
+
     public IBlockState withRotation(IBlockState state, Rotation rot)
     {
         return state.withProperty(FACING, rot.rotate((EnumFacing)state.getValue(FACING)));
     }
 
-    /**
-     * Returns the blockstate with the given mirror of the passed blockstate. If inapplicable, returns the passed
-     * blockstate.
-     * @deprecated call via {@link IBlockState#withMirror(Mirror)} whenever possible. Implementing/overriding is fine.
-     */
+
     public IBlockState withMirror(IBlockState state, Mirror mirrorIn)
     {
         return state.withRotation(mirrorIn.toRotation((EnumFacing)state.getValue(FACING)));
     }
     protected BlockStateContainer createBlockState()
     {
-        return new BlockStateContainer(this, new IProperty[] {FACING});
+        return new BlockStateContainer(this, FACING);
     }
 
 }

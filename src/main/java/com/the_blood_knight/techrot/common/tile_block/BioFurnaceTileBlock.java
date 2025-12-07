@@ -1,8 +1,10 @@
 package com.the_blood_knight.techrot.common.tile_block;
 
+import com.the_blood_knight.techrot.Techrot;
+import com.the_blood_knight.techrot.common.api.INutritionBlock;
 import com.the_blood_knight.techrot.common.block.BioFurnaceBlock;
+import com.the_blood_knight.techrot.common.container.BioFurnaceContainer;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockFurnace;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -20,27 +22,23 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.datafix.DataFixer;
 import net.minecraft.util.datafix.FixTypes;
 import net.minecraft.util.datafix.walkers.ItemStackDataLists;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BioFurnaceTileBlock extends TileEntityLockable implements ITickable, ISidedInventory {
+public class BioFurnaceTileBlock extends TileEntityLockable implements ITickable, ISidedInventory, INutritionBlock {
     private static final int[] SLOTS_TOP = new int[] {0};
     private static final int[] SLOTS_BOTTOM = new int[] {2, 1};
     private static final int[] SLOTS_SIDES = new int[] {1};
-    /** The ItemStacks that hold the items currently being used in the furnace */
     private NonNullList<ItemStack> furnaceItemStacks = NonNullList.<ItemStack>withSize(3, ItemStack.EMPTY);
-    private int furnaceBurnTime;
-    private int currentItemBurnTime;
+    private int currentNutrition;
+    private int maxNutrient = 1000;
     private int cookTime;
     private int totalCookTime;
     private String furnaceCustomName;
 
-    /**
-     * Returns the number of slots in the inventory.
-     */
-    public int getSizeInventory()
-    {
+    public int getSizeInventory() {
         return this.furnaceItemStacks.size();
     }
 
@@ -57,33 +55,25 @@ public class BioFurnaceTileBlock extends TileEntityLockable implements ITickable
         return true;
     }
 
-    /**
-     * Returns the stack in the given slot.
-     */
+
     public ItemStack getStackInSlot(int index)
     {
         return this.furnaceItemStacks.get(index);
     }
 
-    /**
-     * Removes up to a specified number of items from an inventory slot and returns them in a new stack.
-     */
+
     public ItemStack decrStackSize(int index, int count)
     {
         return ItemStackHelper.getAndSplit(this.furnaceItemStacks, index, count);
     }
 
-    /**
-     * Removes a stack from the given slot and returns it.
-     */
+
     public ItemStack removeStackFromSlot(int index)
     {
         return ItemStackHelper.getAndRemove(this.furnaceItemStacks, index);
     }
 
-    /**
-     * Sets the given item stack to the specified slot in the inventory (can be crafting or armor sections).
-     */
+
     public void setInventorySlotContents(int index, ItemStack stack)
     {
         ItemStack itemstack = this.furnaceItemStacks.get(index);
@@ -120,8 +110,7 @@ public class BioFurnaceTileBlock extends TileEntityLockable implements ITickable
         this.furnaceCustomName = p_145951_1_;
     }
 
-    public static void registerFixesFurnace(DataFixer fixer)
-    {
+    public static void registerFixesFurnace(DataFixer fixer) {
         fixer.registerWalker(FixTypes.BLOCK_ENTITY, new ItemStackDataLists(TileEntityFurnace.class, new String[] {"Items"}));
     }
 
@@ -130,10 +119,10 @@ public class BioFurnaceTileBlock extends TileEntityLockable implements ITickable
         super.readFromNBT(compound);
         this.furnaceItemStacks = NonNullList.<ItemStack>withSize(this.getSizeInventory(), ItemStack.EMPTY);
         ItemStackHelper.loadAllItems(compound, this.furnaceItemStacks);
-        this.furnaceBurnTime = compound.getInteger("BurnTime");
+        this.currentNutrition = compound.getInteger("BurnTime");
         this.cookTime = compound.getInteger("CookTime");
         this.totalCookTime = compound.getInteger("CookTimeTotal");
-        this.currentItemBurnTime = getItemBurnTime(this.furnaceItemStacks.get(1));
+        this.maxNutrient = 1000;
 
         if (compound.hasKey("CustomName", 8))
         {
@@ -144,7 +133,7 @@ public class BioFurnaceTileBlock extends TileEntityLockable implements ITickable
     public NBTTagCompound writeToNBT(NBTTagCompound compound)
     {
         super.writeToNBT(compound);
-        compound.setInteger("BurnTime", (short)this.furnaceBurnTime);
+        compound.setInteger("BurnTime", (short)this.currentNutrition);
         compound.setInteger("CookTime", (short)this.cookTime);
         compound.setInteger("CookTimeTotal", (short)this.totalCookTime);
         ItemStackHelper.saveAllItems(compound, this.furnaceItemStacks);
@@ -165,12 +154,9 @@ public class BioFurnaceTileBlock extends TileEntityLockable implements ITickable
         return 64;
     }
 
-    /**
-     * Furnace isBurning
-     */
-    public boolean isBurning()
-    {
-        return this.furnaceBurnTime > 0;
+
+    public boolean isBurning() {
+        return this.currentNutrition > 0;
     }
 
     @SideOnly(Side.CLIENT)
@@ -187,44 +173,25 @@ public class BioFurnaceTileBlock extends TileEntityLockable implements ITickable
         boolean flag = this.isBurning();
         boolean flag1 = false;
 
-        if (this.isBurning())
-        {
-            --this.furnaceBurnTime;
-        }
 
-        if (!this.world.isRemote)
-        {
-            ItemStack itemstack = this.furnaceItemStacks.get(1);
 
-            if (this.isBurning() || !itemstack.isEmpty() && !((ItemStack)this.furnaceItemStacks.get(0)).isEmpty())
-            {
-                if (!this.isBurning() && this.canSmelt())
-                {
-                    this.furnaceBurnTime = getItemBurnTime(itemstack);
-                    this.currentItemBurnTime = this.furnaceBurnTime;
+
+        if (!this.world.isRemote) {
+            if (this.isBurning() || !((ItemStack)this.furnaceItemStacks.get(0)).isEmpty()) {
+                if (this.canSmelt()) {
 
                     if (this.isBurning())
                     {
                         flag1 = true;
 
-                        if (!itemstack.isEmpty())
-                        {
-                            Item item = itemstack.getItem();
-                            itemstack.shrink(1);
-
-                            if (itemstack.isEmpty())
-                            {
-                                ItemStack item1 = item.getContainerItem(itemstack);
-                                this.furnaceItemStacks.set(1, item1);
-                            }
-                        }
                     }
                 }
 
-                if (this.isBurning() && this.canSmelt())
-                {
+                if (this.isBurning() && this.canSmelt()) {
                     ++this.cookTime;
-
+                    if(this.cookTime%10 == 0){
+                        this.currentNutrition-=5;
+                    }
                     if (this.cookTime == this.totalCookTime)
                     {
                         this.cookTime = 0;
@@ -233,8 +200,7 @@ public class BioFurnaceTileBlock extends TileEntityLockable implements ITickable
                         flag1 = true;
                     }
                 }
-                else
-                {
+                else {
                     this.cookTime = 0;
                 }
             }
@@ -250,22 +216,20 @@ public class BioFurnaceTileBlock extends TileEntityLockable implements ITickable
             }
         }
 
-        if (flag1)
-        {
+        if (flag1) {
             this.markDirty();
         }
     }
 
-    public int getCookTime(ItemStack stack)
-    {
+    private void extractNutrient() {
+    }
+
+    public int getCookTime(ItemStack stack) {
         return 200;
     }
 
-    /**
-     * Returns true if the furnace can smelt an item, i.e. has a source item, destination stack isn't full, etc.
-     */
-    private boolean canSmelt()
-    {
+
+    private boolean canSmelt() {
         if (((ItemStack)this.furnaceItemStacks.get(0)).isEmpty())
         {
             return false;
@@ -280,7 +244,7 @@ public class BioFurnaceTileBlock extends TileEntityLockable implements ITickable
             }
             else
             {
-                ItemStack itemstack1 = this.furnaceItemStacks.get(2);
+                ItemStack itemstack1 = this.furnaceItemStacks.get(1);
 
                 if (itemstack1.isEmpty())
                 {
@@ -302,41 +266,32 @@ public class BioFurnaceTileBlock extends TileEntityLockable implements ITickable
         }
     }
 
-    /**
-     * Turn one item from the furnace source stack into the appropriate smelted item in the furnace result stack
-     */
-    public void smeltItem()
-    {
+
+
+    public void smeltItem() {
         if (this.canSmelt())
         {
             ItemStack itemstack = this.furnaceItemStacks.get(0);
             ItemStack itemstack1 = FurnaceRecipes.instance().getSmeltingResult(itemstack);
-            ItemStack itemstack2 = this.furnaceItemStacks.get(2);
+            ItemStack itemstack2 = this.furnaceItemStacks.get(1);
 
-            if (itemstack2.isEmpty())
-            {
-                this.furnaceItemStacks.set(2, itemstack1.copy());
+            if (itemstack2.isEmpty()) {
+                this.furnaceItemStacks.set(1, itemstack1.copy());
             }
-            else if (itemstack2.getItem() == itemstack1.getItem())
-            {
+            else if (itemstack2.getItem() == itemstack1.getItem()) {
                 itemstack2.grow(itemstack1.getCount());
             }
 
-            if (itemstack.getItem() == Item.getItemFromBlock(Blocks.SPONGE) && itemstack.getMetadata() == 1 && !((ItemStack)this.furnaceItemStacks.get(1)).isEmpty() && ((ItemStack)this.furnaceItemStacks.get(1)).getItem() == Items.BUCKET)
-            {
-                this.furnaceItemStacks.set(1, new ItemStack(Items.WATER_BUCKET));
+            if (itemstack.getItem() == Item.getItemFromBlock(Blocks.SPONGE) && itemstack.getMetadata() == 1 && !((ItemStack)this.furnaceItemStacks.get(1)).isEmpty() && ((ItemStack)this.furnaceItemStacks.get(1)).getItem() == Items.BUCKET) {
+                this.furnaceItemStacks.set(0, new ItemStack(Items.WATER_BUCKET));
             }
 
             itemstack.shrink(1);
         }
     }
 
-    /**
-     * Returns the number of ticks that the supplied fuel item will keep the furnace burning, or 0 if the item isn't
-     * fuel
-     */
-    public static int getItemBurnTime(ItemStack stack)
-    {
+
+    public static int getItemBurnTime(ItemStack stack) {
         if (stack.isEmpty())
         {
             return 0;
@@ -452,20 +407,17 @@ public class BioFurnaceTileBlock extends TileEntityLockable implements ITickable
         }
     }
 
-    public void openInventory(EntityPlayer player)
-    {
+    public void openInventory(EntityPlayer player) {
     }
 
-    public void closeInventory(EntityPlayer player)
-    {
+    public void closeInventory(EntityPlayer player) {
     }
 
     /**
      * Returns true if automation is allowed to insert the given stack (ignoring stack size) into the given slot. For
      * guis use Slot.isItemValid
      */
-    public boolean isItemValidForSlot(int index, ItemStack stack)
-    {
+    public boolean isItemValidForSlot(int index, ItemStack stack) {
         if (index == 2)
         {
             return false;
@@ -481,8 +433,7 @@ public class BioFurnaceTileBlock extends TileEntityLockable implements ITickable
         }
     }
 
-    public int[] getSlotsForFace(EnumFacing side)
-    {
+    public int[] getSlotsForFace(EnumFacing side) {
         if (side == EnumFacing.DOWN)
         {
             return SLOTS_BOTTOM;
@@ -493,17 +444,14 @@ public class BioFurnaceTileBlock extends TileEntityLockable implements ITickable
         }
     }
 
-    /**
-     * Returns true if automation can insert the given item in the given slot from the given side.
-     */
-    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction)
-    {
+
+
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
         return this.isItemValidForSlot(index, itemStackIn);
     }
 
-    /**
-     * Returns true if automation can extract the given item in the given slot from the given side.
-     */
+
+
     public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction)
     {
         if (direction == EnumFacing.DOWN && index == 1)
@@ -519,24 +467,22 @@ public class BioFurnaceTileBlock extends TileEntityLockable implements ITickable
         return true;
     }
 
-    public String getGuiID()
-    {
+    public String getGuiID() {
         return "techrot:biofurnace";
     }
 
     public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn)
     {
-        return new ContainerFurnace(playerInventory, this);
+        return new BioFurnaceContainer(playerInventory, this);
     }
 
-    public int getField(int id)
-    {
+    public int getField(int id) {
         switch (id)
         {
             case 0:
-                return this.furnaceBurnTime;
+                return this.currentNutrition;
             case 1:
-                return this.currentItemBurnTime;
+                return this.maxNutrient;
             case 2:
                 return this.cookTime;
             case 3:
@@ -551,10 +497,10 @@ public class BioFurnaceTileBlock extends TileEntityLockable implements ITickable
         switch (id)
         {
             case 0:
-                this.furnaceBurnTime = value;
+                this.currentNutrition = value;
                 break;
             case 1:
-                this.currentItemBurnTime = value;
+                this.maxNutrient = value;
                 break;
             case 2:
                 this.cookTime = value;
@@ -591,5 +537,26 @@ public class BioFurnaceTileBlock extends TileEntityLockable implements ITickable
             else
                 return (T) handlerSide;
         return super.getCapability(capability, facing);
+    }
+
+    @Override
+    public int getNutrition() {
+        return this.getField(0);
+    }
+
+    @Override
+    public void setNutrition(int value) {
+        //this.setField(0,value);
+    }
+
+    @Override
+    public void extractNutrition() {
+        this.currentNutrition++;
+        this.markDirty();
+    }
+
+    @Override
+    public boolean canExtract(BlockPos pos) {
+        return this.currentNutrition<this.maxNutrient;
     }
 }

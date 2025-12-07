@@ -1,8 +1,10 @@
 package com.the_blood_knight.techrot.client.screen;
 
 import com.the_blood_knight.techrot.Techrot;
+import com.the_blood_knight.techrot.common.container.BioPastemakerContainer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ContainerFurnace;
 import net.minecraft.inventory.IInventory;
@@ -24,9 +26,10 @@ public class BioPastemakerScreen extends GuiContainer {
 
     public BioPastemakerScreen(InventoryPlayer playerInv, IInventory furnaceInv)
     {
-        super(new ContainerFurnace(playerInv, furnaceInv));
+        super(new BioPastemakerContainer(playerInv, furnaceInv));
         this.playerInventory = playerInv;
         this.tileFurnace = furnaceInv;
+
     }
 
     /**
@@ -52,33 +55,29 @@ public class BioPastemakerScreen extends GuiContainer {
     /**
      * Draws the background layer of this container (behind the items).
      */
-    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY)
-    {
-        int frame = (int) ((1.25F * (partialTicks+this.playerInventory.player.ticksExisted)) % 8);
+    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+        int frame = (int) ((0.5F * (partialTicks+this.playerInventory.player.ticksExisted)) % 8);
 
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.getTextureManager().bindTexture(FRAMES[frame]);
-        int i = (this.width - this.xSize) / 2;
-        int j = (this.height - this.ySize) / 2;
-        this.drawTexturedModalRect(i, j, 0, 0, this.xSize, this.ySize);
+        int i = (this.width - 176) / 2;
+        int j = (this.height - 166) / 2;
+        this.drawTexturedModalRect(i, j, 0, 0, 176, 166);
+        int eatingProgress = getEat(34);
+        this.drawTexturedModalRect(i + 79 ,j + 26 ,176,0,eatingProgress+1,19);
+        int nutrient = getNutrition(49);
+        this.drawTexturedModalRect(i+ 114 ,j+26,176,20,nutrient+1,18);
     }
 
-    private int getCookProgressScaled(int pixels)
-    {
-        int i = this.tileFurnace.getField(2);
-        int j = this.tileFurnace.getField(3);
-        return j != 0 && i != 0 ? i * pixels / j : 0;
-    }
 
-    private int getBurnLeftScaled(int pixels)
-    {
+
+    private int getNutrition(int pixels) {
         int i = this.tileFurnace.getField(1);
+        int j = this.tileFurnace.getField(0);
+        return j != 0 && i != 0 ? (int) (((float) i / (float) j) * pixels) : 0;
+    }
 
-        if (i == 0)
-        {
-            i = 200;
-        }
-
-        return this.tileFurnace.getField(0) * pixels / i;
+    private int getEat(int pixels) {
+        return (int) (((float)this.tileFurnace.getField(2) / 200.0F) * pixels);
     }
 }

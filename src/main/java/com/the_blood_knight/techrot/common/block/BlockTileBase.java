@@ -35,6 +35,9 @@ public class BlockTileBase extends BlockBase implements ITileEntityProvider {
         return worldIn.getBlockState(pos.offset(facing)).getMaterial() == Material.CACTUS;
     }
 
+    public boolean validConnectPipe(IBlockState state,EnumFacing facing){
+        return false;
+    }
     protected boolean hasInvalidNeighbor(World worldIn, BlockPos pos)
     {
         return this.isInvalidNeighbor(worldIn, pos, EnumFacing.NORTH) || this.isInvalidNeighbor(worldIn, pos, EnumFacing.SOUTH) || this.isInvalidNeighbor(worldIn, pos, EnumFacing.WEST) || this.isInvalidNeighbor(worldIn, pos, EnumFacing.EAST);
@@ -100,8 +103,7 @@ public class BlockTileBase extends BlockBase implements ITileEntityProvider {
      * @deprecated call via {@link IBlockState#onBlockEventReceived(World,BlockPos,int,int)} whenever possible.
      * Implementing/overriding is fine.
      */
-    public boolean eventReceived(IBlockState state, World worldIn, BlockPos pos, int id, int param)
-    {
+    public boolean eventReceived(IBlockState state, World worldIn, BlockPos pos, int id, int param) {
         super.eventReceived(state, worldIn, pos, id, param);
         TileEntity tileentity = worldIn.getTileEntity(pos);
         return tileentity == null ? false : tileentity.receiveClientEvent(id, param);

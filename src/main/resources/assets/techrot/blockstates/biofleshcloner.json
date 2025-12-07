@@ -1,0 +1,15 @@
+{
+  "forge_marker":1,
+  "variants": {
+    "normal" : {
+      "model": "techrot:biofleshcloner"
+    },
+    "inventory": {
+      "model": "techrot:biofleshcloner"
+    },
+    "facing=north": { "model": "techrot:biofleshcloner" },
+    "facing=south": { "model": "techrot:biofleshcloner", "y": 180 },
+    "facing=west":  { "model": "techrot:biofleshcloner", "y": 270 },
+    "facing=east":  { "model": "techrot:biofleshcloner", "y": 90 }
+  }
+}

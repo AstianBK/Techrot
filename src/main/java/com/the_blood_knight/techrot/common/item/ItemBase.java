@@ -11,8 +11,9 @@ public class ItemBase extends Item implements IRegisterable, ICreativeTabbable {
 	protected String name;	
 	
 	public ItemBase(String name) {
-		this.name = name;	
-		
+		this.name = name;
+		this.setCreativeTab(TRegistry.TECHROT_TAB);
+
 		updateRegistryAndLocalizedName(name);
 	}
 	public ItemBase(ToolMaterial material, String name) {

@@ -6,6 +6,10 @@
     },
     "inventory": {
       "model": "techrot:biopastemaker"
-    }
+    },
+    "facing=north": { "model": "techrot:biopastemaker" },
+    "facing=south": { "model": "techrot:biopastemaker", "y": 180 },
+    "facing=west":  { "model": "techrot:biopastemaker", "y": 270 },
+    "facing=east":  { "model": "techrot:biopastemaker", "y": 90 }
   }
 }
