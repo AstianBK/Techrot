@@ -1,0 +1,12 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "techrot:item/bio_extractor_empty"
+  },
+  "overrides": [
+    {
+      "predicate": { "minecraft:fill": 1.0 },
+      "model": "techrot:item/bio_extractor_full"
+    }
+  ]
+}

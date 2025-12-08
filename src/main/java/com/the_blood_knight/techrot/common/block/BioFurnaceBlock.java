@@ -51,9 +51,28 @@ public class BioFurnaceBlock extends BlockTileBase {
         return Item.getItemFromBlock(TRegistry.BIOFURNACE);
     }
 
-    /**
-     * Called after the block is set in the Chunk data, but before the Tile Entity is set
-     */
+    public boolean validConnectPipe(IBlockState state,EnumFacing facing){
+        switch (state.getValue(FACING)){
+            case EAST:{
+                return facing==EnumFacing.WEST || facing==EnumFacing.SOUTH || facing==EnumFacing.NORTH;
+            }
+            case WEST:{
+                return facing==EnumFacing.EAST   || facing==EnumFacing.SOUTH || facing==EnumFacing.NORTH;
+
+            }
+            case SOUTH:{
+                return facing==EnumFacing.WEST || facing==EnumFacing.EAST || facing==EnumFacing.NORTH;
+
+            }
+            case NORTH:{
+                return facing==EnumFacing.WEST || facing==EnumFacing.EAST || facing==EnumFacing.SOUTH;
+
+            }
+            default:{
+                return false;
+            }
+        }
+    }
     public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
         this.setDefaultFacing(worldIn, pos, state);
     }
@@ -143,8 +162,7 @@ public class BioFurnaceBlock extends BlockTileBase {
         {
             TileEntity tileentity = worldIn.getTileEntity(pos);
 
-            if (tileentity instanceof BioFurnaceTileBlock)
-            {
+            if (tileentity instanceof BioFurnaceTileBlock) {
                 playerIn.openGui(Techrot.main,0,worldIn,pos.getX(),pos.getY(),pos.getZ());
                 playerIn.addStat(StatList.FURNACE_INTERACTION);
             }
@@ -179,26 +197,18 @@ public class BioFurnaceBlock extends BlockTileBase {
         }
     }
 
-    /**
-     * Returns a new instance of a block's tile entity class. Called on placing the block.
-     */
+
     public TileEntity createNewTileEntity(World worldIn, int meta)
     {
         return new BioFurnaceTileBlock();
     }
 
-    /**
-     * Called by ItemBlocks just before a block is actually set in the world, to allow for adjustments to the
-     * IBlockstate
-     */
-    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
-    {
+
+    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
         return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
     }
 
-    /**
-     * Called by ItemBlocks after a block is set in the world, to allow post-place logic
-     */
+
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
     {
         worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
@@ -214,9 +224,7 @@ public class BioFurnaceBlock extends BlockTileBase {
         }
     }
 
-    /**
-     * Called serverside after this block is replaced with another in Chunk, but before the Tile Entity is updated
-     */
+
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
     {
         if (!keepInventory)
@@ -233,19 +241,13 @@ public class BioFurnaceBlock extends BlockTileBase {
         super.breakBlock(worldIn, pos, state);
     }
 
-    /**
-     * @deprecated call via {@link IBlockState#hasComparatorInputOverride()} whenever possible. Implementing/overriding
-     * is fine.
-     */
+
     public boolean hasComparatorInputOverride(IBlockState state)
     {
         return true;
     }
 
-    /**
-     * @deprecated call via {@link IBlockState#getComparatorInputOverride(World,BlockPos)} whenever possible.
-     * Implementing/overriding is fine.
-     */
+
     public int getComparatorInputOverride(IBlockState blockState, World worldIn, BlockPos pos)
     {
         return Container.calcRedstone(worldIn.getTileEntity(pos));
@@ -256,19 +258,13 @@ public class BioFurnaceBlock extends BlockTileBase {
         return new ItemStack(Blocks.FURNACE);
     }
 
-    /**
-     * The type of render function called. MODEL for mixed tesr and static model, MODELBLOCK_ANIMATED for TESR-only,
-     * LIQUID for vanilla liquids, INVISIBLE to skip all rendering
-     * @deprecated call via {@link IBlockState#getRenderType()} whenever possible. Implementing/overriding is fine.
-     */
+
     public EnumBlockRenderType getRenderType(IBlockState state)
     {
         return EnumBlockRenderType.MODEL;
     }
 
-    /**
-     * Convert the given metadata into a BlockState for this Block
-     */
+
     public IBlockState getStateFromMeta(int meta)
     {
         EnumFacing enumfacing = EnumFacing.byIndex(meta);
@@ -281,20 +277,13 @@ public class BioFurnaceBlock extends BlockTileBase {
         return this.getDefaultState().withProperty(FACING, enumfacing);
     }
 
-    /**
-     * Convert the BlockState into the correct metadata value
-     */
+
     public int getMetaFromState(IBlockState state)
     {
         return ((EnumFacing)state.getValue(FACING)).getIndex();
     }
 
-    /**
-     * Returns the blockstate with the given rotation from the passed blockstate. If inapplicable, returns the passed
-     * blockstate.
-     * @deprecated call via {@link IBlockState#withRotation(Rotation)} whenever possible. Implementing/overriding is
-     * fine.
-     */
+
     public IBlockState withRotation(IBlockState state, Rotation rot)
     {
         return state.withProperty(FACING, rot.rotate((EnumFacing)state.getValue(FACING)));
@@ -304,11 +293,7 @@ public class BioFurnaceBlock extends BlockTileBase {
     {
         return BlockRenderLayer.CUTOUT;
     }
-    /**
-     * Returns the blockstate with the given mirror of the passed blockstate. If inapplicable, returns the passed
-     * blockstate.
-     * @deprecated call via {@link IBlockState#withMirror(Mirror)} whenever possible. Implementing/overriding is fine.
-     */
+
     public IBlockState withMirror(IBlockState state, Mirror mirrorIn)
     {
         return state.withRotation(mirrorIn.toRotation((EnumFacing)state.getValue(FACING)));

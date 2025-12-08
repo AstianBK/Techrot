@@ -24,6 +24,7 @@ public class BlockBase extends Block {
 		setRegistryName(name);
 
 		this.name = name;
+		this.setCreativeTab(TRegistry.TECHROT_TAB);
 
 		TRegistry.BLOCKS.add(this);
 	}
@@ -34,6 +35,7 @@ public class BlockBase extends Block {
 	public Item createItemBlock() {
 		ItemBlock itemBlock = new ItemBlock(this);
 		itemBlock.setRegistryName(getRegistryName());
+
 		return itemBlock;
 	}
 	

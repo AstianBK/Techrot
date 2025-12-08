@@ -1,26 +1,26 @@
 package com.the_blood_knight.techrot.common.container;
 
-import com.the_blood_knight.techrot.Techrot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BioPastemakerContainer extends Container {
+public class BioFurnaceContainer extends Container {
     private final IInventory tileFurnace;
-    private int maxNutrition = 10000;
-    private int currentNutrition = 0;
-    private int eatTime = 0;
-    private int totalEatTime = 0;
-    public BioPastemakerContainer(InventoryPlayer playerInventory, IInventory furnaceInventory)
+    private int cookTime;
+    private int totalCookTime;
+    private int furnaceBurnTime;
+    private int currentItemBurnTime;
+
+    public BioFurnaceContainer(InventoryPlayer playerInventory, IInventory furnaceInventory)
     {
         this.tileFurnace = furnaceInventory;
-        this.addSlotToContainer(new Slot(furnaceInventory, 0, 26, 27));
-        this.addSlotToContainer(new Slot(furnaceInventory, 1, 44, 27));
-
-        this.addSlotToContainer(new Slot(furnaceInventory, 2, 62, 27));
+        this.addSlotToContainer(new Slot(furnaceInventory, 0, 62, 15));
+        this.addSlotToContainer(new SlotFurnaceOutput(playerInventory.player, furnaceInventory, 1, 98, 15));
 
         for (int i = 0; i < 3; ++i)
         {
@@ -35,21 +35,16 @@ public class BioPastemakerContainer extends Container {
             this.addSlotToContainer(new Slot(playerInventory, k, 8 + k * 18, 142));
         }
     }
+
     public void addListener(IContainerListener listener)
     {
         super.addListener(listener);
         listener.sendAllWindowProperties(this, this.tileFurnace);
     }
-    @Override
-    public boolean canInteractWith(EntityPlayer playerIn) {
-        return true;
-    }
 
-    @Override
-    public void updateProgressBar(int id, int data) {
-        this.tileFurnace.setField(id,data);
-    }
-
+    /**
+     * Looks for changes made in the container, sends them to every listener.
+     */
     public void detectAndSendChanges()
     {
         super.detectAndSendChanges();
@@ -58,26 +53,51 @@ public class BioPastemakerContainer extends Container {
         {
             IContainerListener icontainerlistener = this.listeners.get(i);
 
-
-            if (this.eatTime != this.tileFurnace.getField(2)) {
+            if (this.cookTime != this.tileFurnace.getField(2))
+            {
                 icontainerlistener.sendWindowProperty(this, 2, this.tileFurnace.getField(2));
             }
 
-            if (this.maxNutrition != this.tileFurnace.getField(0)) {
+            if (this.furnaceBurnTime != this.tileFurnace.getField(0))
+            {
                 icontainerlistener.sendWindowProperty(this, 0, this.tileFurnace.getField(0));
             }
 
-            if (this.currentNutrition != this.tileFurnace.getField(1)) {
+            if (this.currentItemBurnTime != this.tileFurnace.getField(1))
+            {
                 icontainerlistener.sendWindowProperty(this, 1, this.tileFurnace.getField(1));
             }
 
+            if (this.totalCookTime != this.tileFurnace.getField(3))
+            {
+                icontainerlistener.sendWindowProperty(this, 3, this.tileFurnace.getField(3));
+            }
         }
 
-        this.maxNutrition = this.tileFurnace.getField(0);
-        this.currentNutrition = this.tileFurnace.getField(1);
-        this.eatTime = this.tileFurnace.getField(2);
-        //this.totalEatTime = this.tileFurnace.getField(1);
+        this.cookTime = this.tileFurnace.getField(2);
+        this.furnaceBurnTime = this.tileFurnace.getField(0);
+        this.currentItemBurnTime = this.tileFurnace.getField(1);
+        this.totalCookTime = this.tileFurnace.getField(3);
     }
+
+    @SideOnly(Side.CLIENT)
+    public void updateProgressBar(int id, int data)
+    {
+        this.tileFurnace.setField(id, data);
+    }
+
+    /**
+     * Determines whether supplied player can use this container
+     */
+    public boolean canInteractWith(EntityPlayer playerIn)
+    {
+        return this.tileFurnace.isUsableByPlayer(playerIn);
+    }
+
+    /**
+     * Handle when the stack in slot {@code index} is shift-clicked. Normally this moves the stack between the player
+     * inventory and the other inventory(s).
+     */
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
     {
         ItemStack itemstack = ItemStack.EMPTY;
@@ -88,7 +108,16 @@ public class BioPastemakerContainer extends Container {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
 
-            if (index != 1 && index != 0 && index != 2)
+            if (index == 2)
+            {
+                if (!this.mergeItemStack(itemstack1, 3, 39, true))
+                {
+                    return ItemStack.EMPTY;
+                }
+
+                slot.onSlotChange(itemstack1, itemstack);
+            }
+            else if (index != 1 && index != 0)
             {
                 if (!FurnaceRecipes.instance().getSmeltingResult(itemstack1).isEmpty())
                 {
