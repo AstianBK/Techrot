@@ -1,0 +1,44 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"parent": "block/block",
+	"ambientocclusion": false,
+	"textures": {
+		"particle": "techrot:block/biocrafter",
+		"all": "techrot:block/biocrafter"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 0],
+			"to": [16, 16, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 4, 4], "texture": "#all"},
+				"east": {"uv": [4, 4, 8, 8], "texture": "#all"},
+				"south": {"uv": [4, 0, 8, 4], "texture": "#all"},
+				"west": {"uv": [8, 0, 12, 4], "texture": "#all"},
+				"up": {"uv": [4, 8, 0, 4], "texture": "#all"},
+				"down": {"uv": [16, 0, 12, 4], "texture": "#all"}
+			}
+		},
+		{
+			"from": [0.5, 0.85, 0.5],
+			"to": [15.5, 15.85, 15.5],
+			"faces": {
+				"north": {"uv": [0, 11.75, 3.75, 15.5], "texture": "#all"},
+				"east": {"uv": [0, 8, 3.75, 11.75], "texture": "#all"},
+				"south": {"uv": [3.75, 8, 7.5, 11.75], "texture": "#all"},
+				"west": {"uv": [0, 8, 3.75, 11.75], "texture": "#all"},
+				"up": {"uv": [7.5, 15.5, 3.75, 11.75], "texture": "#all"},
+				"down": {"uv": [7.5, 8, 11.25, 11.75], "texture": "#all"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "truemain",
+			"origin": [0, 0, 0],
+			"color": 0,
+			"children": [0, 1]
+		}
+	]
+}
