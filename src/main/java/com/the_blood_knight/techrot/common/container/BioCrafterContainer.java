@@ -4,10 +4,7 @@ import com.the_blood_knight.techrot.common.item.BioExtractorItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.tileentity.TileEntityFurnace;
@@ -17,29 +14,22 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BioCrafterContainer extends Container {
     private final IInventory tileFurnace;
     private int currentNutrition = 0;
+    public InventoryCrafting craftMatrix = new InventoryCrafting(this, 3, 3);
+    public InventoryCraftResult craftResult = new InventoryCraftResult();
+
     //private int clonerTime = 0;
     public BioCrafterContainer(InventoryPlayer playerInventory, IInventory furnaceInventory)
     {
         this.tileFurnace = furnaceInventory;
-        this.addSlotToContainer(new Slot(furnaceInventory, 0, 39, 24){
-            @Override
-            public boolean isItemValid(ItemStack stack) {
-                return stack.getItem() instanceof BioExtractorItem;
-            }
-        });
-        this.addSlotToContainer(new Slot(furnaceInventory, 1, 74, 24){
-            @Override
-            public boolean isItemValid(ItemStack stack) {
-                return stack.getItem() == Items.EGG;
-            }
-        });
+        this.addSlotToContainer(new SlotCrafting(playerInventory.player, this.craftMatrix, this.craftResult, 0, 124, 35));
 
-        this.addSlotToContainer(new Slot(furnaceInventory, 2, 126, 24){
-            @Override
-            public boolean isItemValid(ItemStack stack) {
-                return false;
+        for (int i = 0; i < 3; ++i)
+        {
+            for (int j = 0; j < 3; ++j)
+            {
+                this.addSlotToContainer(new Slot(this.craftMatrix, j + i * 3, 30 + j * 18, 17 + i * 18));
             }
-        });
+        }
 
         for (int i = 0; i < 3; ++i)
         {
