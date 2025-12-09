@@ -1,7 +1,9 @@
 {
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
 	"parent": "block/block",
-	"texture_size": [64, 64],
 	"ambientocclusion": false,
+	"texture_size": [64, 64],
 	"textures": {
 		"0": "techrot:block/biofurnace",
 		"particle": "techrot:block/biofurnace"
@@ -32,6 +34,19 @@
 				"west": {"uv": [7.5, 12.25, 11.25, 16], "texture": "#0"},
 				"up": {"uv": [15, 16, 11.25, 12.25], "texture": "#0"},
 				"down": {"uv": [7.5, 8.5, 3.75, 12.25], "texture": "#0"}
+			}
+		},
+		{
+			"from": [1, 1, 0.15],
+			"to": [15, 1, 2.15],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 1, 0.15]},
+			"faces": {
+				"north": {"uv": [0, 0, 4, 0], "texture": "#0"},
+				"east": {"uv": [0, 0, 0.5, 0], "texture": "#0"},
+				"south": {"uv": [0, 0, 4, 0], "texture": "#0"},
+				"west": {"uv": [0, 0, 0.5, 0], "texture": "#0"},
+				"up": {"uv": [8, 3, 12, 3.5], "texture": "#0"},
+				"down": {"uv": [8, 3, 12, 3.5], "texture": "#0"}
 			}
 		}
 	],
@@ -73,7 +88,7 @@
 			"name": "truemain",
 			"origin": [8, 8, 8],
 			"color": 0,
-			"children": [0, 1]
+			"children": [0, 1, 2]
 		}
 	]
 }
