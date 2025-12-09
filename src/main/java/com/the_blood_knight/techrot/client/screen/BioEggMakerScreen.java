@@ -1,6 +1,7 @@
 package com.the_blood_knight.techrot.client.screen;
 
 import com.the_blood_knight.techrot.Techrot;
+import com.the_blood_knight.techrot.common.container.BioEggMakerContainer;
 import com.the_blood_knight.techrot.common.container.BioFleshClonerContainer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -8,23 +9,23 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
 
-public class BioFleshClonerScreen extends GuiContainer {
+public class BioEggMakerScreen extends GuiContainer {
     private static final ResourceLocation[] FRAMES = new ResourceLocation[]{
-            new ResourceLocation(Techrot.MODID,"textures/gui/container/biofleshcloner_gui_0.png"),
-            new ResourceLocation(Techrot.MODID,"textures/gui/container/biofleshcloner_gui_1.png"),
-            new ResourceLocation(Techrot.MODID,"textures/gui/container/biofleshcloner_gui_2.png"),
-            new ResourceLocation(Techrot.MODID,"textures/gui/container/biofleshcloner_gui_3.png"),
-            new ResourceLocation(Techrot.MODID,"textures/gui/container/biofleshcloner_gui_4.png"),
-            new ResourceLocation(Techrot.MODID,"textures/gui/container/biofleshcloner_gui_5.png"),
-            new ResourceLocation(Techrot.MODID,"textures/gui/container/biofleshcloner_gui_6.png"),
-            new ResourceLocation(Techrot.MODID,"textures/gui/container/biofleshcloner_gui_7 .png")
+            new ResourceLocation(Techrot.MODID,"textures/gui/container/bioeggmaker_0.png"),
+            new ResourceLocation(Techrot.MODID,"textures/gui/container/bioeggmaker_1.png"),
+            new ResourceLocation(Techrot.MODID,"textures/gui/container/bioeggmaker_2.png"),
+            new ResourceLocation(Techrot.MODID,"textures/gui/container/bioeggmaker_3.png"),
+            new ResourceLocation(Techrot.MODID,"textures/gui/container/bioeggmaker_4.png"),
+            new ResourceLocation(Techrot.MODID,"textures/gui/container/bioeggmaker_5.png"),
+            new ResourceLocation(Techrot.MODID,"textures/gui/container/bioeggmaker_6.png"),
+            new ResourceLocation(Techrot.MODID,"textures/gui/container/bioeggmaker_7 .png")
     };
     private final InventoryPlayer playerInventory;
     private final IInventory tileFurnace;
 
-    public BioFleshClonerScreen(InventoryPlayer playerInv, IInventory furnaceInv)
+    public BioEggMakerScreen(InventoryPlayer playerInv, IInventory furnaceInv)
     {
-        super(new BioFleshClonerContainer(playerInv, furnaceInv));
+        super(new BioEggMakerContainer(playerInv, furnaceInv));
         this.playerInventory = playerInv;
         this.tileFurnace = furnaceInv;
     }

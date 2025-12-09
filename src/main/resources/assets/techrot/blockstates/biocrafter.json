@@ -1,0 +1,15 @@
+{
+  "forge_marker":1,
+  "variants": {
+    "normal" : {
+      "model": "techrot:biocrafter"
+    },
+    "inventory": {
+      "model": "techrot:biocrafter"
+    },
+    "facing=north": { "model": "techrot:biocrafter" },
+    "facing=south": { "model": "techrot:biocrafter", "y": 180 },
+    "facing=west":  { "model": "techrot:biocrafter", "y": 270 },
+    "facing=east":  { "model": "techrot:biocrafter", "y": 90 }
+  }
+}

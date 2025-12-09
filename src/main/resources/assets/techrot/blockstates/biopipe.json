@@ -1,48 +1,26 @@
 {
   "multipart": [
 
-    {   "when": { "north": "true" ,"south": "true","east": "false" , "west": "false"},
-      "apply": { "model": "techrot:biopipe_horizontal", "uvlock": false }
+    {   "when": { "east": "true"},
+      "apply": { "model": "techrot:bioeast", "uvlock": false }
     },
-    {   "when": { "north": "true" ,"south": "false","east": "false" , "west": "false"},
-      "apply": { "model": "techrot:biopipe_horizontal", "uvlock": false }
+    {   "when": { "west": "true" },
+      "apply": { "model": "techrot:biowest", "uvlock": false }
     },
-    {   "when": { "east": "true", "west": "false","north": "false" ,"south": "false" },
-      "apply": { "model": "techrot:biopipe_horizontal", "y": 90, "uvlock": false }
+    {   "when": { "north": "true"},
+      "apply": { "model": "techrot:bionorth", "uvlock": false }
     },
-    {   "when": { "east": "true" , "west": "true","north": "false" ,"south": "false"},
-      "apply": { "model": "techrot:biopipe_horizontal", "y": 90, "uvlock": false }
+    {   "when": {"south": "true"},
+      "apply": { "model": "techrot:biosouth", "uvlock": false }
     },
-    {   "when": { "south": "true", "west": "false","north": "false" ,"east": "false"},
-      "apply": { "model": "techrot:biopipe_horizontal", "y": 180, "uvlock": false }
+    {   "when": { "up": "true"},
+      "apply": { "model": "techrot:biopipeup", "uvlock": false }
     },
-    {   "when": { "west": "true" , "east": "false","north": "false" ,"south": "false"},
-      "apply": { "model": "techrot:biopipe_horizontal", "y": 270, "uvlock": false }
+    {   "when": {"down" :  "true"},
+      "apply": { "model": "techrot:biopipedown", "uvlock": false }
     },
-    {   "when": { "south": "true" , "west": "true","north": "false" , "east": "false"},
-      "apply": { "model": "techrot:biopipe_l_horizontal", "y": 270, "uvlock": false }
-    },
-    {   "when": { "north": "true" , "west": "true","south": "false" , "east": "false"},
-      "apply": { "model": "techrot:biopipe_l_horizontal", "y": 0, "uvlock": false }
-    },
-    {   "when": { "south": "true" , "east": "true","north": "false" , "west": "false"},
-      "apply": { "model": "techrot:biopipe_l_horizontal", "y": 180, "uvlock": false }
-    },
-    {   "when": { "north": "true" , "east": "true","south": "false" , "west": "false"},
-      "apply": { "model": "techrot:biopipe_l_horizontal", "y": 90, "uvlock": false }
-    },
-
-    {   "when": { "north": "true" , "east": "true","south": "false" , "west": "true"},
-      "apply": { "model": "techrot:biopipe_t", "y": 0, "uvlock": false }
-    },
-    {   "when": { "north": "true" , "east": "true","south": "true" , "west": "false"},
-      "apply": { "model": "techrot:biopipe_t", "y": 90, "uvlock": false }
-    },
-    {   "when": { "north": "true" , "east": "false","south": "true" , "west": "true"},
-      "apply": { "model": "techrot:biopipe_t", "y": 270, "uvlock": false }
-    },
-    {   "when": { "north": "false" , "east": "true","south": "true" , "west": "true"},
-      "apply": { "model": "techrot:biopipe_t", "y": 180, "uvlock": false }
+    {
+      "apply": { "model": "techrot:biomiddle", "uvlock": false }
     }
   ]
 }

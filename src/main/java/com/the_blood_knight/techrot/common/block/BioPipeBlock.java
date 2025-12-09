@@ -1,19 +1,19 @@
 package com.the_blood_knight.techrot.common.block;
 
 import com.the_blood_knight.techrot.Techrot;
-import com.the_blood_knight.techrot.common.tile_block.BioPastemakerTileBlock;
 import com.the_blood_knight.techrot.common.tile_block.BioPipeTileBlock;
 import net.minecraft.block.Block;
 
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -24,9 +24,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 public class BioPipeBlock extends BlockTileBase{
@@ -36,15 +33,20 @@ public class BioPipeBlock extends BlockTileBase{
     public static final PropertyBool NORTH = PropertyBool.create("north");
     public static final PropertyBool UP = PropertyBool.create("up");
     public static final PropertyBool DOWN = PropertyBool.create("down");
-    public static final PropertyEnum<PipeType> SHAPE = PropertyEnum.create("shape",PipeType.class);
     protected static final AxisAlignedBB FLAT_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.125D, 1.0D);
     protected static final AxisAlignedBB ASCENDING_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D);
 
     public BioPipeBlock(Material material,String name) {
         super(material,name);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(SHAPE,PipeType.I).withProperty(UP,false).withProperty(DOWN,false).withProperty(SOUTH,false).withProperty(NORTH,false).withProperty(EAST,true).withProperty(WEST,false));
+        this.setDefaultState(this.blockState.getBaseState().withProperty(UP,false).withProperty(DOWN,false).withProperty(SOUTH,false).withProperty(NORTH,false).withProperty(EAST,false).withProperty(WEST,false));
         this.setCreativeTab(CreativeTabs.DECORATIONS);
     }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return 0;
+    }
+
 
 
     @Override
@@ -90,7 +92,7 @@ public class BioPipeBlock extends BlockTileBase{
         if (!worldIn.isRemote) {
         }
     }
-
+    @Override
     public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
         Pipe newPipe = this.updateDir(worldIn, pos, this.getStateFromMeta(meta), true,false);
         IBlockState state = newPipe.state;
@@ -98,7 +100,7 @@ public class BioPipeBlock extends BlockTileBase{
         if (sourceBlock.getBlock() instanceof BlockTileBase){
             if(sourceBlock.getBlock() instanceof BioPipeBlock){
                 Pipe pipe = (new BioPipeBlock.Pipe(worldIn, pos.offset(facing.getOpposite()), sourceBlock));
-                pipe.connectFacing(facing,newPipe);
+                pipe.connectFacing(facing);
             }
             Pipe pipeSource = (new BioPipeBlock.Pipe(worldIn, pos, state));
             pipeSource.connectToPipe(pos.offset(facing.getOpposite()),facing);
@@ -133,13 +135,7 @@ public class BioPipeBlock extends BlockTileBase{
             }
         }
     }
-    public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(SHAPE, PipeType.byMetadata(meta));
-    }
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return state.getValue(SHAPE).getMeta();
-    }
+    
 
     protected Pipe updateDir(World worldIn, BlockPos pos, IBlockState state, boolean initialPlacement,boolean multi) {
         return (new BioPipeBlock.Pipe(worldIn, pos, state)).place(multi, initialPlacement);
@@ -149,6 +145,14 @@ public class BioPipeBlock extends BlockTileBase{
         return EnumPushReaction.NORMAL;
     }
 
+    @Override
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        TileEntity entity = worldIn.getTileEntity(pos);
+        if(entity instanceof BioPipeTileBlock && !worldIn.isRemote){
+            //((BioPipeTileBlock) entity).requestNutrients(true);
+        }
+        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
+    }
 
     @SideOnly(Side.CLIENT)
     public BlockRenderLayer getRenderLayer()
@@ -191,7 +195,7 @@ public class BioPipeBlock extends BlockTileBase{
 
 
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this,SHAPE,DOWN,UP,EAST,WEST,SOUTH,NORTH);
+        return new BlockStateContainer(this, new IProperty[] {UP, NORTH, EAST, WEST, SOUTH,DOWN});
     }
 
     
@@ -245,54 +249,12 @@ public class BioPipeBlock extends BlockTileBase{
         return block instanceof BioPipeBlock;
     }
 
-    public enum PipeType implements IStringSerializable{
-        I(0,"i"),
-        T(1,"t"),
-        L(2,"l"),
-        I_VERTICAL(3,"i_vertical"),
-        L_VERTICAL(4,"l_vertical");
-        private static final PipeType[] META_LOOKUP = new PipeType[values().length];
-        private final int meta;
-        private final String name;
-        PipeType(int meta,String id){
-            this.meta = meta;
-            this.name = id;
-        }
-
-        public int getMeta() {
-            return meta;
-        }
-
-        public static PipeType byMetadata(int meta)
-        {
-            if (meta < 0 || meta >= META_LOOKUP.length)
-            {
-                meta = 0;
-            }
-
-            return META_LOOKUP[meta];
-        }
-
-        @Override
-        public String getName() {
-            return name;
-        }
-        static
-        {
-            for (PipeType type : values())
-            {
-                META_LOOKUP[type.getMeta()] = type;
-            }
-        }
-    }
-    public static class Pipe
-    {
+    public static class Pipe {
         private final World world;
         private final BlockPos pos;
         private final BioPipeBlock block;
         private IBlockState state;
         private final BioPipeTileBlock pipe;
-        private final PipeType type;
         public Pipe(World worldIn, BlockPos pos, IBlockState state)
         {
             this.world = worldIn;
@@ -300,34 +262,10 @@ public class BioPipeBlock extends BlockTileBase{
             this.state = state;
             this.block = (BioPipeBlock)state.getBlock();
             this.pipe = (BioPipeTileBlock) worldIn.getTileEntity(pos);
-            type = PipeType.I;
         }
 
 
-
-
-
-        private boolean hasPipeAt(BlockPos pos) {
-            return BioPipeBlock.isPipeBlock(this.world, pos);
-        }
-        private boolean hasBioBlockAt(BlockPos pos) {
-            IBlockState state1 = this.world.getBlockState(pos);
-            return state1.getBlock() instanceof BioFurnaceBlock;
-        }
-        @Nullable
-        private BioPipeBlock.Pipe findBioBlockAt(BlockPos pos)
-        {
-            IBlockState iblockstate = this.world.getBlockState(pos);
-
-            if (BioPipeBlock.isPipeBlock(iblockstate))
-            {
-                return new BioPipeBlock.Pipe(this.world, pos, iblockstate);
-            }
-            else
-            {
-                return null;
-            }
-        }
+        
         @Nullable
         private BioPipeBlock.Pipe findPipeAt(BlockPos pos) {
             IBlockState iblockstate = this.world.getBlockState(pos);
@@ -339,21 +277,7 @@ public class BioPipeBlock extends BlockTileBase{
             }
         }
 
-
-        private boolean isConnectedTo(BlockPos posIn,Pipe pipe) {
-            for (EnumFacing facing : EnumFacing.VALUES)
-            {
-                BlockPos blockpos = this.pipe.connections.get(facing);
-                if(blockpos==null)continue;
-                if (blockpos.getX() == posIn.getX() && blockpos.getZ() == posIn.getZ())
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
+        
         private boolean canConnectTo(BioPipeBlock.Pipe rail) {
             boolean maxDirection = this.pipe.getCountConnection() < 2;
 
@@ -367,45 +291,58 @@ public class BioPipeBlock extends BlockTileBase{
             BlockPos posSouth = this.pos.south();
             BlockPos posWest = this.pos.west();
             BlockPos posEast = this.pos.east();
+            BlockPos posUp = this.pos.up();
+            BlockPos posDown = this.pos.down();
             boolean west = false;
             boolean east = false;
             boolean north = false;
             boolean south = false;
+            boolean up = false;
+            boolean down = false;
             Map<EnumFacing,BlockPos> map = Techrot.main.getMapEmpty();
             map.put(facing,sourcePos);
             if(ns){
-                if(isBlockValid(world,EnumFacing.SOUTH,posNorth, 3)){
+                if(isBlockValid(world,EnumFacing.SOUTH,posNorth, 6)){
                     map.put(EnumFacing.NORTH,posNorth);
                     north = true;
                 }
-                if(isBlockValid(world,EnumFacing.NORTH,posSouth, 3)){
+                if(isBlockValid(world,EnumFacing.NORTH,posSouth, 6)){
                     map.put(EnumFacing.SOUTH,posSouth);
                     south = true;
                 }
             }
             if(we){
-                if(isBlockValid(world,EnumFacing.EAST,posWest, 3)){
+                if(isBlockValid(world,EnumFacing.EAST,posWest, 6)){
                     map.put(EnumFacing.WEST,posWest);
                     west = true;
                 }
-                if(isBlockValid(world,EnumFacing.WEST,posEast, 3)){
+                if(isBlockValid(world,EnumFacing.WEST,posEast, 6)){
                     map.put(EnumFacing.EAST,posEast);
                     east = true;
                 }
             }
-            this.state = this.state.withProperty(EAST, east).withProperty(WEST, west).withProperty(NORTH, north).withProperty(SOUTH, south);
+            if(du){
+                if(isBlockValid(world,EnumFacing.UP,posDown, 6)){
+                    map.put(EnumFacing.DOWN,posDown);
+                    down = true;
+                }
+                if(isBlockValid(world,EnumFacing.DOWN,posUp, 6)){
+                    map.put(EnumFacing.UP,posUp);
+                    up = true;
+                }
+            }
+            this.state = this.state.withProperty(EAST,east).withProperty(WEST,west).withProperty(NORTH,north).withProperty(SOUTH,south).withProperty(UP,up).withProperty(DOWN,down);
             this.world.setBlockState(pos,state,3);
 
             ((BioPipeTileBlock)world.getTileEntity(pos)).connections=map;
-            updateState(((BioPipeTileBlock)world.getTileEntity(pos)),new ArrayList<>() );
-
         }
-        private void connectFacing(EnumFacing facing,Pipe newPipe) {
+        public void connectFacing(EnumFacing facing) {
             boolean north = this.state.getValue(NORTH);
             boolean south = this.state.getValue(SOUTH);
             boolean west = this.state.getValue(WEST);
             boolean east = this.state.getValue(EAST);
-
+            boolean up = this.state.getValue(UP);
+            boolean down = this.state.getValue(DOWN);
             Map<EnumFacing,BlockPos> map = ((BioPipeTileBlock)this.world.getTileEntity(pos)).connections;
             map.put(facing,this.pos.offset(facing));
             if(this.pipe.getCountConnection()<2){
@@ -414,12 +351,24 @@ public class BioPipeBlock extends BlockTileBase{
                     east = true;
                     north = false;
                     south = false;
+                    up = false;
+                    down = false;
                 }
                 if(facing == EnumFacing.NORTH || facing == EnumFacing.SOUTH){
                     south = true;
                     north = true;
                     west = false;
                     east = false;
+                    up = false;
+                    down = false;
+                }
+                if(facing == EnumFacing.DOWN || facing == EnumFacing.UP){
+                    south = false;
+                    north = false;
+                    west = false;
+                    east = false;
+                    up = true;
+                    down = true;
                 }
             }else {
                 if(facing == EnumFacing.WEST){
@@ -434,14 +383,19 @@ public class BioPipeBlock extends BlockTileBase{
                 if(facing == EnumFacing.EAST){
                     east = true;
                 }
+                if(facing == EnumFacing.UP){
+                    up = true;
+                }
+                if(facing == EnumFacing.DOWN){
+                    down = true;
+                }
             }
 
-            this.state = this.state.withProperty(EAST, east).withProperty(WEST, west).withProperty(NORTH, north).withProperty(SOUTH, south);
+            this.state = this.state.withProperty(EAST,east).withProperty(WEST,west).withProperty(NORTH,north).withProperty(SOUTH,south).withProperty(UP,up).withProperty(DOWN,down);
             this.world.setBlockState(pos,state,3);
 
             ((BioPipeTileBlock)world.getTileEntity(pos)).connections=map;
 
-            updateState(((BioPipeTileBlock)world.getTileEntity(pos)),new ArrayList<>() );
 
         }
         private void connectTo(BioPipeBlock.Pipe rail,EnumFacing facing) {
@@ -449,23 +403,75 @@ public class BioPipeBlock extends BlockTileBase{
             BlockPos posSouth = this.pos.south();
             BlockPos posWest = this.pos.west();
             BlockPos posEast = this.pos.east();
-            BlockPos blockPos4 = this.pos.up();
-            BlockPos blockPos5 = this.pos.down();
+            BlockPos posUp = this.pos.up();
+            BlockPos posDown = this.pos.down();
             BlockPos sourcePos = rail.pos;
             boolean sinConexion = this.pipe.getCountConnection()==0;
             boolean north = this.state.getValue(NORTH);
             boolean south = this.state.getValue(SOUTH);
             boolean west = this.state.getValue(WEST);
             boolean east = this.state.getValue(EAST);
-            boolean bioBlock = this.hasNeighborBioBlock(posNorth);
-            boolean bioBlock1 = this.hasNeighborBioBlock(posSouth);
-            boolean bioBlock2 = this.hasNeighborBioBlock(posWest);
-            boolean bioBlock3 = this.hasNeighborBioBlock(posEast);
+            boolean up = this.state.getValue(UP);
+            boolean down = this.state.getValue(DOWN);
+            
             Map<EnumFacing,BlockPos> map = Techrot.main.getMapEmpty();
             EnumFacing opposite = facing.getOpposite();
+            if(down){
+                if(isPipeValid(world,posDown,6)){
+                    map.put(EnumFacing.EAST, posDown);
+                }else {
+                    down = false;
+                }
 
-            if(east){
-                if(isPipeValid(world,posEast,2)){
+                if(opposite == EnumFacing.NORTH){
+                    map.put(opposite,sourcePos);
+                    north = true;
+                }
+                if(opposite == EnumFacing.SOUTH){
+                    map.put(opposite,sourcePos);
+                    south = true;
+                }
+                if(opposite == EnumFacing.WEST){
+                    map.put(opposite,sourcePos);
+                    west = true;
+                }
+                if(opposite == EnumFacing.EAST){
+                    map.put(opposite,sourcePos);
+                    east = true;
+                }
+                if(opposite == EnumFacing.UP){
+                    map.put(opposite,sourcePos);
+                    up = true;
+                }
+            } else if(up){
+                if(isPipeValid(world,posUp,6)){
+                    map.put(EnumFacing.EAST, posUp);
+                }else {
+                    up = false;
+                }
+
+                if(opposite == EnumFacing.NORTH){
+                    map.put(opposite,sourcePos);
+                    north = true;
+                }
+                if(opposite == EnumFacing.SOUTH){
+                    map.put(opposite,sourcePos);
+                    south = true;
+                }
+                if(opposite == EnumFacing.WEST){
+                    map.put(opposite,sourcePos);
+                    west = true;
+                }
+                if(opposite == EnumFacing.EAST){
+                    map.put(opposite,sourcePos);
+                    east = true;
+                }
+                if(opposite == EnumFacing.DOWN){
+                    map.put(opposite,sourcePos);
+                    down = true;
+                }
+            }else if(east){
+                if(isPipeValid(world,posEast,6)){
                     map.put(EnumFacing.EAST, posEast);
                 }else {
                     east = false;
@@ -483,8 +489,16 @@ public class BioPipeBlock extends BlockTileBase{
                     map.put(opposite,sourcePos);
                     west = true;
                 }
+                if(opposite == EnumFacing.UP){
+                    map.put(opposite,sourcePos);
+                    up = true;
+                }
+                if(opposite == EnumFacing.DOWN){
+                    map.put(opposite,sourcePos);
+                    down = true;
+                }
             }else if(west){
-                if(isPipeValid(world,posWest,2)){
+                if(isPipeValid(world,posWest,6)){
                     map.put(EnumFacing.WEST, posWest);
                 }else {
                     west = false;
@@ -501,8 +515,16 @@ public class BioPipeBlock extends BlockTileBase{
                     map.put(opposite,posEast);
                     east = true;
                 }
+                if(opposite == EnumFacing.UP){
+                    map.put(opposite,sourcePos);
+                    up = true;
+                }
+                if(opposite == EnumFacing.DOWN){
+                    map.put(opposite,sourcePos);
+                    down = true;
+                }
             }else if(north){
-                if(isPipeValid(world,posNorth,2)){
+                if(isPipeValid(world,posNorth,6)){
                     map.put(EnumFacing.NORTH, posNorth);
                 }else {
                     north = false;
@@ -519,9 +541,16 @@ public class BioPipeBlock extends BlockTileBase{
                     map.put(opposite,posWest);
                     west = true;
                 }
-
+                if(opposite == EnumFacing.UP){
+                    map.put(opposite,sourcePos);
+                    up = true;
+                }
+                if(opposite == EnumFacing.DOWN){
+                    map.put(opposite,sourcePos);
+                    down = true;
+                }
             }else if(south){
-                if(isPipeValid(world,posSouth,2)){
+                if(isPipeValid(world,posSouth,6)){
                     map.put(EnumFacing.SOUTH, posSouth);
                 }else {
                     south = false;
@@ -538,6 +567,14 @@ public class BioPipeBlock extends BlockTileBase{
                 if(opposite == EnumFacing.WEST){
                     map.put(opposite,posWest);
                     west = true;
+                }
+                if(opposite == EnumFacing.UP){
+                    map.put(opposite,sourcePos);
+                    up = true;
+                }
+                if(opposite == EnumFacing.DOWN){
+                    map.put(opposite,sourcePos);
+                    down = true;
                 }
             }
             if(sinConexion){
@@ -558,14 +595,21 @@ public class BioPipeBlock extends BlockTileBase{
                     south=true;
                     map.put(EnumFacing.SOUTH,sourcePos);
                 }
+                if(facing == EnumFacing.UP){
+                    map.put(EnumFacing.DOWN,sourcePos);
+                    up = true;
+                }
+                if(facing == EnumFacing.DOWN){
+                    map.put(EnumFacing.UP,sourcePos);
+                    down = true;
+                }
             }
 
-            this.state = this.state.withProperty(EAST, east).withProperty(WEST, west).withProperty(NORTH, north).withProperty(SOUTH, south);
+            this.state = this.state.withProperty(EAST,east).withProperty(WEST,west).withProperty(NORTH,north).withProperty(SOUTH,south).withProperty(UP,up).withProperty(DOWN,down);
             this.world.setBlockState(pos,state,3);
 
 
             ((BioPipeTileBlock)this.world.getTileEntity(pos)).connections=map;
-            updateState(((BioPipeTileBlock)this.world.getTileEntity(pos)),new ArrayList<>());
         }
 
         private boolean hasNeighborPipe(BlockPos posIn,EnumFacing facing,boolean canConnect) {
@@ -606,16 +650,14 @@ public class BioPipeBlock extends BlockTileBase{
             BlockPos blockposSouth = this.pos.south();
             BlockPos blockposWest = this.pos.west();
             BlockPos blockposEast = this.pos.east();
-            BlockPos blockPos4 = this.pos.up();
-            BlockPos blockPos5 = this.pos.down();
+            BlockPos blockposUp = this.pos.up();
+            BlockPos blockposDown = this.pos.down();
             boolean north = this.hasNeighborPipe(blockposNorth,EnumFacing.NORTH,canConnect);
             boolean south = this.hasNeighborPipe(blockposSouth,EnumFacing.SOUTH,canConnect);
             boolean west = this.hasNeighborPipe(blockposWest,EnumFacing.WEST,canConnect);
             boolean east = this.hasNeighborPipe(blockposEast,EnumFacing.EAST,canConnect);
-            boolean bioBlock = this.hasNeighborBioBlock(blockposNorth);
-            boolean bioBlock1 = this.hasNeighborBioBlock(blockposSouth);
-            boolean bioBlock2 = this.hasNeighborBioBlock(blockposWest);
-            boolean bioBlock3 = this.hasNeighborBioBlock(blockposEast);
+            boolean up = this.hasNeighborPipe(blockposUp,EnumFacing.UP,canConnect);
+            boolean down = this.hasNeighborPipe(blockposUp,EnumFacing.DOWN,canConnect);
             Map<EnumFacing,BlockPos> map = Techrot.main.getMapEmpty();
 
             if(east){
@@ -631,12 +673,17 @@ public class BioPipeBlock extends BlockTileBase{
             if(south){
                 map.put(EnumFacing.SOUTH,blockposSouth);
             }
-
-            if(!east && !west && !north && !south){
+            if(up){
+                map.put(EnumFacing.UP,blockposUp);
+            }
+            if(down){
+                map.put(EnumFacing.DOWN,blockposDown);
+            }
+            if(!east && !west && !north && !south && !up && !down){
                 east = true;
             }
 
-            this.state = this.state.withProperty(SHAPE,PipeType.I).withProperty(EAST,east).withProperty(WEST,west).withProperty(NORTH,north).withProperty(SOUTH,south);
+            this.state = this.state.withProperty(EAST,east).withProperty(WEST,west).withProperty(NORTH,north).withProperty(SOUTH,south).withProperty(UP,up).withProperty(DOWN,down);
 
             if (initialPlacement || this.world.getBlockState(this.pos) != this.state) {
                 this.world.setBlockState(this.pos, this.state, 3);
@@ -649,42 +696,9 @@ public class BioPipeBlock extends BlockTileBase{
                 }
             }
             ((BioPipeTileBlock)world.getTileEntity(pos)).connections=map;
-            updateState(((BioPipeTileBlock)world.getTileEntity(pos)),new ArrayList<>());
             return this;
         }
 
-        private void updateState(BioPipeTileBlock tileBlock, Collection<BlockPos> ignore) {
-            List<BlockPos> collection = new ArrayList<>(ignore);
-            for (BlockPos connection : tileBlock.connections.values()){
-                if(connection==null || ignore.contains(connection)){
-                    continue;
-                }
-                IBlockState state1 = this.world.getBlockState(connection);
-                if(state1.getBlock() instanceof BioPastemakerBlock){
-                    Techrot.logger.info("nucleo.");
-                    ((BioPipeTileBlock) world.getTileEntity(pos)).addCore(connection);
-                }else if (state1.getBlock() instanceof BioPipeBlock){
-                    collection.add(connection);
-
-                    Techrot.logger.info("pipe time.");
-                    for (BlockPos core :tileBlock.cores){
-                        ((BioPipeTileBlock) world.getTileEntity(connection)).addCore(core);
-                    }
-                    Pipe pipe1 = new Pipe(world,connection,state1);
-                    pipe1.updateState((BioPipeTileBlock) world.getTileEntity(connection),collection);
-                }else if(state1.getBlock() instanceof BlockTileBase){
-                    Techrot.logger.info("pasar datos."+tileBlock.cores);
-                    for (BlockPos pos1:tileBlock.cores){
-                        if(world.getTileEntity(pos1) instanceof BioPastemakerTileBlock){
-                            ((BioPastemakerTileBlock)world.getTileEntity(pos1)).addParent(connection);
-                        }else {
-                            ((BioPastemakerTileBlock)world.getTileEntity(pos1)).removeParent(connection);
-                        }
-                    }
-                }
-            }
-
-        }
 
         public IBlockState getBlockState() {
             return this.state;
@@ -695,6 +709,8 @@ public class BioPipeBlock extends BlockTileBase{
             boolean south =this.state.getValue(SOUTH);
             boolean west = this.state.getValue(WEST);
             boolean east = this.state.getValue(EAST);
+            boolean up = this.state.getValue(UP);
+            boolean down = this.state.getValue(DOWN);
             if(this.pipe.getCountConnection()<2)return;
             Map<EnumFacing,BlockPos> map = this.pipe.connections;
             map.put(facing.getOpposite(),null);
@@ -710,10 +726,18 @@ public class BioPipeBlock extends BlockTileBase{
             if(facing == EnumFacing.WEST){
                 east = false;
             }
-            this.state = this.state.withProperty(SHAPE,PipeType.I).withProperty(EAST,east).withProperty(WEST,west).withProperty(NORTH,north).withProperty(SOUTH,south);
+            if(facing == EnumFacing.DOWN){
+                up = false;
+            }
+            if(facing == EnumFacing.UP){
+                down = false;
+            }
+            this.state = this.state.withProperty(EAST,east).withProperty(WEST,west).withProperty(NORTH,north).withProperty(SOUTH,south).withProperty(UP,up).withProperty(DOWN,down);
             this.world.setBlockState(this.pos, this.state, 3);
 
             ((BioPipeTileBlock)this.world.getTileEntity(pos)).connections = map;
         }
+
+
     }
 }

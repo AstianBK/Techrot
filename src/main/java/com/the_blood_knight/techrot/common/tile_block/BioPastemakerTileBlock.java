@@ -1,9 +1,8 @@
 package com.the_blood_knight.techrot.common.tile_block;
 
-import com.the_blood_knight.techrot.Techrot;
+import com.google.common.collect.Lists;
 import com.the_blood_knight.techrot.common.api.INutritionBlock;
 import com.the_blood_knight.techrot.common.container.BioPastemakerContainer;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
@@ -34,17 +33,19 @@ public class BioPastemakerTileBlock extends TileEntityLockable implements ITicka
     private int totalEatTime = 0;
     private NonNullList<ItemStack> container = NonNullList.<ItemStack>withSize(3, ItemStack.EMPTY);
     private List<BlockPos> parents = new ArrayList<>();
+    private List<Item> foods = Lists.newArrayList(Items.BEEF,Items.MUTTON,Items.SPIDER_EYE,Items.CHICKEN,Items.FISH,Items.PORKCHOP,Items.EGG,Items.ROTTEN_FLESH,Items.RABBIT, Items.RABBIT_FOOT);
 
+    public boolean isHungry(){
+        return this.currentNutrition<this.maxNutrition;
+    }
     @Override
     public void update() {
         boolean flag = this.isEating();
         boolean flag1 = false;
+        if(!this.isHungry())return;
         if (!this.world.isRemote) {
             ItemStack itemstack = getEatItem();
 
-            if(this.currentNutrition>0 && !parents.isEmpty()){
-                 flag1=this.circularNutrient();
-            }
             if (this.isEating() || !itemstack.isEmpty()) {
 
                 if (!this.isEating() && this.canEat()) {
@@ -84,24 +85,23 @@ public class BioPastemakerTileBlock extends TileEntityLockable implements ITicka
         }
     }
 
-    private boolean circularNutrient() {
-        boolean flag = false;
-        for (BlockPos pos : parents){
-            IBlockState state = world.getBlockState(pos);
-            TileEntity base = world.getTileEntity(pos);
-            if(base instanceof INutritionBlock && ((INutritionBlock) base).canExtract(pos) && currentNutrition>0){
-                ((INutritionBlock) base).extractNutrition();
-                currentNutrition--;
-                flag = true;
-            }
-        }
-        return flag;
-    }
+
     public void addParent(BlockPos pos){
         if(!this.parents.contains(pos)){
             this.parents.add(pos);
         }
         markDirty();
+    }
+    public int extractNutrients(int amount) {
+        if (amount <= 0) return 0;
+
+        int delivered = Math.min(amount, this.currentNutrition);
+
+        this.currentNutrition -= delivered;
+
+        markDirty();
+
+        return delivered;
     }
 
     public void removeParent(BlockPos pos){
@@ -152,17 +152,20 @@ public class BioPastemakerTileBlock extends TileEntityLockable implements ITicka
         ItemStack item0 = this.container.get(0);
         ItemStack item1 = this.container.get(1);
         ItemStack item2 = this.container.get(2);
-        if(item0.getItem() == Items.BEEF){
+        if(isFood(item0)){
             return item0;
         }
-        if(item1.getItem() == Items.BEEF){
+        if(isFood(item1)){
             return item1;
         }
-        if(item2.getItem() == Items.BEEF){
+        if(isFood(item2)){
             return item2;
         }
 
         return new ItemStack(Items.AIR);
+    }
+    public boolean isFood(ItemStack food){
+        return this.foods.contains(food.getItem());
     }
 
     public void eat(){

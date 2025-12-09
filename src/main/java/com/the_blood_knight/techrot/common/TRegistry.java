@@ -28,13 +28,23 @@ public class TRegistry {
     public static final ArrayList<BlockBase> BLOCKS = new ArrayList<BlockBase>();
     public static final BioExtractorItem BIO_EXTRACTOR = new BioExtractorItem("bio_extractor");
     public static final ItemBase BIO_CUBE = new ItemBase("bio_cube");
+    public static final ItemBase BIO_CHUNK = new ItemBase("bio_chunk");
+    public static final ItemBase ROTPLATE = new ItemBase("rotplate");
+
     public static final ItemBase BIO_WRENCH = new ItemBase("bio_wrench");
+    public static final BlockBase BIOIMPLANTER = new BioFurnaceBlock(false,Material.ROCK,"bioimplanter");
+    public static final BlockBase ROTPLATE_BLOCK = new BlockBase(Material.IRON,"rotplate_block");
+    public static final BlockBase ROTPLATE_SOLID_BLOCK = new BlockBase(Material.IRON,"rotplate_solid_block");
+    public static final BlockBase ROTPLATE_ORE = new BlockBase(Material.IRON,"rotplate_ore");
 
     public static final BlockBase BIOFURNACE = new BioFurnaceBlock(false,Material.ROCK,"biofurnace");
 
     public static final BlockBase LIT_BIOFURNACE = new BioFurnaceBlock(true,Material.ROCK,"lit_biofurnace");
     public static final BlockBase BIOPASTEMAKER = new BioPastemakerBlock(Material.CACTUS,"biopastemaker");
     public static final BlockBase BIOPIPE = new BioPipeBlock(Material.CACTUS,"biopipe");
+    public static final BlockBase BIOEGGMAKER = new BioEggMakerBlock(Material.CACTUS,"bioeggmaker");
+    public static final BlockBase BIOCRAFTER = new BioCrafterBlock(Material.CACTUS,"biocrafter");
+
     public static final BlockBase BIOFLESHCLONER = new BioFleshClonerBlock(Material.CACTUS,"biofleshcloner");
     public static void registerBlocks(IForgeRegistry<Block> registry) {
         for(BlockBase block : BLOCKS) {
@@ -59,7 +69,7 @@ public class TRegistry {
 
 
     public static void registerItems(IForgeRegistry<Item> registry) {
-        registry.registerAll(BIO_EXTRACTOR,BIO_WRENCH,BIO_CUBE);
+        registry.registerAll(BIO_EXTRACTOR,BIO_WRENCH,BIO_CUBE,BIO_CHUNK,ROTPLATE);
     }
 
 

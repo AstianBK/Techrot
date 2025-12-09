@@ -4,6 +4,7 @@ import com.the_blood_knight.techrot.common.TRegistry;
 import com.the_blood_knight.techrot.common.item.BioExtractorItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
@@ -14,12 +15,11 @@ import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BioFleshClonerContainer extends Container {
+public class BioEggMakerContainer extends Container {
     private final IInventory tileFurnace;
-    private int maxNutrition = 1000;
     private int currentNutrition = 0;
     private int clonerTime = 0;
-    public BioFleshClonerContainer(InventoryPlayer playerInventory, IInventory furnaceInventory)
+    public BioEggMakerContainer(InventoryPlayer playerInventory, IInventory furnaceInventory)
     {
         this.tileFurnace = furnaceInventory;
         this.addSlotToContainer(new Slot(furnaceInventory, 0, 39, 24){
@@ -31,7 +31,7 @@ public class BioFleshClonerContainer extends Container {
         this.addSlotToContainer(new Slot(furnaceInventory, 1, 74, 24){
             @Override
             public boolean isItemValid(ItemStack stack) {
-                return stack.getItem() == TRegistry.BIO_CUBE;
+                return stack.getItem() == Items.EGG;
             }
         });
 

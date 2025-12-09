@@ -3,10 +3,7 @@ package com.the_blood_knight.techrot;
 import com.the_blood_knight.techrot.client.particles.BioGasParticle;
 import com.the_blood_knight.techrot.common.TRegistry;
 import com.the_blood_knight.techrot.common.proxy.CommonProxy;
-import com.the_blood_knight.techrot.common.tile_block.BioFleshClonerTileBlock;
-import com.the_blood_knight.techrot.common.tile_block.BioFurnaceTileBlock;
-import com.the_blood_knight.techrot.common.tile_block.BioPastemakerTileBlock;
-import com.the_blood_knight.techrot.common.tile_block.BioPipeTileBlock;
+import com.the_blood_knight.techrot.common.tile_block.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPane;
 import net.minecraft.client.Minecraft;
@@ -18,6 +15,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -46,6 +44,8 @@ public class Techrot
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         logger = event.getModLog();
+        GameRegistry.registerTileEntity(BioEggMakerTileBlock.class,new ResourceLocation(MODID,"bioeggmaker"));
+        GameRegistry.registerTileEntity(BioCrafterTileBlock.class,new ResourceLocation(MODID,"biocrafter"));
 
         GameRegistry.registerTileEntity(BioPipeTileBlock.class,new ResourceLocation(MODID,"biopipe"));
         GameRegistry.registerTileEntity(BioPastemakerTileBlock.class,new ResourceLocation(MODID,"biopastemaker"));

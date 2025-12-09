@@ -1,0 +1,15 @@
+{
+  "forge_marker":1,
+  "variants": {
+    "normal" : {
+      "model": "techrot:bioimplanter"
+    },
+    "inventory": {
+      "model": "techrot:bioimplanter"
+    },
+    "facing=north": { "model": "techrot:bioimplanter" },
+    "facing=south": { "model": "techrot:bioimplanter", "y": 180 },
+    "facing=west":  { "model": "techrot:bioimplanter", "y": 270 },
+    "facing=east":  { "model": "techrot:bioimplanter", "y": 90 }
+  }
+}

@@ -14,12 +14,10 @@ import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BioFleshClonerContainer extends Container {
+public class BioImplanterContainer extends Container {
     private final IInventory tileFurnace;
-    private int maxNutrition = 1000;
     private int currentNutrition = 0;
-    private int clonerTime = 0;
-    public BioFleshClonerContainer(InventoryPlayer playerInventory, IInventory furnaceInventory)
+    public BioImplanterContainer(InventoryPlayer playerInventory, IInventory furnaceInventory)
     {
         this.tileFurnace = furnaceInventory;
         this.addSlotToContainer(new Slot(furnaceInventory, 0, 39, 24){
@@ -35,12 +33,10 @@ public class BioFleshClonerContainer extends Container {
             }
         });
 
-        this.addSlotToContainer(new Slot(furnaceInventory, 2, 126, 24){
-            @Override
-            public boolean isItemValid(ItemStack stack) {
-                return false;
-            }
-        });
+        this.addSlotToContainer(new Slot(furnaceInventory, 2, 126, 24));
+        this.addSlotToContainer(new Slot(furnaceInventory, 3, 126, 24));
+        this.addSlotToContainer(new Slot(furnaceInventory, 4, 126, 24));
+        this.addSlotToContainer(new Slot(furnaceInventory, 5, 126, 24));
 
         for (int i = 0; i < 3; ++i)
         {
@@ -79,10 +75,6 @@ public class BioFleshClonerContainer extends Container {
             IContainerListener icontainerlistener = this.listeners.get(i);
 
 
-            if (this.clonerTime != this.tileFurnace.getField(1)) {
-                icontainerlistener.sendWindowProperty(this, 1, this.tileFurnace.getField(1));
-            }
-
 
             if (this.currentNutrition != this.tileFurnace.getField(0)) {
                 icontainerlistener.sendWindowProperty(this, 0, this.tileFurnace.getField(0));
@@ -90,7 +82,6 @@ public class BioFleshClonerContainer extends Container {
 
         }
         this.currentNutrition = this.tileFurnace.getField(0);
-        this.clonerTime = this.tileFurnace.getField(1);
     }
 
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
@@ -164,4 +155,5 @@ public class BioFleshClonerContainer extends Container {
 
         return itemstack;
     }
+
 }

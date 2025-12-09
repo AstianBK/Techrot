@@ -5,6 +5,7 @@ import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
@@ -14,6 +15,7 @@ import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldNameable;
 import net.minecraft.world.World;
@@ -29,6 +31,17 @@ public class BlockTileBase extends BlockBase implements ITileEntityProvider {
     public BlockTileBase(Material material) {
         super(material);
         this.hasTileEntity = true;
+    }
+    @Override
+    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
+        IBlockState sourceBlock = worldIn.getBlockState(pos.offset(facing.getOpposite()));
+        if (sourceBlock.getBlock() instanceof BlockTileBase){
+            if(sourceBlock.getBlock() instanceof BioPipeBlock){
+                BioPipeBlock.Pipe pipe = (new BioPipeBlock.Pipe(worldIn, pos.offset(facing.getOpposite()), sourceBlock));
+                pipe.connectFacing(facing);
+            }
+        }
+        return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer, hand);
     }
     protected boolean isInvalidNeighbor(World worldIn, BlockPos pos, EnumFacing facing)
     {

@@ -4,9 +4,11 @@ import com.google.common.collect.Lists;
 import com.the_blood_knight.techrot.common.TRegistry;
 import com.the_blood_knight.techrot.common.api.INutritionBlock;
 import com.the_blood_knight.techrot.common.block.BioFurnaceBlock;
+import com.the_blood_knight.techrot.common.container.BioEggMakerContainer;
 import com.the_blood_knight.techrot.common.container.BioFleshClonerContainer;
 import com.the_blood_knight.techrot.common.item.BioExtractorItem;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
@@ -14,6 +16,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -21,22 +24,24 @@ import net.minecraft.tileentity.TileEntityLockable;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.datafix.fixes.SpawnEggNames;
+import net.minecraft.util.datafix.fixes.SpawnerEntityTypes;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.HashSet;
 import java.util.List;
 
-public class BioFleshClonerTileBlock extends TileEntityLockable implements ITickable, ISidedInventory, INutritionBlock {
+public class BioEggMakerTileBlock extends TileEntityLockable implements ITickable, ISidedInventory, INutritionBlock {
     private static final int[] SLOTS_TOP = new int[] {0};
     private static final int[] SLOTS_BOTTOM = new int[] {2, 1};
     private static final int[] SLOTS_SIDES = new int[] {1};
     public int currentNutrient = 0;
-    public int maxNutrient = 0;
     public int clonerTimer = 0;
     public int maxClonerTimer = 0;
     private NonNullList<ItemStack> container = NonNullList.<ItemStack>withSize(3, ItemStack.EMPTY);
 
-    public BioFleshClonerTileBlock() {
+    public BioEggMakerTileBlock() {
         super();
     }
 
@@ -113,6 +118,19 @@ public class BioFleshClonerTileBlock extends TileEntityLockable implements ITick
             }
         }
     }
+    public static ItemStack createSpawnEgg(ResourceLocation entityId, int primaryColor, int secondaryColor) {
+        ItemStack egg = new ItemStack(Items.SPAWN_EGG);
+
+        NBTTagCompound entityTag = new NBTTagCompound();
+        entityTag.setString("id", entityId.toString());
+
+        NBTTagCompound root = new NBTTagCompound();
+        root.setTag("EntityTag", entityTag);
+
+        egg.setTagCompound(root);
+
+        return egg;
+    }
     private void cloneFlesh() {
         this.container.get(1).shrink(1);
         ItemStack extract = this.container.get(0);
@@ -135,33 +153,15 @@ public class BioFleshClonerTileBlock extends TileEntityLockable implements ITick
     }
     public ItemStack getCloneForADN(ItemStack extract){
         if(!BioExtractorItem.getADN(extract).contains(":"))return ItemStack.EMPTY;
-        String adn = BioExtractorItem.getADN(extract).split(":")[1];
-        switch (adn){
-            case "pig" :{
-                return new ItemStack(Items.PORKCHOP);
-            }
-            case "cow":{
-                return new ItemStack(Items.BEEF);
-            }
-            case "rabbit":{
-                return new ItemStack(Items.RABBIT);
-            }
-            case "chicken":{
-                return new ItemStack(Items.CHICKEN);
-            }
-            case "sheep":{
-                return new ItemStack(Items.MUTTON);
-            }
-            default:
-                return null;
-        }
+        String adn = BioExtractorItem.getADN(extract);
+        return createSpawnEgg(new ResourceLocation(adn),0xA0E0A0, 0xFF0000 );
     }
 
 
 
 
     public boolean canCloneFlesh(){
-        boolean flag = !BioExtractorItem.getADN(this.container.get(0)).equals("none") && this.container.get(1).getItem().equals(TRegistry.BIO_CUBE);
+        boolean flag = !BioExtractorItem.getADN(this.container.get(0)).equals("none") && this.container.get(1).getItem().equals(Items.EGG);
         if(!flag){
             return false;
         }
@@ -346,7 +346,7 @@ public class BioFleshClonerTileBlock extends TileEntityLockable implements ITick
 
     @Override
     public String getName() {
-        return "Flesh Cloner";
+        return "Egg Maker";
     }
 
     @Override
@@ -372,22 +372,22 @@ public class BioFleshClonerTileBlock extends TileEntityLockable implements ITick
 
     @Override
     public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
-        return new BioFleshClonerContainer(playerInventory,this);
+        return new BioEggMakerContainer(playerInventory,this);
     }
 
     @Override
     public String getGuiID() {
-        return "techrot:biofleshcloner";
+        return "techrot:bioeggmaker";
     }
 
-    net.minecraftforge.items.IItemHandler handlerTop = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, net.minecraft.util.EnumFacing.UP);
-    net.minecraftforge.items.IItemHandler handlerBottom = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, net.minecraft.util.EnumFacing.DOWN);
-    net.minecraftforge.items.IItemHandler handlerSide = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, net.minecraft.util.EnumFacing.WEST);
+    net.minecraftforge.items.IItemHandler handlerTop = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, EnumFacing.UP);
+    net.minecraftforge.items.IItemHandler handlerBottom = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, EnumFacing.DOWN);
+    net.minecraftforge.items.IItemHandler handlerSide = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, EnumFacing.WEST);
 
     @SuppressWarnings("unchecked")
     @Override
     @javax.annotation.Nullable
-    public <T> T getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @javax.annotation.Nullable net.minecraft.util.EnumFacing facing)
+    public <T> T getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @javax.annotation.Nullable EnumFacing facing)
     {
         if (facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
             if (facing == EnumFacing.DOWN)

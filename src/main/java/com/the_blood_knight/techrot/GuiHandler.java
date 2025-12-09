@@ -1,15 +1,9 @@
 package com.the_blood_knight.techrot;
 
-import com.the_blood_knight.techrot.client.screen.BioFleshClonerScreen;
-import com.the_blood_knight.techrot.client.screen.BioFurnaceScreen;
-import com.the_blood_knight.techrot.client.screen.BioPastemakerScreen;
+import com.the_blood_knight.techrot.client.screen.*;
 import com.the_blood_knight.techrot.common.block.BioFurnaceBlock;
-import com.the_blood_knight.techrot.common.container.BioFleshClonerContainer;
-import com.the_blood_knight.techrot.common.container.BioFurnaceContainer;
-import com.the_blood_knight.techrot.common.container.BioPastemakerContainer;
-import com.the_blood_knight.techrot.common.tile_block.BioFleshClonerTileBlock;
-import com.the_blood_knight.techrot.common.tile_block.BioFurnaceTileBlock;
-import com.the_blood_knight.techrot.common.tile_block.BioPastemakerTileBlock;
+import com.the_blood_knight.techrot.common.container.*;
+import com.the_blood_knight.techrot.common.tile_block.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ContainerFurnace;
 import net.minecraft.util.math.BlockPos;
@@ -20,6 +14,9 @@ public class GuiHandler implements IGuiHandler {
     public static final int BIOPIPE = 0;
     public static final int BIOPASTEMAKER = 1;
     public static final int BIOFLESHCLONER = 2;
+    public static final int BIOEGGMAKER = 3;
+    public static final int BIOCRAFTER = 4;
+
     @Override
     public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
         if(id == 0){
@@ -30,6 +27,12 @@ public class GuiHandler implements IGuiHandler {
         }
         if(id == 2){
             return new BioFleshClonerContainer(player.inventory,((BioFleshClonerTileBlock)world.getTileEntity(new BlockPos(x, y, z))));
+        }
+        if(id == 3){
+            return new BioEggMakerContainer(player.inventory,((BioEggMakerTileBlock)world.getTileEntity(new BlockPos(x, y, z))));
+        }
+        if(id == 4){
+            return new BioCrafterContainer(player.inventory,((BioCrafterTileBlock)world.getTileEntity(new BlockPos(x, y, z))));
         }
         return null;
     }
@@ -44,6 +47,12 @@ public class GuiHandler implements IGuiHandler {
         }
         if(id == 2){
             return new BioFleshClonerScreen(player.inventory, ((BioFleshClonerTileBlock)world.getTileEntity(new BlockPos(x, y, z))));
+        }
+        if(id == 3){
+            return new BioEggMakerScreen(player.inventory, ((BioEggMakerTileBlock)world.getTileEntity(new BlockPos(x, y, z))));
+        }
+        if(id == 4){
+            return new BioCrafterScreen(player.inventory, ((BioCrafterTileBlock)world.getTileEntity(new BlockPos(x, y, z))));
         }
         return null;
     }

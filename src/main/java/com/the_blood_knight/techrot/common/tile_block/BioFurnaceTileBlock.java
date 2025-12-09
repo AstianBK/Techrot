@@ -1,11 +1,13 @@
 package com.the_blood_knight.techrot.common.tile_block;
 
-import com.the_blood_knight.techrot.Techrot;
+import com.google.common.collect.Lists;
 import com.the_blood_knight.techrot.common.api.INutritionBlock;
 import com.the_blood_knight.techrot.common.block.BioFurnaceBlock;
+import com.the_blood_knight.techrot.common.block.BioPipeBlock;
 import com.the_blood_knight.techrot.common.container.BioFurnaceContainer;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
@@ -14,6 +16,7 @@ import net.minecraft.inventory.*;
 import net.minecraft.item.*;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.tileentity.TileEntityLockable;
 import net.minecraft.util.EnumFacing;
@@ -26,6 +29,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.HashSet;
+import java.util.List;
 
 public class BioFurnaceTileBlock extends TileEntityLockable implements ITickable, ISidedInventory, INutritionBlock {
     private static final int[] SLOTS_TOP = new int[] {0};
@@ -174,9 +180,10 @@ public class BioFurnaceTileBlock extends TileEntityLockable implements ITickable
         boolean flag1 = false;
 
 
-
-
         if (!this.world.isRemote) {
+            if(this.currentNutrition<this.maxNutrient){
+                this.currentNutrition += this.requestNutrient(10);
+            }
             if (this.isBurning() || !((ItemStack)this.furnaceItemStacks.get(0)).isEmpty()) {
                 if (this.canSmelt()) {
 
@@ -221,8 +228,42 @@ public class BioFurnaceTileBlock extends TileEntityLockable implements ITickable
         }
     }
 
-    private void extractNutrient() {
+    private int requestNutrient(int amount) {
+        for (EnumFacing facing : getValidFacingConnect()){
+            BlockPos offset = this.pos.offset(facing);
+            TileEntity tile = this.world.getTileEntity(offset);
+            if(tile instanceof BioPipeTileBlock){
+                return ((BioPipeTileBlock)tile).requestNutrients(amount,facing,new HashSet<>());
+            }
+        }
+        return 0;
     }
+
+    public List<EnumFacing> getValidFacingConnect(){
+        IBlockState state = this.world.getBlockState(this.pos);
+        switch (state.getValue(BioFurnaceBlock.FACING)){
+            case EAST:{
+
+                return Lists.newArrayList(EnumFacing.WEST,EnumFacing.SOUTH,EnumFacing.NORTH);
+            }
+            case WEST:{
+                return Lists.newArrayList(EnumFacing.EAST,EnumFacing.SOUTH,EnumFacing.NORTH);
+
+            }
+            case SOUTH:{
+                return Lists.newArrayList(EnumFacing.WEST,EnumFacing.EAST,EnumFacing.NORTH);
+
+            }
+            case NORTH:{
+                return Lists.newArrayList(EnumFacing.WEST,EnumFacing.SOUTH,EnumFacing.EAST);
+
+            }
+            default:{
+                return Lists.newArrayList();
+            }
+        }
+    }
+
 
     public int getCookTime(ItemStack stack) {
         return 200;
@@ -550,13 +591,19 @@ public class BioFurnaceTileBlock extends TileEntityLockable implements ITickable
     }
 
     @Override
-    public void extractNutrition() {
+    public int extractNutrition(EnumFacing facing) {
         this.currentNutrition++;
         this.markDirty();
+        return 1;
     }
 
     @Override
-    public boolean canExtract(BlockPos pos) {
+    public boolean canExtract(BlockPos pos, EnumFacing facing) {
+        return false;
+    }
+
+    @Override
+    public boolean canInsert(BlockPos pos, EnumFacing facing) {
         return this.currentNutrition<this.maxNutrient;
     }
 }

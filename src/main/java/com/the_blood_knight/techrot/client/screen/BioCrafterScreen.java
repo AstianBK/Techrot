@@ -1,30 +1,31 @@
 package com.the_blood_knight.techrot.client.screen;
 
 import com.the_blood_knight.techrot.Techrot;
-import com.the_blood_knight.techrot.common.container.BioFleshClonerContainer;
+import com.the_blood_knight.techrot.common.container.BioCrafterContainer;
+import com.the_blood_knight.techrot.common.container.BioEggMakerContainer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
 
-public class BioFleshClonerScreen extends GuiContainer {
+public class BioCrafterScreen extends GuiContainer {
     private static final ResourceLocation[] FRAMES = new ResourceLocation[]{
-            new ResourceLocation(Techrot.MODID,"textures/gui/container/biofleshcloner_gui_0.png"),
-            new ResourceLocation(Techrot.MODID,"textures/gui/container/biofleshcloner_gui_1.png"),
-            new ResourceLocation(Techrot.MODID,"textures/gui/container/biofleshcloner_gui_2.png"),
-            new ResourceLocation(Techrot.MODID,"textures/gui/container/biofleshcloner_gui_3.png"),
-            new ResourceLocation(Techrot.MODID,"textures/gui/container/biofleshcloner_gui_4.png"),
-            new ResourceLocation(Techrot.MODID,"textures/gui/container/biofleshcloner_gui_5.png"),
-            new ResourceLocation(Techrot.MODID,"textures/gui/container/biofleshcloner_gui_6.png"),
-            new ResourceLocation(Techrot.MODID,"textures/gui/container/biofleshcloner_gui_7 .png")
+            new ResourceLocation(Techrot.MODID,"textures/gui/container/biocrafter_0.png"),
+            new ResourceLocation(Techrot.MODID,"textures/gui/container/biocrafter_1.png"),
+            new ResourceLocation(Techrot.MODID,"textures/gui/container/biocrafter_2.png"),
+            new ResourceLocation(Techrot.MODID,"textures/gui/container/biocrafter_3.png"),
+            new ResourceLocation(Techrot.MODID,"textures/gui/container/biocrafter_4.png"),
+            new ResourceLocation(Techrot.MODID,"textures/gui/container/biocrafter_5.png"),
+            new ResourceLocation(Techrot.MODID,"textures/gui/container/biocrafter_6.png"),
+            new ResourceLocation(Techrot.MODID,"textures/gui/container/biocrafter_7 .png")
     };
     private final InventoryPlayer playerInventory;
     private final IInventory tileFurnace;
 
-    public BioFleshClonerScreen(InventoryPlayer playerInv, IInventory furnaceInv)
+    public BioCrafterScreen(InventoryPlayer playerInv, IInventory furnaceInv)
     {
-        super(new BioFleshClonerContainer(playerInv, furnaceInv));
+        super(new BioCrafterContainer(playerInv, furnaceInv));
         this.playerInventory = playerInv;
         this.tileFurnace = furnaceInv;
     }
@@ -56,7 +57,7 @@ public class BioFleshClonerScreen extends GuiContainer {
         this.mc.getTextureManager().bindTexture(FRAMES[frame]);
         int i = (this.width - this.xSize) / 2;
         int j = (this.height - this.ySize) / 2;
-        this.drawTexturedModalRect(i, j, 0, 0, 176, 186);
+        this.drawTexturedModalRect(i, j, 0, 0, 176, 166);
 
         int k = this.getNutrition(49);
         this.drawTexturedModalRect(i + 60, j + 72, 176, 20, k, 18);

@@ -29,6 +29,14 @@ public class BioExtractorItem extends ItemBase{
     }
 
 
+    @Override
+    public int getDamage(ItemStack stack) {
+        return getADN(stack).equals("none") ? 1 : super.getDamage(stack);
+    }
+
+    public static void clearADN(ItemStack stack){
+        stack.getOrCreateSubCompound("store").setString("adn","none");
+    }
 
     @Override
     public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target, EnumHand hand) {
@@ -51,7 +59,8 @@ public class BioExtractorItem extends ItemBase{
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
-        if(getADN(stack).equals("none"))return;
-        tooltip.add(getADN(stack).split(":")[1]);
+        String adn = getADN(stack);
+        if(adn.equals("none") || !adn.contains(":"))return;
+        tooltip.add(adn.split(":")[1]);
     }
 }
