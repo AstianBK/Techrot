@@ -41,7 +41,7 @@ public class BioExtractorItem extends ItemBase{
     @Override
     public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target, EnumHand hand) {
         ItemStack extract = playerIn.getHeldItem(hand);
-        if(extract.getTagCompound()==null && (target instanceof EntityCow || target instanceof EntityChicken || target instanceof EntityPig || target instanceof EntityRabbit || target instanceof EntitySheep)){
+        if(extract.getTagCompound()==null && !(target instanceof EntityPlayer)){
             addADN(extract,EntityList.getKey(target).toString());
 
         }

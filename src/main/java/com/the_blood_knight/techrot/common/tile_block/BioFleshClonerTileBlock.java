@@ -167,7 +167,7 @@ public class BioFleshClonerTileBlock extends TileEntityLockable implements ITick
         }
         ItemStack clone = getCloneForADN(this.container.get(0));
         ItemStack result = this.container.get(2);
-        return (result.isEmpty() || result.getItem() == clone.getItem()) && result.getCount()<64;
+        return clone!=null && (result.isEmpty() || result.getItem() == clone.getItem()) && result.getCount()<64;
     }
 
 

@@ -47,7 +47,10 @@ public class BioPipeBlock extends BlockTileBase{
         return 0;
     }
 
-
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return getDefaultState();
+    }
 
     @Override
     public IBlockState withRotation(IBlockState state, Rotation rot) {
@@ -117,22 +120,6 @@ public class BioPipeBlock extends BlockTileBase{
         if (!worldIn.isRemote) {
             final IBlockState currentState = worldIn.getBlockState(pos);
             boolean flag = false;
-
-            if (!worldIn.getBlockState(pos.down()).isSideSolid(worldIn, pos.down(), EnumFacing.UP))
-            {
-                flag = true;
-            }
-
-
-            if (flag && !currentState.getBlock().isAir(currentState, worldIn, pos))
-            {
-                //this.dropBlockAsItem(worldIn, pos, state, 0);
-                //worldIn.setBlockToAir(pos);
-            }
-            else
-            {
-                //this.updateState(state, worldIn, pos, blockIn);
-            }
         }
     }
     

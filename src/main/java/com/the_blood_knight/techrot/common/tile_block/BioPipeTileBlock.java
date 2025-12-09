@@ -7,6 +7,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTUtil;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
@@ -20,10 +22,30 @@ public class BioPipeTileBlock extends TileEntity implements ITickable,INutrition
     public Map<EnumFacing, BlockPos> connections = Techrot.main.getMapEmpty();
     public List<BlockPos> cores = new ArrayList<>();
     public List<BlockPos> features = new ArrayList<>();
-    public EnumFacing directionActually = null;
+
+    public boolean loaded = false;
+    public boolean north = false;
+    public boolean south = false;
+    public boolean east = false;
+    public boolean west = false;
+    public boolean up = false;
+    public boolean down = false;
     @Override
     public void update() {
+        if (!loaded || world == null) return;
 
+        loaded = false;
+        Techrot.logger.info("update data :)");
+        IBlockState state = world.getBlockState(pos)
+                .withProperty(BioPipeBlock.NORTH, this.north)
+                .withProperty(BioPipeBlock.SOUTH, this.south)
+                .withProperty(BioPipeBlock.EAST,  this.east)
+                .withProperty(BioPipeBlock.WEST,  this.west)
+                .withProperty(BioPipeBlock.UP,    this.up)
+                .withProperty(BioPipeBlock.DOWN,  this.down);
+
+        world.setBlockState(pos, state, 3);
+        markDirty();
     }
 
     public int getCountConnection(){
@@ -36,21 +58,16 @@ public class BioPipeTileBlock extends TileEntity implements ITickable,INutrition
         return i;
     }
 
-    public void addFeature(BlockPos pos){
-        if(!this.features.contains(pos)){
-            this.features.add(pos);
-        }
-    }
-    public void addCore(BlockPos pos){
-        if(!this.cores.contains(pos)){
-            this.cores.add(pos);
-        }
-    }
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
-
-
+        this.north = compound.getBoolean("north");
+        this.south =compound.getBoolean("south");
+        this.east =  compound.getBoolean("east");
+        this.west =compound.getBoolean("west");
+        this.up = compound.getBoolean("up");
+        this.down = compound.getBoolean("down");
+        this.loaded = true;
     }
 
     public BlockPos[] getConnectedPipes() {
@@ -66,21 +83,38 @@ public class BioPipeTileBlock extends TileEntity implements ITickable,INutrition
     }
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        NBTTagList list = new NBTTagList();
-        for (Map.Entry<EnumFacing,BlockPos> facings : connections.entrySet()){
-            if(facings.getValue()==null)continue;
-            NBTTagCompound blockpos = new NBTTagCompound();
-            blockpos.setTag("pos",NBTUtil.createPosTag(facings.getValue()));
-            blockpos.setString("facing",facings.getKey().getName());
-            list.appendTag(blockpos);
-        }
-        compound.setTag("connections",list);
-        NBTTagList cores = new NBTTagList();
-        for (BlockPos coresPos : this.cores){
-            cores.appendTag(NBTUtil.createPosTag(coresPos));
-        }
-        compound.setTag("cores",cores);
-        return super.writeToNBT(compound);
+        NBTTagCompound tag = super.writeToNBT(compound);
+        tag.setBoolean("north", world.getBlockState(pos).getValue(BioPipeBlock.NORTH));
+        tag.setBoolean("south", world.getBlockState(pos).getValue(BioPipeBlock.SOUTH));
+        tag.setBoolean("east",  world.getBlockState(pos).getValue(BioPipeBlock.EAST));
+        tag.setBoolean("west",  world.getBlockState(pos).getValue(BioPipeBlock.WEST));
+        tag.setBoolean("up",    world.getBlockState(pos).getValue(BioPipeBlock.UP));
+        tag.setBoolean("down",  world.getBlockState(pos).getValue(BioPipeBlock.DOWN));
+
+        return tag;
+    }
+    @Override
+    public NBTTagCompound getUpdateTag() {
+        NBTTagCompound tag = super.getUpdateTag();
+        writeToNBT(tag);
+        return tag;
+    }
+
+    @Override
+    public void handleUpdateTag(NBTTagCompound tag) {
+        readFromNBT(tag);
+    }
+
+    @Override
+    public SPacketUpdateTileEntity getUpdatePacket() {
+        NBTTagCompound tag = new NBTTagCompound();
+        writeToNBT(tag);
+        return new SPacketUpdateTileEntity(this.pos, 1, tag);
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+        readFromNBT(pkt.getNbtCompound());
     }
     public BioPastemakerTileBlock getConnectedNucleus() {
         for (EnumFacing facing : EnumFacing.VALUES) {
