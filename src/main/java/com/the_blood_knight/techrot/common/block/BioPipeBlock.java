@@ -39,7 +39,6 @@ public class BioPipeBlock extends BlockTileBase{
     public BioPipeBlock(Material material,String name) {
         super(material,name);
         this.setDefaultState(this.blockState.getBaseState().withProperty(UP,false).withProperty(DOWN,false).withProperty(SOUTH,false).withProperty(NORTH,false).withProperty(EAST,false).withProperty(WEST,false));
-        this.setCreativeTab(CreativeTabs.DECORATIONS);
     }
 
     @Override
