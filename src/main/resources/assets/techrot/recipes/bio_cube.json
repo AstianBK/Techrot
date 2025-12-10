@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "#S#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:rotten_flesh"
+    },
+    "S": {
+      "item": "techrot:bio_chunk"
+    }
+  },
+  "result": {
+    "item": "techrot:bio_cube",
+    "count": 1
+  }
+}
