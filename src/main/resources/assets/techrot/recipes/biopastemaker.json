@@ -1,7 +1,7 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "gFg",
+    "gDg",
     "gRg",
     "iii"
   ],
@@ -9,18 +9,18 @@
     "g": {
       "item": "techrot:rotplate"
     },
-    "F": {
-      "item": "minecraft:crafting_table"
+    "D": {
+      "item": "minecraft:dispenser"
     },
     "R": {
-      "item": "techrot:bio_chunk"
+      "item": "techrot:bio_cube"
     },
     "i": {
       "item": "minecraft:iron_ingot"
     }
   },
   "result": {
-    "item": "techrot:biocrafter",
+    "item": "techrot:biopastemaker",
     "count": 1
   }
 }

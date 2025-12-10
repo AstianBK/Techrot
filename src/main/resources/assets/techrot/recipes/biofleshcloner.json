@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#C#",
+    "gRg",
+    "ggg"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:iron_trapdoor"
+    },
+    "C": {
+      "item": "minecraft:cauldron"
+    },
+    "g": {
+      "item": "techrot:rotplate"
+    },
+    "R": {
+      "item": "techrot:bio_cube"
+    }
+  },
+  "result": {
+    "item": "techrot:biofleshcloner",
+    "count": 1
+  }
+}
