@@ -114,14 +114,26 @@ public class BioFurnaceBlock extends BlockTileBase {
         if (this.isBurning)
         {
 
+            for (int pass = 0; pass < 15; pass++) {
+                BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos(pos);
+                float theta = (float) (2 * Math.PI * rand.nextFloat());
+                float phi = (float) Math.acos(2 * rand.nextFloat() - 1);
+                double x = 3 * Math.sin(phi) * Math.cos(theta);
+                double y = 3 * Math.sin(phi) * Math.sin(theta);
+                double z = 3 * Math.cos(phi);
+
+                mutableBlockPos.setPos(x + pos.getX(), y + pos.getY(), z + pos.getZ());
+                if (worldIn.getHeight(mutableBlockPos.getX(), mutableBlockPos.getZ()) > pos.getY())
+                    continue;
+                double height = worldIn.getHeight(mutableBlockPos.getX(),mutableBlockPos.getZ());
+                Minecraft.getMinecraft().effectRenderer.addEffect(new ToxicFogParticle(worldIn, mutableBlockPos.getX(), height + rand.nextFloat(), mutableBlockPos.getZ(), 0, 0, 0));
+            }
             EnumFacing enumfacing = (EnumFacing)stateIn.getValue(FACING);
             double d0 = (double)pos.getX() + 0.5D;
             double d1 = (double)pos.getY() + rand.nextDouble() * 6.0D / 16.0D;
             double d2 = (double)pos.getZ() + 0.5D;
             double d3 = 0.52D;
             double d4 = rand.nextDouble() * 0.6D - 0.3D;
-            Minecraft.getMinecraft().effectRenderer.addEffect(new BioGasParticle(worldIn,d0 - 0.52D, d1, d2 + d4, 0.0D, 0.01D, 0.0D));
-            Minecraft.getMinecraft().effectRenderer.addEffect(new ToxicFogParticle(worldIn,d0 - 0.52D, d1, d2 + d4, 0.0D, 0.01D, 0.0D));
 
             if (rand.nextDouble() < 0.1D)
             {

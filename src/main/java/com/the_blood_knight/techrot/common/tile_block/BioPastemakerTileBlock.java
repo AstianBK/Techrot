@@ -109,7 +109,7 @@ public class BioPastemakerTileBlock extends TileEntityLockable implements ITicka
         markDirty();
     }
     public boolean canEat(){
-        return this.container.stream().anyMatch(e->e.getItem() == Items.BEEF);
+        return this.container.stream().anyMatch(this::isFood);
     }
 
     public boolean isEating(){
@@ -173,13 +173,13 @@ public class BioPastemakerTileBlock extends TileEntityLockable implements ITicka
         ItemStack item1 = this.container.get(1);
         ItemStack item2 = this.container.get(2);
         boolean flag = false;
-        if(item0.getItem() == Items.BEEF){
+        if(isFood(item0)){
             item0.shrink(1);
             flag = true;
-        }else if(item1.getItem() == Items.BEEF){
+        }else if(isFood(item1)){
             item1.shrink(1);
             flag = true;
-        }else if(item2.getItem() == Items.BEEF){
+        }else if(isFood(item2)){
             item2.shrink(1);
             flag = true;
         }

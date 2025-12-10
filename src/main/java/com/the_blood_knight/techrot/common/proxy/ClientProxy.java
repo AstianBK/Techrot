@@ -46,7 +46,7 @@ public class ClientProxy extends CommonProxy{
 				}
 		);
 		Minecraft.getMinecraft().effectRenderer.registerParticle(
-				49,
+				51,
 				new ToxicFogParticle.Factory()
 		);
 		Minecraft.getMinecraft().effectRenderer.registerParticle(
