@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " # ",
+    " R#",
+    "#  "
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:bone"
+    },
+    "R": {
+      "item": "techrot:bio_chunk"
+    }
+  },
+  "result": {
+    "item": "techrot:bio_wrench",
+    "count": 1
+  }
+}
