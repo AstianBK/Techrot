@@ -67,7 +67,7 @@ public class BioEggMakerBlock extends BlockTileBase{
     @SuppressWarnings("incomplete-switch")
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         if (this.isWork) {
-            Techrot.spawnPeste(worldIn,pos,rand,3);
+            Techrot.spawnPeste(worldIn,pos,rand,7);
         }
     }
 
