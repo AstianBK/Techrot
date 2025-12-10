@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "gFg",
+    "gRg",
+    "iii"
+  ],
+  "key": {
+    "g": {
+      "item": "techrot:rotplate"
+    },
+    "F": {
+      "item": "minecraft:crafting_table"
+    },
+    "R": {
+      "item": "techrot:bio_chunk"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "techrot:biocrafter",
+    "count": 1
+  }
+}

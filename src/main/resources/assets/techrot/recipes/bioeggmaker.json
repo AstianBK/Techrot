@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#N#",
+    "gRg",
+    "ggg"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:iron_trapdoor"
+    },
+    "N": {
+      "item": "minecraft:nether_star"
+    },
+    "g": {
+      "item": "techrot:rotplate"
+    },
+    "R": {
+      "item": "techrot:bio_cube"
+    }
+  },
+  "result": {
+    "item": "techrot:bioeggmaker",
+    "count": 1
+  }
+}
