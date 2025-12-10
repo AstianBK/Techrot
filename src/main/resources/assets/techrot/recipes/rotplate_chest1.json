@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "g g",
+    "BRB",
+    "ggg"
+  ],
+  "key": {
+    "g": {
+      "item": "techrot:rotplate"
+    },
+    "B": {
+      "item": "minecraft:bone"
+    },
+    "R": {
+      "item": "minecraft:redstone_block"
+    }
+  },
+  "result": {
+    "item": "techrot:rotplate_chest1",
+    "count": 1
+  }
+}
