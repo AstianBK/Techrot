@@ -72,7 +72,7 @@ public class BioFurnaceScreen extends GuiContainer {
 
 
         int l = this.getCookProgressScaled(18);
-        this.drawTexturedModalRect(i + 79, j + 15, 176, 14, l + 1, 16);
+        this.drawTexturedModalRect(i + 79, j + 14, 176, 16, l, 18);
     }
 
     private int getCookProgressScaled(int pixels)

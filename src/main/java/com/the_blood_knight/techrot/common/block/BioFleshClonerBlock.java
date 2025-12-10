@@ -26,17 +26,46 @@ import java.util.Random;
 
 public class BioFleshClonerBlock extends BlockTileBase{
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
+    private final boolean isBurning;
 
-    public BioFleshClonerBlock(Material material, String name) {
+    public BioFleshClonerBlock(Material material, String name,boolean isBurning) {
         super(material, name);
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
-
+        this.isBurning = isBurning;
     }
     public Item getItemDropped(IBlockState state, Random rand, int fortune)
     {
         return Item.getItemFromBlock(TRegistry.BIOFLESHCLONER);
     }
+    @SideOnly(Side.CLIENT)
+    @SuppressWarnings("incomplete-switch")
+    public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+        if (this.isBurning) {
+            Techrot.spawnPeste(worldIn,pos,rand,3);
+        }
+    }
+    public static void setState(boolean active, World worldIn, BlockPos pos) {
+        IBlockState iblockstate = worldIn.getBlockState(pos);
+        TileEntity tileentity = worldIn.getTileEntity(pos);
 
+        if (active)
+        {
+            worldIn.setBlockState(pos, TRegistry.LIT_BIOFLESHCLONER.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
+            worldIn.setBlockState(pos, TRegistry.LIT_BIOFLESHCLONER.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
+        }
+        else
+        {
+            worldIn.setBlockState(pos, TRegistry.BIOFLESHCLONER.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
+            worldIn.setBlockState(pos, TRegistry.BIOFLESHCLONER.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
+        }
+
+
+        if (tileentity != null)
+        {
+            tileentity.validate();
+            worldIn.setTileEntity(pos, tileentity);
+        }
+    }
     @Nullable
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {

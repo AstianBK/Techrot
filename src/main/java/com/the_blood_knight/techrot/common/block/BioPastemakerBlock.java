@@ -24,14 +24,47 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Random;
+
 public class BioPastemakerBlock extends BlockTileBase{
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
     private static boolean keepInventory;
-
-    public BioPastemakerBlock(Material material, String name) {
+    private final boolean active;
+    public BioPastemakerBlock(Material material, String name,boolean active) {
         super(material, name);
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+        this.active = active;
+    }
+    @SideOnly(Side.CLIENT)
+    @SuppressWarnings("incomplete-switch")
+    public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+        if (this.active) {
+            Techrot.spawnPeste(worldIn,pos,rand,3);
+        }
+    }
+    public static void setState(boolean active, World worldIn, BlockPos pos) {
+        IBlockState iblockstate = worldIn.getBlockState(pos);
+        TileEntity tileentity = worldIn.getTileEntity(pos);
+        keepInventory = true;
 
+        if (active)
+        {
+            worldIn.setBlockState(pos, TRegistry.LIT_BIOPASTEMAKER.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
+            worldIn.setBlockState(pos, TRegistry.LIT_BIOPASTEMAKER.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
+        }
+        else
+        {
+            worldIn.setBlockState(pos, TRegistry.BIOPASTEMAKER.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
+            worldIn.setBlockState(pos, TRegistry.BIOPASTEMAKER.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
+        }
+
+        keepInventory = false;
+
+        if (tileentity != null)
+        {
+            tileentity.validate();
+            worldIn.setTileEntity(pos, tileentity);
+        }
     }
 
     @SideOnly(Side.CLIENT)

@@ -8,17 +8,23 @@ import com.the_blood_knight.techrot.common.container.BioFurnaceContainer;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.init.MobEffects;
+import net.minecraft.init.PotionTypes;
 import net.minecraft.inventory.*;
 import net.minecraft.item.*;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.tileentity.TileEntityLockable;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
@@ -162,7 +168,7 @@ public class BioFurnaceTileBlock extends TileEntityLockable implements ITickable
 
 
     public boolean isBurning() {
-        return this.currentNutrition > 0;
+        return this.cookTime > 0;
     }
 
     @SideOnly(Side.CLIENT)
@@ -181,26 +187,33 @@ public class BioFurnaceTileBlock extends TileEntityLockable implements ITickable
 
 
         if (!this.world.isRemote) {
+            if(this.isBurning() && this.cookTime%10==0){
+                for (EntityLiving living : this.world.getEntities(EntityLiving.class, e-> e.isEntityAlive() && e.getDistance(this.pos.getX(),this.pos.getY(),this.pos.getZ())<3)){
+                    living.attackEntityFrom(DamageSource.FALL,1.0F);
+                    living.addPotionEffect(new PotionEffect(MobEffects.POISON,100,0));
+                }
+            }
             if(this.currentNutrition<this.maxNutrient){
                 this.currentNutrition += this.requestNutrient(10);
             }
             if (this.isBurning() || !((ItemStack)this.furnaceItemStacks.get(0)).isEmpty()) {
                 if (this.canSmelt()) {
 
-                    if (this.isBurning())
+                    if (this.currentNutrition>0)
                     {
                         flag1 = true;
 
                     }
                 }
 
-                if (this.isBurning() && this.canSmelt()) {
+                if (this.currentNutrition>0 && this.canSmelt()) {
                     ++this.cookTime;
+
                     if(this.cookTime%10 == 0){
                         this.currentNutrition-=5;
                     }
-                    if (this.cookTime == this.totalCookTime)
-                    {
+
+                    if (this.cookTime == this.totalCookTime) {
                         this.cookTime = 0;
                         this.totalCookTime = this.getCookTime(this.furnaceItemStacks.get(0));
                         this.smeltItem();
@@ -211,8 +224,7 @@ public class BioFurnaceTileBlock extends TileEntityLockable implements ITickable
                     this.cookTime = 0;
                 }
             }
-            else if (!this.isBurning() && this.cookTime > 0)
-            {
+            else if (!this.isBurning() && this.cookTime > 0) {
                 this.cookTime = MathHelper.clamp(this.cookTime - 2, 0, this.totalCookTime);
             }
 
@@ -266,7 +278,7 @@ public class BioFurnaceTileBlock extends TileEntityLockable implements ITickable
 
 
     public int getCookTime(ItemStack stack) {
-        return 200;
+        return 90;
     }
 
 

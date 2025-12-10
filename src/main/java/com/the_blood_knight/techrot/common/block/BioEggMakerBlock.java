@@ -25,14 +25,13 @@ import java.util.Random;
 
 public class BioEggMakerBlock extends BlockTileBase{
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
-
-    public BioEggMakerBlock(Material material, String name) {
+    public final boolean isWork;
+    public BioEggMakerBlock(Material material, String name,boolean isWork) {
         super(material, name);
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
-
+        this.isWork = isWork;
     }
-    public Item getItemDropped(IBlockState state, Random rand, int fortune)
-    {
+    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
         return Item.getItemFromBlock(TRegistry.BIOEGGMAKER);
     }
 
@@ -62,6 +61,36 @@ public class BioEggMakerBlock extends BlockTileBase{
             default:{
                 return false;
             }
+        }
+    }
+    @SideOnly(Side.CLIENT)
+    @SuppressWarnings("incomplete-switch")
+    public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+        if (this.isWork) {
+            Techrot.spawnPeste(worldIn,pos,rand,3);
+        }
+    }
+
+    public static void setState(boolean active, World worldIn, BlockPos pos) {
+        IBlockState iblockstate = worldIn.getBlockState(pos);
+        TileEntity tileentity = worldIn.getTileEntity(pos);
+
+        if (active)
+        {
+            worldIn.setBlockState(pos, TRegistry.LIT_BIOEGGMAKER.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
+            worldIn.setBlockState(pos, TRegistry.LIT_BIOEGGMAKER.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
+        }
+        else
+        {
+            worldIn.setBlockState(pos, TRegistry.BIOEGGMAKER.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
+            worldIn.setBlockState(pos, TRegistry.BIOEGGMAKER.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
+        }
+
+
+        if (tileentity != null)
+        {
+            tileentity.validate();
+            worldIn.setTileEntity(pos, tileentity);
         }
     }
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {

@@ -1,8 +1,10 @@
 package com.the_blood_knight.techrot.common.tile_block;
 
 import com.google.common.collect.Lists;
+import com.the_blood_knight.techrot.Techrot;
 import com.the_blood_knight.techrot.common.TRegistry;
 import com.the_blood_knight.techrot.common.api.INutritionBlock;
+import com.the_blood_knight.techrot.common.block.BioEggMakerBlock;
 import com.the_blood_knight.techrot.common.block.BioFurnaceBlock;
 import com.the_blood_knight.techrot.common.container.BioEggMakerContainer;
 import com.the_blood_knight.techrot.common.container.BioFleshClonerContainer;
@@ -75,6 +77,7 @@ public class BioEggMakerTileBlock extends TileEntityLockable implements ITickabl
             }
             if(flag1!=this.maxClonerTimer>0){
                 flag = true;
+                BioEggMakerBlock.setState(this.maxClonerTimer>0,this.world,this.pos);
             }
         }
 
@@ -117,6 +120,15 @@ public class BioEggMakerTileBlock extends TileEntityLockable implements ITickabl
                 return Lists.newArrayList();
             }
         }
+    }
+    public static boolean equalSpawnEgg(ItemStack first,ItemStack second){
+        if(first.getTagCompound() == null || second.getTagCompound()==null){
+            return false;
+        }
+        if(first.getTagCompound().hasKey("EntityTag") && second.getTagCompound().hasKey("EntityTag")){
+            return first.getTagCompound().getCompoundTag("EntityTag").getString("id").equals(second.getTagCompound().getCompoundTag("EntityTag").getString("id"));
+        }
+        return false;
     }
     public static ItemStack createSpawnEgg(ResourceLocation entityId, int primaryColor, int secondaryColor) {
         ItemStack egg = new ItemStack(Items.SPAWN_EGG);
@@ -167,7 +179,7 @@ public class BioEggMakerTileBlock extends TileEntityLockable implements ITickabl
         }
         ItemStack clone = getCloneForADN(this.container.get(0));
         ItemStack result = this.container.get(2);
-        return (result.isEmpty() || result.getItem() == clone.getItem()) && result.getCount()<64;
+        return (result.isEmpty() || equalSpawnEgg(clone,result)) && result.getCount()<64;
     }
 
 

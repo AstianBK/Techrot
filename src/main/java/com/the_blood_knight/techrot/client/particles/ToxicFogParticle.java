@@ -28,15 +28,45 @@ public class ToxicFogParticle extends Particle {
     public final ResourceLocation tex = new ResourceLocation(Techrot.MODID,"textures/particles/toxic_fog.png");
     public ToxicFogParticle(World worldIn, double posXIn, double posYIn, double posZI, double p_i1221_8_, double p_i1221_10_, double p_i1221_12_n) {
         super(worldIn, posXIn, posYIn,posZI,p_i1221_8_,p_i1221_10_,p_i1221_12_n);
-        particleScale = 1;
+        particleScale = 4;
         this.roll = (float) (Math.PI/2.0F * worldIn.rand.nextInt(4));
         this.oRoll = this.roll;
+        this.motionX = (Math.random() * 2.0D - 1.0D) * 0.4000000059604645D;
+        this.motionY = 0;
+        this.motionZ = 0 ;
+        float f = (float)(Math.random() + Math.random() + 1.0D) * 0.15F;
+        float f1 = MathHelper.sqrt(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
+        this.motionX = this.motionX / (double)f1 * (double)f * 0.4000000059604645D;
+        this.motionZ = this.motionZ / (double)f1 * (double)f * 0.4000000059604645D;
+        this.particleAlpha = 0.2F;
+        this.particleRed = (105.0F-rand.nextFloat()*49)/255.0F;
+        this.particleGreen = (153.0F-rand.nextFloat()*59)/255.0F;
+        this.particleBlue = (26.0F-rand.nextFloat()*3)/255.0F;
+
     }
 
     @Override
     public void onUpdate() {
-        super.onUpdate();
+        this.prevPosX = this.posX;
+        this.prevPosY = this.posY;
+        this.prevPosZ = this.posZ;
 
+        if (this.particleAge++ >= this.particleMaxAge)
+        {
+            this.setExpired();
+        }
+
+        this.motionY -= 0.04D * (double)this.particleGravity;
+        this.move(this.motionX, this.motionY, this.motionZ);
+        this.motionX *= 0.9800000190734863D;
+        this.motionY *= 0.9800000190734863D;
+        this.motionZ *= 0.9800000190734863D;
+
+        if (this.onGround)
+        {
+            this.motionX *= 0.699999988079071D;
+            this.motionZ *= 0.699999988079071D;
+        }
     }
 
 

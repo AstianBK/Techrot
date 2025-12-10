@@ -1,6 +1,7 @@
 package com.the_blood_knight.techrot;
 
 import com.the_blood_knight.techrot.client.particles.BioGasParticle;
+import com.the_blood_knight.techrot.client.particles.ToxicFogParticle;
 import com.the_blood_knight.techrot.common.TRegistry;
 import com.the_blood_knight.techrot.common.proxy.CommonProxy;
 import com.the_blood_knight.techrot.common.tile_block.*;
@@ -13,6 +14,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -29,6 +31,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 @Mod(modid = "techrot", name = Techrot.NAME, version = Techrot.VERSION)
 public class Techrot
@@ -65,6 +68,22 @@ public class Techrot
         return map;
     }
 
+    public static void spawnPeste(World worldIn , BlockPos pos, Random rand,int radius){
+        for (int pass = 0; pass < 15; pass++) {
+            BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos(pos);
+            float theta = (float) (2 * Math.PI * rand.nextFloat());
+            float phi = (float) Math.acos(2 * rand.nextFloat() - 1);
+            double x = radius * Math.sin(phi) * Math.cos(theta);
+            double y = radius * Math.sin(phi) * Math.sin(theta);
+            double z = radius * Math.cos(phi);
+
+            mutableBlockPos.setPos(x + pos.getX(), y + pos.getY(), z + pos.getZ());
+            if (worldIn.getHeight(mutableBlockPos.getX(), mutableBlockPos.getZ()) > pos.getY())
+                continue;
+            double height = worldIn.getHeight(mutableBlockPos.getX(),mutableBlockPos.getZ());
+            Minecraft.getMinecraft().effectRenderer.addEffect(new ToxicFogParticle(worldIn, mutableBlockPos.getX(), height + rand.nextFloat(), mutableBlockPos.getZ(), 0, 0, 0));
+        }
+    }
     @EventHandler
     public void init(FMLInitializationEvent event) {
         proxy.init();

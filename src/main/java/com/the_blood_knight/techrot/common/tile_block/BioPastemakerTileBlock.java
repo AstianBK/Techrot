@@ -2,6 +2,7 @@ package com.the_blood_knight.techrot.common.tile_block;
 
 import com.google.common.collect.Lists;
 import com.the_blood_knight.techrot.common.api.INutritionBlock;
+import com.the_blood_knight.techrot.common.block.BioPastemakerBlock;
 import com.the_blood_knight.techrot.common.container.BioPastemakerContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -76,7 +77,7 @@ public class BioPastemakerTileBlock extends TileEntityLockable implements ITicka
 
             if (flag != this.isEating()) {
                 flag1 = true;
-                //BioFurnaceBlock.setState(this.isEating(), this.world, this.pos);
+                BioPastemakerBlock.setState(this.isEating(), this.world, this.pos);
             }
 
         }
@@ -86,12 +87,6 @@ public class BioPastemakerTileBlock extends TileEntityLockable implements ITicka
     }
 
 
-    public void addParent(BlockPos pos){
-        if(!this.parents.contains(pos)){
-            this.parents.add(pos);
-        }
-        markDirty();
-    }
     public int extractNutrients(int amount) {
         if (amount <= 0) return 0;
 
@@ -104,10 +99,6 @@ public class BioPastemakerTileBlock extends TileEntityLockable implements ITicka
         return delivered;
     }
 
-    public void removeParent(BlockPos pos){
-        this.parents.remove(pos);
-        markDirty();
-    }
     public boolean canEat(){
         return this.container.stream().anyMatch(this::isFood);
     }

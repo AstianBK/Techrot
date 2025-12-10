@@ -3,6 +3,7 @@ package com.the_blood_knight.techrot.common.tile_block;
 import com.google.common.collect.Lists;
 import com.the_blood_knight.techrot.common.TRegistry;
 import com.the_blood_knight.techrot.common.api.INutritionBlock;
+import com.the_blood_knight.techrot.common.block.BioFleshClonerBlock;
 import com.the_blood_knight.techrot.common.block.BioFurnaceBlock;
 import com.the_blood_knight.techrot.common.container.BioFleshClonerContainer;
 import com.the_blood_knight.techrot.common.item.BioExtractorItem;
@@ -70,6 +71,7 @@ public class BioFleshClonerTileBlock extends TileEntityLockable implements ITick
             }
             if(flag1!=this.maxClonerTimer>0){
                 flag = true;
+                BioFleshClonerBlock.setState(this.maxClonerTimer>0,world,pos);
             }
         }
 

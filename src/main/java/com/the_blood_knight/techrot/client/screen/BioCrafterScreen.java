@@ -60,7 +60,7 @@ public class BioCrafterScreen extends GuiContainer {
         this.drawTexturedModalRect(i, j, 0, 0, 176, 166);
 
         int k = this.getNutrition(49);
-        this.drawTexturedModalRect(i + 108, j + 62, 176, 20, k, 18);
+        this.drawTexturedModalRect(i + 107, j + 61, 176, 20, k, 18);
 
 
         int l = this.getCloning(34);
