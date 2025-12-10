@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ggg",
+    "ggg",
+    "ggg"
+  ],
+  "key": {
+    "g": {
+      "item": "techrot:rotplate"
+    }
+  },
+  "result": {
+    "item": "techrot:rotplate_block",
+    "count": 1
+  }
+}

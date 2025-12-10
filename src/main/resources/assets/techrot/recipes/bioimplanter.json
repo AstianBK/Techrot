@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "gIg",
+    "R R",
+    "gIg"
+  ],
+  "key": {
+    "g": {
+      "item": "techrot:rotplate"
+    },
+    "I": {
+      "item": "minecraft:iron_trapdoor"
+    },
+    "R": {
+      "item": "techrot:bio_cube"
+    }
+  },
+  "result": {
+    "item": "techrot:bioimplanter",
+    "count": 1
+  }
+}
