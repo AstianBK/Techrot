@@ -20,25 +20,31 @@ public class TRegistry {
 
         @Override
         public ItemStack createIcon() {
-            return new ItemStack(TRegistry.BIO_EXTRACTOR); // ícono del tab
+            return new ItemStack(TRegistry.BIO_CUBE); // ícono del tab
         }
     };
     public static final ArrayList<IRegisterable> ITEMS = new ArrayList<>();
 
     public static final ArrayList<BlockBase> BLOCKS = new ArrayList<BlockBase>();
-    public static final BioExtractorItem BIO_EXTRACTOR = new BioExtractorItem("bio_extractor");
-    public static final ItemBase BIO_CUBE = new ItemBase("bio_cube");
-    public static final ItemBase BIO_CHUNK = new ItemBase("bio_chunk");
-    public static final ItemBase ROTPLATE = new ItemBase("rotplate");
 
-    public static final ItemBase BIO_WRENCH = new ItemBase("bio_wrench");
-    public static final BlockBase BIOIMPLANTER = new BioFurnaceBlock(false,Material.ROCK,"bioimplanter");
+    //DECORATIVE-BLOCKS
+
+    public static final BlockBase BIOCUBE_BLOCK = new BlockBase(Material.IRON,"biocube_block");
+
     public static final BlockBase ROTPLATE_BLOCK = new BlockBase(Material.IRON,"rotplate_block");
+
+    public static final BlockBase ROTPLATE_SECTIONED_BLOCK = new BlockBase(Material.IRON,"rotplate_sectioned_block");
+
+    public static final BlockBase ROTPLATE_PATTERN_BLOCK = new BlockBase(Material.IRON,"rotplate_pattern_block");
+
     public static final BlockBase ROTPLATE_SOLID_BLOCK = new BlockBase(Material.IRON,"rotplate_solid_block");
+
     public static final BlockBase ROTPLATE_ORE = new BlockBase(Material.IRON,"rotplate_ore");
 
-    public static final BlockBase BIOFURNACE = new BioFurnaceBlock(false,Material.ROCK,"biofurnace");
+    //FUNCTIONAL-BLOCKS
 
+    public static final BlockBase BIOIMPLANTER = new BioFurnaceBlock(false,Material.ROCK,"bioimplanter");
+    public static final BlockBase BIOFURNACE = new BioFurnaceBlock(false,Material.ROCK,"biofurnace");
     public static final BlockBase LIT_BIOFURNACE = new BioFurnaceBlock(true,Material.ROCK,"lit_biofurnace");
     public static final BlockBase BIOPASTEMAKER = new BioPastemakerBlock(Material.CACTUS,"biopastemaker",false);
     public static final BlockBase LIT_BIOPASTEMAKER = new BioPastemakerBlock(Material.CACTUS,"lit_biopastemaker",true);
@@ -48,9 +54,15 @@ public class TRegistry {
     public static final BlockBase LIT_BIOEGGMAKER = new BioEggMakerBlock(Material.CACTUS,"lit_bioeggmaker",true);
 
     public static final BlockBase BIOCRAFTER = new BioCrafterBlock(Material.CACTUS,"biocrafter");
-
     public static final BlockBase BIOFLESHCLONER = new BioFleshClonerBlock(Material.CACTUS,"biofleshcloner",false);
     public static final BlockBase LIT_BIOFLESHCLONER = new BioFleshClonerBlock(Material.CACTUS,"lit_biofleshcloner",true);
+
+    //ITEMS
+    public static final BioExtractorItem BIO_EXTRACTOR = new BioExtractorItem("bio_extractor");
+    public static final ItemBase BIO_CUBE = new ItemBase("bio_cube");
+    public static final ItemBase BIO_CHUNK = new ItemBase("bio_chunk");
+    public static final ItemBase ROTPLATE = new ItemBase("rotplate");
+    public static final ItemBase BIO_WRENCH = new ItemBase("bio_wrench");
 
     public static void registerBlocks(IForgeRegistry<Block> registry) {
         for(BlockBase block : BLOCKS) {

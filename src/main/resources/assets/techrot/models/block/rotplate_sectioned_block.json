@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "techrot:block/rotplate_sectioned_block"
+  }
+}
