@@ -1,26 +1,26 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "gGg",
-    "RSR",
-    "g g"
+    "gig",
+    "ROR",
+    "gig"
   ],
   "key": {
     "g": {
       "item": "techrot:rotplate"
     },
-    "G": {
-      "item": "techrot:comp_necrotic_coil"
+    "i": {
+      "item": "minecraft:iron_ingot"
     },
     "R": {
       "item": "minecraft:redstone"
     },
-    "S": {
-      "item": "techrot:comp_agony_synapse"
+    "O": {
+      "item": "techrot:bio_cube"
     }
   },
   "result": {
-    "item": "techrot:rotplate_head1",
+    "item": "techrot:comp_screaming_core",
     "count": 1
   }
 }

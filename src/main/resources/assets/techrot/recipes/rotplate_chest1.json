@@ -10,10 +10,10 @@
       "item": "techrot:rotplate"
     },
     "B": {
-      "item": "minecraft:bone"
+      "item": "techrot:comp_agony_synapse"
     },
     "R": {
-      "item": "minecraft:redstone_block"
+      "item": "techrot:comp_screaming_core"
     }
   },
   "result": {

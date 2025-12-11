@@ -10,13 +10,13 @@
       "item": "techrot:rotplate"
     },
     "C": {
-      "item": "minecraft:comparator"
+      "item": "techrot:comp_screaming_core"
     },
     "B": {
-      "item": "minecraft:bone"
+      "item": "techrot:comp_necrotic_coil"
     },
     "G": {
-      "item": "minecraft:glass"
+      "item": "techrot:comp_agony_synapse"
     }
   },
   "result": {
