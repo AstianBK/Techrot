@@ -2,7 +2,7 @@
   "name": "Agony Synapse",
   "category": "components",
   "icon": "techrot:comp_agony_synapse",
-  "priority": true,
+  "priority": false,
   "pages": [
     {
       "type": "crafting",

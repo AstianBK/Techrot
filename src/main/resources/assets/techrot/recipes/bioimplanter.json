@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "gIg",
-    "R R",
+    "RHR",
     "gIg"
   ],
   "key": {
@@ -13,6 +13,9 @@
       "item": "minecraft:iron_trapdoor"
     },
     "R": {
+      "item": "techrot:comp_necrotic_coil"
+    },
+    "H": {
       "item": "techrot:bio_cube"
     }
   },

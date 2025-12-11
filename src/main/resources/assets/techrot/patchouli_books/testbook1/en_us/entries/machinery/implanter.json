@@ -1,12 +1,12 @@
 {
-  "name": "Rotplate Arm",
-  "category": "implants",
-  "icon": "techrot:rotplate_arm1",
+  "name": "Implant Chamber",
+  "category": "machinery",
+  "icon": "techrot:bioimplanter",
   "priority": false,
   "pages": [
     {
       "type": "crafting",
-      "recipe": "techrot:rotplate_arm1",
+      "recipe": "techrot:bioimplanter",
       "text": "The base poppet for all your crafting, does nothing and cannot be bound."
     }
   ]

@@ -2,7 +2,7 @@
   "name": "Rotplate Chest",
   "category": "implants",
   "icon": "techrot:rotplate_chest1",
-  "priority": true,
+  "priority": false,
   "pages": [
     {
       "type": "crafting",

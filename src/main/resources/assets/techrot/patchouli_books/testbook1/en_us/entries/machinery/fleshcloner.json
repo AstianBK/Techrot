@@ -1,12 +1,12 @@
 {
-  "name": "Rotplate Arm",
-  "category": "implants",
-  "icon": "techrot:rotplate_arm1",
+  "name": "Flesh Cloner",
+  "category": "machinery",
+  "icon": "techrot:biofleshcloner",
   "priority": false,
   "pages": [
     {
       "type": "crafting",
-      "recipe": "techrot:rotplate_arm1",
+      "recipe": "techrot:biofleshcloner",
       "text": "The base poppet for all your crafting, does nothing and cannot be bound."
     }
   ]

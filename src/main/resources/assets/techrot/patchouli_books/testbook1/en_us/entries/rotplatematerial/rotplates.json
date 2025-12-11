@@ -1,0 +1,12 @@
+{
+  "name": "Rotplates",
+  "category": "rotplatematerial",
+  "icon": "techrot:rotplate",
+  "priority": false,
+  "pages": [
+    {
+      "type": "text",
+      "text": "The base poppet for all your crafting, does nothing and cannot be bound."
+    }
+  ]
+}

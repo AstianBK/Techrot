@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "techrot:rotplate_ore"
+  },
+  "result": "techrot:rotplate",
+  "experience": 2,
+  "cookingtime": 350
+}

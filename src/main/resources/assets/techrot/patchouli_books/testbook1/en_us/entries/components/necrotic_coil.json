@@ -2,7 +2,7 @@
   "name": "Necrotic Coil",
   "category": "components",
   "icon": "techrot:comp_necrotic_coil",
-  "priority": true,
+  "priority": false,
   "pages": [
     {
       "type": "crafting",

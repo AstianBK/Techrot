@@ -7,10 +7,10 @@
   ],
   "key": {
     "#": {
-      "item": "minecraft:iron_trapdoor"
+      "item": "techrot:comp_necrotic_coil"
     },
     "C": {
-      "item": "minecraft:cauldron"
+      "item": "techrot:comp_screaming_core"
     },
     "g": {
       "item": "techrot:rotplate"

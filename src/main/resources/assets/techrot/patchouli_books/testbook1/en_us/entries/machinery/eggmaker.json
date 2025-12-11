@@ -1,12 +1,12 @@
 {
-  "name": "Rotplate Arm",
-  "category": "implants",
-  "icon": "techrot:rotplate_arm1",
+  "name": "Egg Maker",
+  "category": "machinery",
+  "icon": "techrot:bioeggmaker",
   "priority": false,
   "pages": [
     {
       "type": "crafting",
-      "recipe": "techrot:rotplate_arm1",
+      "recipe": "techrot:bioeggmaker",
       "text": "The base poppet for all your crafting, does nothing and cannot be bound."
     }
   ]

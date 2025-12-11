@@ -1,0 +1,13 @@
+{
+  "name": "Genome Extractor",
+  "category": "tools",
+  "icon": "techrot:bio_extractor",
+  "priority": true,
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "techrot:bio_extractor",
+      "text": "The base poppet for all your crafting, does nothing and cannot be bound."
+    }
+  ]
+}
