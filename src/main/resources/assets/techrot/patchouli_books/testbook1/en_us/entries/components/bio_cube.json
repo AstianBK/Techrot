@@ -1,0 +1,13 @@
+{
+  "name": "Small Rot Cube",
+  "category": "components",
+  "icon": "techrot:bio_cube",
+  "priority": true,
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "techrot:bio_cube",
+      "text": "The base poppet for all your crafting, does nothing and cannot be bound."
+    }
+  ]
+}

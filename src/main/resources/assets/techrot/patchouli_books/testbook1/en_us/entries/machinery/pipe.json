@@ -1,0 +1,13 @@
+{
+  "name": "RotPaste-Transport Pipe",
+  "category": "machinery",
+  "icon": "techrot:biopipe",
+  "priority": true,
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "techrot:biopipe",
+      "text": "The base poppet for all your crafting, does nothing and cannot be bound."
+    }
+  ]
+}

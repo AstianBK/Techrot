@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "techrot:rotplate"
+    },
+    {
+      "item": "techrot:rotplate"
+    },
+    {
+      "item": "techrot:rotplate"
+    }
+  ],
+  "result": {
+    "item": "techrot:biopipe",
+    "count": 2
+  }
+}

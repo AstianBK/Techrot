@@ -3,3 +3,34 @@ tile.biopipe.name=Bio Pipe
 
 item.techrot:techrot_guide.name=Techrot Guide
 info.techrot:techrot_guide.landing=Landing Text goes here
+
+item.rotplate.name=Rotplate
+
+item.bio_extractor.name=Genome Extractor
+item.bio_wrench.name=Rot-Wrench
+item.bio_cube.name=Small Rot Cube
+item.bio_chunk.name=Rot Chunk
+
+item.comp_agony_synapse.name=Agony Synapse
+item.comp_necrotic_coil.name=Necrotic Coil
+item.comp_screaming_core.name=Screaming Core
+
+item.rotplate_head1.name=Implant Head
+item.rotplate_arm1.name=Implant Arm
+item.rotplate_chest1.name=Implant Chest
+
+tile.rotplate_ore.name=Rotplate Ore
+
+tile.biocube_block.name=Rot Cube
+tile.rotplate_block.name=Rotplate Block
+tile.biocube_solid_block.name=Dense Rotplate Block
+tile.biocube_sectioned_block.name=Sectioned Rotplate Block
+tile.biocube_pattern_block.name=Patterned Rotplate Block
+
+tile.biofurnace.name=Rot Furnace
+tile.bioimplanter.name=Implant Chamber
+tile.biopastemaker.name=Rot Paste Maker
+tile.bioeggmaker.name=Egg Maker
+tile.biofleshcloner.name=Flesh Cloner
+tile.biocrafter.name=CUT-CONTENT
+tile.biopipe.name=Transport Pipe
