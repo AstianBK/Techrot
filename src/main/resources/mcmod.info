@@ -2,13 +2,13 @@
 {
   "modid": "techrot",
   "name": "Techrot",
-  "description": "Mod",
+  "description": "Control machinery powered by sentient rot, how much are you willing to give in exchange for power?",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "",
   "updateUrl": "",
-  "authorList": ["AstianBK"],
-  "credits": "The Forge and FML guys, for making this example",
+  "authorList": ["AstianBK&SangreBK"],
+  "credits": "Part of the 1.12.2 Coalition Modjam (2025)",
   "logoFile": "",
   "screenshots": [],
   "dependencies": []
