@@ -1,11 +1,9 @@
 package com.the_blood_knight.techrot;
 
 import com.the_blood_knight.techrot.client.screen.*;
-import com.the_blood_knight.techrot.common.block.BioFurnaceBlock;
 import com.the_blood_knight.techrot.common.container.*;
 import com.the_blood_knight.techrot.common.tile_block.*;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ContainerFurnace;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
@@ -16,7 +14,7 @@ public class GuiHandler implements IGuiHandler {
     public static final int BIOFLESHCLONER = 2;
     public static final int BIOEGGMAKER = 3;
     public static final int BIOCRAFTER = 4;
-
+    public static final int BIOIMPLANT = 5;
     @Override
     public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
         if(id == 0){
@@ -33,6 +31,9 @@ public class GuiHandler implements IGuiHandler {
         }
         if(id == 4){
             return new BioCrafterContainer(player.inventory,((BioCrafterTileBlock)world.getTileEntity(new BlockPos(x, y, z))));
+        }
+        if(id == 5){
+            return new BioImplanterContainer(player.inventory,((BioImplanterTileBlock)world.getTileEntity(new BlockPos(x,y,z))));
         }
         return null;
     }
@@ -53,6 +54,9 @@ public class GuiHandler implements IGuiHandler {
         }
         if(id == 4){
             return new BioCrafterScreen(player.inventory, ((BioCrafterTileBlock)world.getTileEntity(new BlockPos(x, y, z))));
+        }
+        if(id == 5){
+            return new BioImplanterScreen(player.inventory,((BioImplanterTileBlock)world.getTileEntity(new BlockPos(x,y,z))));
         }
         return null;
     }

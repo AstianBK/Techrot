@@ -331,7 +331,7 @@ public class BioPipeBlock extends BlockTileBase{
             boolean down = this.state.getValue(DOWN);
             Map<EnumFacing,BlockPos> map = ((BioPipeTileBlock)this.world.getTileEntity(pos)).connections;
             map.put(facing,this.pos.offset(facing));
-            if(this.pipe.getCountConnection()<2){
+            if(this.pipe.getCountConnection()<1){
                 if(facing == EnumFacing.EAST || facing == EnumFacing.WEST){
                     west = true;
                     east = true;

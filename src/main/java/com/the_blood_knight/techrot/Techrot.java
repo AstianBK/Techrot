@@ -7,13 +7,20 @@ import com.google.gson.*;
 import com.the_blood_knight.techrot.client.particles.BioGasParticle;
 import com.the_blood_knight.techrot.client.particles.ToxicFogParticle;
 import com.the_blood_knight.techrot.common.TRegistry;
+import com.the_blood_knight.techrot.common.api.ITechRotPlayer;
+import com.the_blood_knight.techrot.common.capacity.TechrotPlayer;
 import com.the_blood_knight.techrot.common.proxy.CommonProxy;
 import com.the_blood_knight.techrot.common.recipes.BioCrafterRecipe;
 import com.the_blood_knight.techrot.common.tile_block.*;
+import com.the_blood_knight.techrot.messager.PacketHandler;
+import com.the_blood_knight.techrot.messager.SyncDataPacket;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPane;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.IInventory;
@@ -24,12 +31,19 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -37,8 +51,10 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.registries.IForgeRegistry;
 import org.apache.logging.log4j.Logger;
 
@@ -65,7 +81,7 @@ public class Techrot
         logger = event.getModLog();
         GameRegistry.registerTileEntity(BioEggMakerTileBlock.class,new ResourceLocation(MODID,"bioeggmaker"));
         GameRegistry.registerTileEntity(BioCrafterTileBlock.class,new ResourceLocation(MODID,"biocrafter"));
-
+        GameRegistry.registerTileEntity(BioImplanterTileBlock.class,new ResourceLocation(MODID,"bioimplanter"));
         GameRegistry.registerTileEntity(BioPipeTileBlock.class,new ResourceLocation(MODID,"biopipe"));
         GameRegistry.registerTileEntity(BioPastemakerTileBlock.class,new ResourceLocation(MODID,"biopastemaker"));
         GameRegistry.registerTileEntity(BioFurnaceTileBlock.class,new ResourceLocation(MODID,"biofurnace"));
@@ -128,7 +144,8 @@ public class Techrot
     public void init(FMLInitializationEvent event) {
         proxy.init();
         loadAll();
-
+        CapabilityRegistry.register();
+        PacketHandler.registerNetwork();
     }
     @Mod.EventBusSubscriber
     public static class RegistrationHandler{
@@ -155,6 +172,54 @@ public class Techrot
         @SubscribeEvent
         public static void registerItems(ModelRegistryEvent event) {
             TRegistry.registerModels();
+        }
+        @SubscribeEvent
+        public static void attachCapabilities(AttachCapabilitiesEvent<Entity> event) {
+            if (event.getObject() instanceof EntityPlayer) {
+                event.addCapability(
+                        CapabilityRegistry.PLAYER_UPGRADES_ID,
+                        new ICapabilityProvider() {
+
+                            final TechrotPlayer inst = new TechrotPlayer();
+
+                            @Override
+                            public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+                                return capability == CapabilityRegistry.PLAYER_UPGRADES;
+                            }
+
+                            @Override
+                            public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+                                return capability == CapabilityRegistry.PLAYER_UPGRADES ?
+                                        CapabilityRegistry.PLAYER_UPGRADES.cast(inst) : null;
+                            }
+                        }
+                );
+            }
+        }
+        @SubscribeEvent
+        public static void onTick(TickEvent.PlayerTickEvent event){
+            if(event.side == Side.SERVER){
+                ITechRotPlayer cap = event.player.getCapability(
+                        CapabilityRegistry.PLAYER_UPGRADES,
+                        null
+                );
+                if(cap!=null){
+                    cap.tick(event.player);
+                }
+
+            }
+        }
+        @SubscribeEvent
+        public static void onPlayerJoin(EntityJoinWorldEvent event) {
+            if (event.getEntity() instanceof EntityPlayerMP) {
+                EntityPlayerMP mp = (EntityPlayerMP) event.getEntity();
+                ITechRotPlayer cap = mp.getCapability(CapabilityRegistry.PLAYER_UPGRADES, null);
+
+                NBTTagCompound tag = new NBTTagCompound();
+                tag.setTag("Inv", cap.getInventory().serializeNBT());
+
+                PacketHandler.sendTo(new SyncDataPacket(tag), mp);
+            }
         }
     }
     public static void loadAll() {
@@ -208,7 +273,23 @@ public class Techrot
         ItemStack itemstack = ShapedRecipes.deserializeItem(JsonUtils.getJsonObject(json, "result"), true);
         return new BioCrafterRecipe(nonnulllist, itemstack,nutrient);
     }
+    @Mod.EventBusSubscriber
+    public static class CapabilityRegistry {
 
+        public static final ResourceLocation PLAYER_UPGRADES_ID =
+                new ResourceLocation("techrot", "player_upgrades");
+
+        @CapabilityInject(ITechRotPlayer.class)
+        public static Capability<ITechRotPlayer> PLAYER_UPGRADES = null;
+
+        public static void register() {
+            CapabilityManager.INSTANCE.register(
+                    ITechRotPlayer.class,
+                    new TechrotPlayer.TechrotPlayerProvider(),
+                    TechrotPlayer::new
+            );
+        }
+    }
     private static Map<String, Ingredient> deserializeKey(JsonObject json)
     {
         Map<String, Ingredient> map = Maps.<String, Ingredient>newHashMap();

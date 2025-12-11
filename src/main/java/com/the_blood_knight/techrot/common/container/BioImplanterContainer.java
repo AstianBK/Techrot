@@ -1,7 +1,8 @@
 package com.the_blood_knight.techrot.common.container;
 
+import com.the_blood_knight.techrot.Techrot;
 import com.the_blood_knight.techrot.common.TRegistry;
-import com.the_blood_knight.techrot.common.item.BioExtractorItem;
+import com.the_blood_knight.techrot.common.api.ITechRotPlayer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -20,35 +21,50 @@ public class BioImplanterContainer extends Container {
     public BioImplanterContainer(InventoryPlayer playerInventory, IInventory furnaceInventory)
     {
         this.tileFurnace = furnaceInventory;
-        this.addSlotToContainer(new Slot(furnaceInventory, 0, 39, 24){
+        this.addSlotToContainer(new Slot(furnaceInventory, 0, 52, -2){
             @Override
             public boolean isItemValid(ItemStack stack) {
-                return stack.getItem() instanceof BioExtractorItem;
+                return stack.getItem() == TRegistry.ROTPLATE_ARM;
             }
         });
-        this.addSlotToContainer(new Slot(furnaceInventory, 1, 74, 24){
+        this.addSlotToContainer(new Slot(furnaceInventory, 1, 108, 56){
             @Override
             public boolean isItemValid(ItemStack stack) {
-                return stack.getItem() == TRegistry.BIO_CUBE;
+                return stack.getItem() == TRegistry.ROTPLATE_HEAD;
             }
         });
 
-        this.addSlotToContainer(new Slot(furnaceInventory, 2, 126, 24));
-        this.addSlotToContainer(new Slot(furnaceInventory, 3, 126, 24));
-        this.addSlotToContainer(new Slot(furnaceInventory, 4, 126, 24));
-        this.addSlotToContainer(new Slot(furnaceInventory, 5, 126, 24));
+        this.addSlotToContainer(new Slot(furnaceInventory, 2, 112, 18){
+            @Override
+            public boolean isItemValid(ItemStack stack) {
+                return stack.getItem() == TRegistry.ROTPLATE_CHEST;
+            }
+        });
+        this.addSlotToContainer(new Slot(furnaceInventory, 3, 35, 27){
+            @Override
+            public boolean isItemValid(ItemStack stack) {
+                return false;
+            }
+        });
+        this.addSlotToContainer(new Slot(furnaceInventory, 4, 42, 57){
+            @Override
+            public boolean isItemValid(ItemStack stack) {
+                return false;
+            }
+        });
+
 
         for (int i = 0; i < 3; ++i)
         {
             for (int j = 0; j < 9; ++j)
             {
-                this.addSlotToContainer(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 104 + i * 18));
+                this.addSlotToContainer(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 119 + i * 18));
             }
         }
 
         for (int k = 0; k < 9; ++k)
         {
-            this.addSlotToContainer(new Slot(playerInventory, k, 8 + k * 18, 162));
+            this.addSlotToContainer(new Slot(playerInventory, k, 8 + k * 18, 177));
         }
     }
     public void addListener(IContainerListener listener)
@@ -156,4 +172,20 @@ public class BioImplanterContainer extends Container {
         return itemstack;
     }
 
+    @Override
+    public void onContainerClosed(EntityPlayer playerIn) {
+        if(!playerIn.world.isRemote){
+
+            ITechRotPlayer cap = playerIn.getCapability(Techrot.CapabilityRegistry.PLAYER_UPGRADES,null);
+            if(cap!=null){
+                for (int i = 0 ; i < 6 ; i++){
+                    ItemStack stack = this.tileFurnace.getStackInSlot(i);
+                    if(cap.getInventory().getStackInSlot(i).isEmpty()){
+                        cap.getInventory().setStackInSlot(i,stack.copy());
+                        stack.shrink(1);
+                    }
+                }
+            }
+        }
+    }
 }
