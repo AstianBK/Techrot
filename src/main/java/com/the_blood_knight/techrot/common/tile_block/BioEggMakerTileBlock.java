@@ -53,8 +53,11 @@ public class BioEggMakerTileBlock extends TileEntityLockable implements ITickabl
         boolean flag1 = this.maxClonerTimer>0;
 
         if(!this.world.isRemote){
+            if(this.maxClonerTimer>0 && this.clonerTimer%10==0){
+                Techrot.damageTick(world,pos,3);
+            }
             if(this.currentNutrient<1000){
-                this.currentNutrient+=this.requestNutrient(10);
+                this.currentNutrient+=this.requestNutrient(1);
             }
             if(currentNutrient>0 && canCloneFlesh()){
                 if(this.maxClonerTimer<=0){
@@ -75,9 +78,9 @@ public class BioEggMakerTileBlock extends TileEntityLockable implements ITickabl
             }else if(this.clonerTimer>0){
                 this.clonerTimer = 0;
             }
-            if(flag1!=this.maxClonerTimer>0){
+            if(flag1!=this.clonerTimer>0){
                 flag = true;
-                BioEggMakerBlock.setState(this.maxClonerTimer>0,this.world,this.pos);
+                BioEggMakerBlock.setState(this.clonerTimer>0,this.world,this.pos);
             }
         }
 

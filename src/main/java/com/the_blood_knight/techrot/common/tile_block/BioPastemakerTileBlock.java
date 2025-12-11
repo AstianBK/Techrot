@@ -1,6 +1,7 @@
 package com.the_blood_knight.techrot.common.tile_block;
 
 import com.google.common.collect.Lists;
+import com.the_blood_knight.techrot.Techrot;
 import com.the_blood_knight.techrot.common.api.INutritionBlock;
 import com.the_blood_knight.techrot.common.block.BioPastemakerBlock;
 import com.the_blood_knight.techrot.common.container.BioPastemakerContainer;
@@ -46,10 +47,12 @@ public class BioPastemakerTileBlock extends TileEntityLockable implements ITicka
         if(!this.isHungry())return;
         if (!this.world.isRemote) {
             ItemStack itemstack = getEatItem();
-
+            if(this.isEating() && this.eatTime%10==0){
+                Techrot.damageTick(world,pos,7);
+            }
             if (this.isEating() || !itemstack.isEmpty()) {
 
-                if (!this.isEating() && this.canEat()) {
+                if (this.totalEatTime<=0 && this.canEat()) {
                     this.eatTime = 0;
                     this.totalEatTime = 200;
 
@@ -59,7 +62,7 @@ public class BioPastemakerTileBlock extends TileEntityLockable implements ITicka
 
                 }
 
-                if (this.isEating() && this.canEat()) {
+                if (this.totalEatTime>0 && this.canEat()) {
                     ++this.eatTime;
 
                     if (this.eatTime == this.totalEatTime) {
@@ -70,8 +73,9 @@ public class BioPastemakerTileBlock extends TileEntityLockable implements ITicka
                     }
                 } else {
                     this.eatTime = 0;
+                    this.totalEatTime = 0;
                 }
-            } else if (!this.isEating() && this.eatTime > 0) {
+            } else if (this.totalEatTime<=0 && this.eatTime > 0) {
                 this.eatTime = MathHelper.clamp(this.eatTime - 2, 0, 200);
             }
 
@@ -104,7 +108,7 @@ public class BioPastemakerTileBlock extends TileEntityLockable implements ITicka
     }
 
     public boolean isEating(){
-        return this.totalEatTime>0;
+        return this.eatTime>0;
     }
 
 
@@ -176,6 +180,7 @@ public class BioPastemakerTileBlock extends TileEntityLockable implements ITicka
         }
         if(flag){
             this.currentNutrition=Math.min(this.maxNutrition,this.currentNutrition+1000);
+
         }
     }
 

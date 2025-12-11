@@ -47,7 +47,6 @@ public class BioFleshClonerBlock extends BlockTileBase{
     public static void setState(boolean active, World worldIn, BlockPos pos) {
         IBlockState iblockstate = worldIn.getBlockState(pos);
         TileEntity tileentity = worldIn.getTileEntity(pos);
-
         if (active)
         {
             worldIn.setBlockState(pos, TRegistry.LIT_BIOFLESHCLONER.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);

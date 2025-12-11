@@ -1,13 +1,24 @@
 package com.the_blood_knight.techrot.common.container;
 
+import com.google.common.collect.Lists;
+import com.the_blood_knight.techrot.Techrot;
+import com.the_blood_knight.techrot.common.api.IBioCrafterRecipe;
 import com.the_blood_knight.techrot.common.item.BioExtractorItem;
+import com.the_blood_knight.techrot.common.recipes.BioCrafterRecipe;
+import com.the_blood_knight.techrot.common.slot.BioCrafterSlot;
+import com.the_blood_knight.techrot.common.tile_block.BioCrafterTileBlock;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.network.play.server.SPacketSetSlot;
 import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -17,11 +28,21 @@ public class BioCrafterContainer extends Container {
     public InventoryCrafting craftMatrix = new InventoryCrafting(this, 3, 3);
     public InventoryCraftResult craftResult = new InventoryCraftResult();
 
+    public World world;
+    public EntityPlayer player;
     //private int clonerTime = 0;
     public BioCrafterContainer(InventoryPlayer playerInventory, IInventory furnaceInventory)
     {
         this.tileFurnace = furnaceInventory;
-        this.addSlotToContainer(new SlotCrafting(playerInventory.player, this.craftMatrix, this.craftResult, 0, 124, 35));
+        this.world = playerInventory.player.world;
+        this.player = playerInventory.player;
+        this.addSlotToContainer(new BioCrafterSlot(playerInventory.player, this.craftMatrix, this.craftResult, 0, 124, 35){
+            @Override
+            public ItemStack onTake(EntityPlayer thePlayer, ItemStack stack) {
+
+                return super.onTake(thePlayer, stack);
+            }
+        });
 
         for (int i = 0; i < 3; ++i)
         {
@@ -49,6 +70,13 @@ public class BioCrafterContainer extends Container {
         super.addListener(listener);
         listener.sendAllWindowProperties(this, this.tileFurnace);
     }
+
+    @Override
+    public void onCraftMatrixChanged(IInventory inventoryIn) {
+        super.onCraftMatrixChanged(inventoryIn);
+        this.slotChangedCraftingGrid(world,this.player,this.craftMatrix,this.craftResult);
+    }
+
     @Override
     public boolean canInteractWith(EntityPlayer playerIn) {
         return true;
@@ -152,5 +180,24 @@ public class BioCrafterContainer extends Container {
         }
 
         return itemstack;
+    }
+
+    protected void slotChangedCraftingGrid(World p_192389_1_, EntityPlayer p_192389_2_, InventoryCrafting p_192389_3_, InventoryCraftResult p_192389_4_)
+    {
+        if (!p_192389_1_.isRemote)
+        {
+            EntityPlayerMP entityplayermp = (EntityPlayerMP)p_192389_2_;
+            ItemStack itemstack = ItemStack.EMPTY;
+            IRecipe irecipe = Techrot.getMatch(p_192389_3_,world);
+
+            if (irecipe != null) {
+                Techrot.logger.info("recipes :"+irecipe.getRemainingItems(p_192389_3_));
+                p_192389_4_.setRecipeUsed(irecipe);
+                itemstack = irecipe.getCraftingResult(p_192389_3_);
+            }
+
+            p_192389_4_.setInventorySlotContents(0, itemstack);
+            entityplayermp.connection.sendPacket(new SPacketSetSlot(this.windowId, 0, itemstack));
+        }
     }
 }

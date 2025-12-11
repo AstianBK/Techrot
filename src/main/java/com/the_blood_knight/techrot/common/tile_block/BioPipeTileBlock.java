@@ -35,7 +35,6 @@ public class BioPipeTileBlock extends TileEntity implements ITickable,INutrition
         if (!loaded || world == null) return;
 
         loaded = false;
-        Techrot.logger.info("update data :)");
         IBlockState state = world.getBlockState(pos)
                 .withProperty(BioPipeBlock.NORTH, this.north)
                 .withProperty(BioPipeBlock.SOUTH, this.south)
@@ -49,22 +48,16 @@ public class BioPipeTileBlock extends TileEntity implements ITickable,INutrition
     }
 
     public int getCountConnection(){
-        int i = 0;
-        for (BlockPos pos1: this.connections.values()){
-            if(pos1!=null){
-                i++;
-            }
-        }
-        return i;
+        return getConnectedPipes().length;
     }
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
         this.north = compound.getBoolean("north");
-        this.south =compound.getBoolean("south");
+        this.south = compound.getBoolean("south");
         this.east =  compound.getBoolean("east");
-        this.west =compound.getBoolean("west");
+        this.west = compound.getBoolean("west");
         this.up = compound.getBoolean("up");
         this.down = compound.getBoolean("down");
         this.loaded = true;
@@ -72,7 +65,7 @@ public class BioPipeTileBlock extends TileEntity implements ITickable,INutrition
 
     public BlockPos[] getConnectedPipes() {
         List<BlockPos> list = new ArrayList<>();
-        for (EnumFacing f : EnumFacing.VALUES) {
+        for (EnumFacing f : getConnectionFacing()) {
             BlockPos p = pos.offset(f);
             if (world.isBlockLoaded(p)) {
                 TileEntity te = world.getTileEntity(p);

@@ -1,6 +1,7 @@
 package com.the_blood_knight.techrot.common.tile_block;
 
 import com.google.common.collect.Lists;
+import com.the_blood_knight.techrot.Techrot;
 import com.the_blood_knight.techrot.common.api.INutritionBlock;
 import com.the_blood_knight.techrot.common.block.BioFurnaceBlock;
 import com.the_blood_knight.techrot.common.block.BioPipeBlock;
@@ -188,15 +189,12 @@ public class BioFurnaceTileBlock extends TileEntityLockable implements ITickable
 
         if (!this.world.isRemote) {
             if(this.isBurning() && this.cookTime%10==0){
-                for (EntityLiving living : this.world.getEntities(EntityLiving.class, e-> e.isEntityAlive() && e.getDistance(this.pos.getX(),this.pos.getY(),this.pos.getZ())<3)){
-                    living.attackEntityFrom(DamageSource.FALL,1.0F);
-                    living.addPotionEffect(new PotionEffect(MobEffects.POISON,100,0));
-                }
+                Techrot.damageTick(world,pos,3);
             }
             if(this.currentNutrition<this.maxNutrient){
-                this.currentNutrition += this.requestNutrient(10);
+                this.currentNutrition += this.requestNutrient(1);
             }
-            if (this.isBurning() || !((ItemStack)this.furnaceItemStacks.get(0)).isEmpty()) {
+            if (this.totalCookTime>0 || !((ItemStack)this.furnaceItemStacks.get(0)).isEmpty()) {
                 if (this.canSmelt()) {
 
                     if (this.currentNutrition>0)
@@ -223,13 +221,11 @@ public class BioFurnaceTileBlock extends TileEntityLockable implements ITickable
                 else {
                     this.cookTime = 0;
                 }
-            }
-            else if (!this.isBurning() && this.cookTime > 0) {
+            } else if (this.cookTime > 0) {
                 this.cookTime = MathHelper.clamp(this.cookTime - 2, 0, this.totalCookTime);
             }
 
-            if (flag != this.isBurning())
-            {
+            if (flag != this.isBurning()) {
                 flag1 = true;
                 BioFurnaceBlock.setState(this.isBurning(), this.world, this.pos);
             }

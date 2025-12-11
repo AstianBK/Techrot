@@ -1,0 +1,15 @@
+{
+  "forge_marker":1,
+  "variants": {
+    "normal" : {
+      "model": "techrot:bioeggmaker"
+    },
+    "inventory": {
+      "model": "techrot:bioeggmaker"
+    },
+    "facing=north": { "model": "techrot:bioeggmaker" },
+    "facing=south": { "model": "techrot:bioeggmaker", "y": 180 },
+    "facing=west":  { "model": "techrot:bioeggmaker", "y": 270 },
+    "facing=east":  { "model": "techrot:bioeggmaker", "y": 90 }
+  }
+}

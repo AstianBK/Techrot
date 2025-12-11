@@ -16,5 +16,6 @@
   "result": {
     "item": "techrot:bio_cube",
     "count": 1
-  }
+  },
+  "need_nutrient" : 100
 }

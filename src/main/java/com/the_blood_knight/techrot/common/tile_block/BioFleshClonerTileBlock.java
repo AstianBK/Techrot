@@ -1,6 +1,7 @@
 package com.the_blood_knight.techrot.common.tile_block;
 
 import com.google.common.collect.Lists;
+import com.the_blood_knight.techrot.Techrot;
 import com.the_blood_knight.techrot.common.TRegistry;
 import com.the_blood_knight.techrot.common.api.INutritionBlock;
 import com.the_blood_knight.techrot.common.block.BioFleshClonerBlock;
@@ -44,11 +45,14 @@ public class BioFleshClonerTileBlock extends TileEntityLockable implements ITick
     @Override
     public void update() {
         boolean flag = false;
-        boolean flag1 = this.maxClonerTimer>0;
+        boolean flag1 = this.clonerTimer>0;
 
         if(!this.world.isRemote){
+            if(this.maxClonerTimer>0 && this.clonerTimer%10==0){
+                Techrot.damageTick(world,pos,3);
+            }
             if(this.currentNutrient<1000){
-                this.currentNutrient+=this.requestNutrient(10);
+                this.currentNutrient+=this.requestNutrient(1);
             }
             if(currentNutrient>0 && canCloneFlesh()){
                 if(this.maxClonerTimer<=0){
@@ -68,10 +72,11 @@ public class BioFleshClonerTileBlock extends TileEntityLockable implements ITick
                 }
             }else if(this.clonerTimer>0){
                 this.clonerTimer = 0;
+                this.maxClonerTimer = 0;
             }
-            if(flag1!=this.maxClonerTimer>0){
+            if(flag1!=this.clonerTimer>0){
                 flag = true;
-                BioFleshClonerBlock.setState(this.maxClonerTimer>0,world,pos);
+                BioFleshClonerBlock.setState(this.clonerTimer>0,world,pos);
             }
         }
 

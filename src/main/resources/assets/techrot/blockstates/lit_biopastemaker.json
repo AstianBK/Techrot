@@ -1,0 +1,15 @@
+{
+  "forge_marker":1,
+  "variants": {
+    "normal" : {
+      "model": "techrot:lit_biopastemaker"
+    },
+    "inventory": {
+      "model": "techrot:lit_biopastemaker"
+    },
+    "facing=north": { "model": "techrot:lit_biopastemaker" },
+    "facing=south": { "model": "techrot:lit_biopastemaker", "y": 180 },
+    "facing=west":  { "model": "techrot:lit_biopastemaker", "y": 270 },
+    "facing=east":  { "model": "techrot:lit_biopastemaker", "y": 90 }
+  }
+}
