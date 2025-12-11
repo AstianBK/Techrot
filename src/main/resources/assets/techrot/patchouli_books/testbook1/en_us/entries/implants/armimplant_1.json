@@ -1,0 +1,13 @@
+{
+  "name": "Rotplate Arm",
+  "category": "implants",
+  "icon": "techrot:rotplate_arm1",
+  "priority": true,
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "techrot:rotplate_arm1",
+      "text": "The base poppet for all your crafting, does nothing and cannot be bound."
+    }
+  ]
+}

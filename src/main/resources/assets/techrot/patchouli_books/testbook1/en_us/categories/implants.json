@@ -1,6 +1,6 @@
 {
   "name": "Implants",
   "description": "Information regarding Implants.$(br2)You will learn about them in these pages.",
-  "icon": "techrot:textures/item/rotplate_head1.png",
-  "sortnum": 0
+  "icon": "techrot:rotplate_head1",
+  "sortnum": 2
 }

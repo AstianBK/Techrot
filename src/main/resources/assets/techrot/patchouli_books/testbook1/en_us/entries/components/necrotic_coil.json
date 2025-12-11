@@ -1,0 +1,13 @@
+{
+  "name": "Necrotic Coil",
+  "category": "components",
+  "icon": "techrot:comp_necrotic_coil",
+  "priority": true,
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "techrot:comp_necrotic_coil",
+      "text": "The base poppet for all your crafting, does nothing and cannot be bound."
+    }
+  ]
+}

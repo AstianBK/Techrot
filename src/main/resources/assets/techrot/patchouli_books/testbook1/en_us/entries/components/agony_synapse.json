@@ -1,0 +1,13 @@
+{
+  "name": "Agony Synapse",
+  "category": "components",
+  "icon": "techrot:comp_agony_synapse",
+  "priority": true,
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "techrot:comp_agony_synapse",
+      "text": "The base poppet for all your crafting, does nothing and cannot be bound."
+    }
+  ]
+}

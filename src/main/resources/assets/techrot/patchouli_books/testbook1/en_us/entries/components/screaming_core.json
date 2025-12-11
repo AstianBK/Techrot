@@ -1,0 +1,13 @@
+{
+  "name": "Screaming Core",
+  "category": "components",
+  "icon": "techrot:comp_screaming_core",
+  "priority": true,
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "techrot:comp_screaming_core",
+      "text": "The base poppet for all your crafting, does nothing and cannot be bound."
+    }
+  ]
+}

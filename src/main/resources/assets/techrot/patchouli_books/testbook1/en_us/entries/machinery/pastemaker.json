@@ -1,0 +1,13 @@
+{
+  "name": "Paste Maker",
+  "category": "machinery",
+  "icon": "techrot:biopastemaker",
+  "priority": true,
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "techrot:biopastemaker",
+      "text": "The base poppet for all your crafting, does nothing and cannot be bound."
+    }
+  ]
+}

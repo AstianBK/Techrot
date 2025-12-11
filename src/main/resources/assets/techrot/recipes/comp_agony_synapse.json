@@ -1,26 +1,26 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "gig",
-    "ROR",
-    "gig"
+    "gSg",
+    "GR ",
+    "g  "
   ],
   "key": {
     "g": {
       "item": "techrot:rotplate"
     },
-    "i": {
-      "item": "minecraft:iron_ingot"
+    "S": {
+      "item": "minecraft:string"
+    },
+    "G": {
+      "item": "techrot:bio_chunk"
     },
     "R": {
       "item": "minecraft:redstone"
-    },
-    "O": {
-      "item": "techrot:bio_chunk"
     }
   },
   "result": {
-    "item": "techrot:comp_screaming_core",
+    "item": "techrot:comp_agony_synapse",
     "count": 1
   }
 }
