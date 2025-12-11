@@ -188,7 +188,7 @@ public class BioFurnaceTileBlock extends TileEntityLockable implements ITickable
 
         if (!this.world.isRemote) {
             if(this.isBurning() && this.cookTime%10==0){
-                Techrot.damageTick(world,pos,3);
+                Techrot.damageTick(world,pos,4);
             }
             if(this.currentNutrition<this.maxNutrient){
                 this.currentNutrition += this.requestNutrient(1);

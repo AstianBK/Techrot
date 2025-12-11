@@ -49,7 +49,7 @@ public class BioFleshClonerTileBlock extends TileEntityLockable implements ITick
 
         if(!this.world.isRemote){
             if(this.maxClonerTimer>0 && this.clonerTimer%10==0){
-                Techrot.damageTick(world,pos,3);
+                Techrot.damageTick(world,pos,4);
             }
             if(this.currentNutrient<1000){
                 this.currentNutrient+=this.requestNutrient(1);
