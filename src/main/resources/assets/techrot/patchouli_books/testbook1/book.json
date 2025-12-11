@@ -1,10 +1,8 @@
 {
-  "name": "item.patchouli:test_book_1.name",
-  "advancement_namespaces": [
-    "patchouli"
-  ],
+  "name": "item.techrot:techrot_guide.name",
+  "landing_text":"info.techrot:techrot_guide.landing",
   "book_texture": "patchouli:textures/gui/book_green.png",
-  "version": "GRADLE:VERSION",
+  "version": "1",
   "index_icon": "minecraft:diamond",
   "creative_tab": "techrot_tab",
   "use_blocky_font": true

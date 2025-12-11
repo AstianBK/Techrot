@@ -1,2 +1,5 @@
 tile.biopipe.name=Bio Pipe
-item.patchouli:techrot_guide.name=TechRot Guide
+
+
+item.techrot:techrot_guide.name=Techrot Guide
+info.techrot:techrot_guide.landing=Landing Text goes here
