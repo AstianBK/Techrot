@@ -64,6 +64,12 @@ public class TRegistry {
     public static final ItemBase ROTPLATE = new ItemBase("rotplate");
     public static final ItemBase BIO_WRENCH = new ItemBase("bio_wrench");
 
+    public static final ItemBase COMP_AGONY_SYNAPSE = new ItemBase("comp_agony_synapse");
+
+    public static final ItemBase COMP_NECROTIC_COIL = new ItemBase("comp_necrotic_coil");
+
+    public static final ItemBase COMP_SCREAMING_CORE = new ItemBase("comp_screaming_core");
+
     public static void registerBlocks(IForgeRegistry<Block> registry) {
         for(BlockBase block : BLOCKS) {
             registry.register(block);
@@ -87,7 +93,7 @@ public class TRegistry {
 
 
     public static void registerItems(IForgeRegistry<Item> registry) {
-        registry.registerAll(BIO_EXTRACTOR,BIO_WRENCH,BIO_CUBE,BIO_CHUNK,ROTPLATE);
+        registry.registerAll(COMP_AGONY_SYNAPSE,COMP_NECROTIC_COIL,COMP_SCREAMING_CORE,BIO_EXTRACTOR,BIO_WRENCH,BIO_CUBE,BIO_CHUNK,ROTPLATE);
     }
 
 
