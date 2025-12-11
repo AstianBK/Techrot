@@ -2,6 +2,7 @@ package com.the_blood_knight.techrot.client.screen;
 
 import com.the_blood_knight.techrot.Techrot;
 import com.the_blood_knight.techrot.common.container.BioFleshClonerContainer;
+import com.the_blood_knight.techrot.common.container.BioImplanterContainer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -21,7 +22,7 @@ public class BioImplanterScreen extends GuiContainer {
 
     public BioImplanterScreen(InventoryPlayer playerInv, IInventory furnaceInv)
     {
-        super(new BioFleshClonerContainer(playerInv, furnaceInv));
+        super(new BioImplanterContainer(playerInv, furnaceInv));
         this.playerInventory = playerInv;
         this.tileFurnace = furnaceInv;
     }
@@ -47,13 +48,13 @@ public class BioImplanterScreen extends GuiContainer {
      * Draws the background layer of this container (behind the items).
      */
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-        int frame = (int) ((0.25F * (partialTicks+this.playerInventory.player.ticksExisted)) % 7);
+        int frame = (int) ((0.25F * (partialTicks+this.playerInventory.player.ticksExisted)) % 4);
 
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.getTextureManager().bindTexture(FRAMES[frame]);
         int i = (this.width - this.xSize) / 2;
         int j = (this.height - this.ySize) / 2;
-        this.drawTexturedModalRect(i, j, 0, 0, 176, 220);
+        this.drawTexturedModalRect(i, j-20, 0, 0, 176, 221);
 
         int k = this.getNutrition(49);
         this.drawTexturedModalRect(i + 60, j + 72, 176, 20, k, 18);

@@ -43,7 +43,7 @@ public class TRegistry {
 
     //FUNCTIONAL-BLOCKS
 
-    public static final BlockBase BIOIMPLANTER = new BioFurnaceBlock(false,Material.ROCK,"bioimplanter");
+    public static final BlockBase BIOIMPLANTER = new BioImplanterBlock(Material.ROCK,"bioimplanter",false);
     public static final BlockBase BIOFURNACE = new BioFurnaceBlock(false,Material.ROCK,"biofurnace");
     public static final BlockBase LIT_BIOFURNACE = new BioFurnaceBlock(true,Material.ROCK,"lit_biofurnace");
     public static final BlockBase BIOPASTEMAKER = new BioPastemakerBlock(Material.CACTUS,"biopastemaker",false);
@@ -63,6 +63,9 @@ public class TRegistry {
     public static final ItemBase BIO_CHUNK = new ItemBase("bio_chunk");
     public static final ItemBase ROTPLATE = new ItemBase("rotplate");
     public static final ItemBase BIO_WRENCH = new ItemBase("bio_wrench");
+    public static final ItemBase ROTPLATE_ARM = new ItemBase("rotplate_arm");
+    public static final ItemBase ROTPLATE_CHEST = new ItemBase("rotplate_chest");
+    public static final ItemBase ROTPLATE_HEAD = new ItemBase("rotplate_head");
 
     public static void registerBlocks(IForgeRegistry<Block> registry) {
         for(BlockBase block : BLOCKS) {
@@ -87,7 +90,7 @@ public class TRegistry {
 
 
     public static void registerItems(IForgeRegistry<Item> registry) {
-        registry.registerAll(BIO_EXTRACTOR,BIO_WRENCH,BIO_CUBE,BIO_CHUNK,ROTPLATE);
+        registry.registerAll(BIO_EXTRACTOR,BIO_WRENCH,BIO_CUBE,BIO_CHUNK,ROTPLATE,ROTPLATE_HEAD,ROTPLATE_CHEST,ROTPLATE_ARM);
     }
 
 

@@ -2,6 +2,7 @@ package com.the_blood_knight.techrot.common.item;
 
 import com.the_blood_knight.techrot.Techrot;
 import com.the_blood_knight.techrot.common.TRegistry;
+import com.the_blood_knight.techrot.common.api.ITechRotPlayer;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityList;
@@ -43,7 +44,12 @@ public class BioExtractorItem extends ItemBase{
         ItemStack extract = playerIn.getHeldItem(hand);
         if(extract.getTagCompound()==null && !(target instanceof EntityPlayer)){
             addADN(extract,EntityList.getKey(target).toString());
-
+        }else {
+            ITechRotPlayer cap = playerIn.getCapability(Techrot.CapabilityRegistry.PLAYER_UPGRADES, null);
+            if(cap!=null){
+                cap.getInventory().setStackInSlot(0,extract.copy());
+                extract.shrink(1);
+            }
         }
         return super.itemInteractionForEntity(stack, playerIn, target, hand);
     }

@@ -181,8 +181,7 @@ public class BioFurnaceTileBlock extends TileEntityLockable implements ITickable
     /**
      * Like the old updateEntity(), except more generic.
      */
-    public void update()
-    {
+    public void update() {
         boolean flag = this.isBurning();
         boolean flag1 = false;
 
