@@ -5,6 +5,7 @@ import com.the_blood_knight.techrot.common.block.*;
 import com.the_blood_knight.techrot.common.item.BioExtractorItem;
 import com.the_blood_knight.techrot.common.item.ItemBase;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockBreakable;
 import net.minecraft.block.BlockFurnace;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
