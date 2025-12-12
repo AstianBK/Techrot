@@ -1,5 +1,5 @@
 {
-  "name": "Rotplate Head",
+  "name": "Rotpiercer Skullplate",
   "category": "implants",
   "icon": "techrot:rotplate_head1",
   "priority": false,
@@ -7,7 +7,7 @@
     {
       "type": "crafting",
       "recipe": "techrot:rotplate_head1",
-      "text": "The base poppet for all your crafting, does nothing and cannot be bound."
+      "text": "Grants immunity to techrot fumes and prevents your vision from getting impaired in any way. Doesn't filter in poison"
     }
   ]
 }

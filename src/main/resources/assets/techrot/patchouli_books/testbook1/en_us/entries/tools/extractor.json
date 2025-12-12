@@ -7,7 +7,7 @@
     {
       "type": "crafting",
       "recipe": "techrot:bio_extractor",
-      "text": "The base poppet for all your crafting, does nothing and cannot be bound."
+      "text": "Allows the extraction of genomes from living creatures"
     }
   ]
 }

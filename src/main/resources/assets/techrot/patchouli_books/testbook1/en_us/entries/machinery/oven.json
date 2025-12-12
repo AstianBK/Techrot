@@ -7,7 +7,7 @@
     {
       "type": "crafting",
       "recipe": "techrot:biofurnace",
-      "text": "The base poppet for all your crafting, does nothing and cannot be bound."
+      "text": "Increases it's skin temperature to dangerous levels rapidly cooking anything inside it."
     }
   ]
 }

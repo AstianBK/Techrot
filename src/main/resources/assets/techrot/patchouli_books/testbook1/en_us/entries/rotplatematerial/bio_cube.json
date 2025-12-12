@@ -7,7 +7,7 @@
     {
       "type": "crafting",
       "recipe": "techrot:bio_cube",
-      "text": "The base poppet for all your crafting, does nothing and cannot be bound."
+      "text": "Small sentient rot cube, can grow exponentially when encased inside of rotplate"
     }
   ]
 }

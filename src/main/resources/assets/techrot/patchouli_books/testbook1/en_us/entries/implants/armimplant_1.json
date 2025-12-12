@@ -1,5 +1,5 @@
 {
-  "name": "Rotplate Arm",
+  "name": "Torq-Rot Armature",
   "category": "implants",
   "icon": "techrot:rotplate_arm1",
   "priority": false,
@@ -7,7 +7,7 @@
     {
       "type": "crafting",
       "recipe": "techrot:rotplate_arm1",
-      "text": "The base poppet for all your crafting, does nothing and cannot be bound."
+      "text": "Allows the use of rotplate weaponry and increases melee damage"
     }
   ]
 }

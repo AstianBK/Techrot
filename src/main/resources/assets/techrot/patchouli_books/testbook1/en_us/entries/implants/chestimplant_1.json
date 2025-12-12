@@ -1,5 +1,5 @@
 {
-  "name": "Rotplate Chest",
+  "name": "Pneumic Reactor",
   "category": "implants",
   "icon": "techrot:rotplate_chest1",
   "priority": false,
@@ -7,7 +7,7 @@
     {
       "type": "crafting",
       "recipe": "techrot:rotplate_chest1",
-      "text": "The base poppet for all your crafting, does nothing and cannot be bound."
+      "text": "Assimilates toxins allowing to regenerate decaying hearts while inside toxic fume clouds, grants immunity to poison and infinite water breathing"
     }
   ]
 }

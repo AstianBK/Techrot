@@ -7,7 +7,7 @@
     {
       "type": "crafting",
       "recipe": "techrot:comp_necrotic_coil",
-      "text": "The base poppet for all your crafting, does nothing and cannot be bound."
+      "text": "It produces a constant electrical pulse that travels around the coil. Weak individually, but amplified by the coil’s metallic structure into violent, crackling surges."
     }
   ]
 }

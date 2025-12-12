@@ -7,7 +7,7 @@
     {
       "type": "crafting",
       "recipe": "techrot:biopipe",
-      "text": "The base poppet for all your crafting, does nothing and cannot be bound."
+      "text": "Transports rot paste between machinery at high speeds."
     }
   ]
 }
