@@ -114,7 +114,7 @@ public class BioPipeBlock extends BlockTileBase{
             //state = ;
         }
 
-        worldIn.playSound(null,pos.getX(),pos.getY(),pos.getZ(), TRSounds.IMPLANTEDPLAYER_BREATHE,SoundCategory.PLAYERS,1.0F,1.0F);
+        worldIn.playSound(null,pos.getX(),pos.getY(),pos.getZ(), TRSounds.BIOPIPE_BLOCK_PLACE,SoundCategory.PLAYERS,1.0F,1.0F);
 
         return state;
     }
@@ -164,7 +164,7 @@ public class BioPipeBlock extends BlockTileBase{
                 breakPie.breakConnect(worldIn,facing);
             }
         }
-        worldIn.playSound(null,pos.getX(),pos.getY(),pos.getZ(), TRSounds.IMPLANTEDPLAYER_BREATHE,SoundCategory.PLAYERS,1.0F,1.0F);
+        worldIn.playSound(null,pos.getX(),pos.getY(),pos.getZ(), TRSounds.BIOPIPE_BLOCK_BREAK,SoundCategory.PLAYERS,1.0F,1.0F);
         super.breakBlock(worldIn, pos, state);
         worldIn.notifyNeighborsOfStateChange(pos, this, false);
         worldIn.notifyNeighborsOfStateChange(pos.down(), this, false);

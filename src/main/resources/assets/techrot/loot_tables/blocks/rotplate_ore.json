@@ -1,0 +1,33 @@
+{
+  "pools": [
+    {
+      "name": "main",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "techrot:rotplate"
+        }
+      ],
+      "conditions": [
+        { "condition": "minecraft:survives_explosion" }
+      ]
+    },
+    {
+      "name": "rare",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "techrot:bio_chunk"
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:random_chance",
+          "chance": 0.05
+        }
+      ]
+    }
+  ]
+}

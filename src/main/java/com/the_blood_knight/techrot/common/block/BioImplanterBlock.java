@@ -72,7 +72,7 @@ public class BioImplanterBlock extends BlockTileBase{
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (worldIn.isRemote)
         {
-            worldIn.playSound(null,pos.getX(),pos.getY(),pos.getZ(), TRSounds.IMPLANTEDPLAYER_BREATHE,SoundCategory.PLAYERS,1.0F,1.0F);
+            worldIn.playSound(null,pos.getX(),pos.getY(),pos.getZ(), TRSounds.BIOIMPLANTER_USE,SoundCategory.PLAYERS,1.0F,1.0F);
             return true;
         }
         else

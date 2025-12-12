@@ -10,6 +10,7 @@ import com.the_blood_knight.techrot.common.entity.TEntityRegister;
 import com.the_blood_knight.techrot.common.proxy.CommonProxy;
 import com.the_blood_knight.techrot.common.recipes.BioCrafterRecipe;
 import com.the_blood_knight.techrot.common.tile_block.*;
+import com.the_blood_knight.techrot.common.world.WorldGenRotOre;
 import com.the_blood_knight.techrot.messager.PacketHandler;
 import com.the_blood_knight.techrot.messager.SyncDataPacket;
 import net.minecraft.block.Block;
@@ -67,6 +68,7 @@ public class Techrot
     public static final List<BioCrafterRecipe> RECIPES = new ArrayList<>();
     public static final SoundType ROTPLATE = new SoundType(0.3F, 1.0F, SoundEvents.BLOCK_ANVIL_BREAK, SoundEvents.BLOCK_METAL_STEP, SoundEvents.BLOCK_ANVIL_PLACE, SoundEvents.BLOCK_ANVIL_HIT, SoundEvents.BLOCK_ANVIL_FALL);
 
+
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         logger = event.getModLog();
@@ -78,6 +80,7 @@ public class Techrot
         GameRegistry.registerTileEntity(BioFurnaceTileBlock.class,new ResourceLocation(MODID,"biofurnace"));
         GameRegistry.registerTileEntity(BioFleshClonerTileBlock.class,new ResourceLocation(MODID,"biofleshcloner"));
         NetworkRegistry.INSTANCE.registerGuiHandler(Techrot.this, new GuiHandler());
+        GameRegistry.registerWorldGenerator(new WorldGenRotOre(), 0);
         TEntityRegister.registerEntities();
     }
     public Map<EnumFacing, BlockPos> getMapEmpty(){

@@ -1,6 +1,7 @@
 package com.the_blood_knight.techrot.common.block;
 
 import com.the_blood_knight.techrot.Techrot;
+import com.the_blood_knight.techrot.common.TRSounds;
 import com.the_blood_knight.techrot.common.TRegistry;
 import com.the_blood_knight.techrot.common.tile_block.BioFleshClonerTileBlock;
 import com.the_blood_knight.techrot.common.tile_block.BioFurnaceTileBlock;
@@ -42,9 +43,6 @@ public class BioFleshClonerBlock extends BlockTileBase{
     @SuppressWarnings("incomplete-switch")
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         if (this.isBurning) {
-            if (rand.nextDouble() < 0.1) {
-                worldIn.playSound((double)pos.getX() + 0.5, (double)pos.getY(), (double)pos.getZ() + 0.5, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
-            }
             Techrot.spawnPeste(worldIn,pos,rand,4);
         }
     }
