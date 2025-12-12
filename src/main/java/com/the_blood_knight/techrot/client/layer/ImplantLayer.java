@@ -15,6 +15,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 public class ImplantLayer<T extends EntityPlayer> implements LayerRenderer<T> {
     public static final ResourceLocation TEXTURE = new ResourceLocation(Techrot.MODID,"textures/entity/bioarmors.png");
@@ -26,8 +27,6 @@ public class ImplantLayer<T extends EntityPlayer> implements LayerRenderer<T> {
     }
     @Override
     public void doRenderLayer(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-
-
         GlStateManager.pushMatrix();
 
         ITechRotPlayer cap = entitylivingbaseIn.getCapability(Techrot.CapabilityRegistry.PLAYER_UPGRADES,null);
@@ -52,8 +51,21 @@ public class ImplantLayer<T extends EntityPlayer> implements LayerRenderer<T> {
                 }
                 if(stack.getItem() == TRegistry.ROTPLATE_HEAD){
                     Minecraft.getMinecraft().getTextureManager().bindTexture(TEXTURE);
+
                     modelArm.renderHead(this.renderer.getMainModel().bipedHead);
                     modelArm.head.render(scale);
+                    GlStateManager.enableBlend();
+                    int frame = (int) ((0.25F * (partialTicks+entitylivingbaseIn.ticksExisted)) % 7);
+                    ResourceLocation location = new ResourceLocation(Techrot.MODID,"textures/entity/bioglowing_"+frame+".png");
+                    Minecraft.getMinecraft().getTextureManager().bindTexture(location);
+
+                    GlStateManager.blendFunc(GL11.GL_ONE, GL11.GL_ONE); // additive glow
+                    GlStateManager.disableLighting();
+
+                    modelArm.head.render(scale);
+
+                    GlStateManager.enableLighting();
+                    GlStateManager.disableBlend();
                 }
             }
             if(hasArm){
