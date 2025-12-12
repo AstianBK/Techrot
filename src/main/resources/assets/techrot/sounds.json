@@ -59,5 +59,10 @@
         "sounds": [
             "techrot:toxiclauncher_shoot"
         ]
+    },
+    "bio_extractor_use": {
+        "sounds": [
+            "techrot:bio_extractor_use"
+        ]
     }
 }
