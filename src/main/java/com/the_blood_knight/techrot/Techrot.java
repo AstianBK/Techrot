@@ -178,7 +178,7 @@ public class Techrot
                     player.posX,
                     player.posY,
                     player.posZ,
-                    SoundEvents.BLOCK_NOTE_HARP,
+                    TRSounds.IMPLANTEDPLAYER_TALK,
                     SoundCategory.PLAYERS,
                     1.0F,
                     1.0F
