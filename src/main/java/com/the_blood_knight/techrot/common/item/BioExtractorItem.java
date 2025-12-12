@@ -42,15 +42,25 @@ public class BioExtractorItem extends ItemBase{
     @Override
     public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target, EnumHand hand) {
         ItemStack extract = playerIn.getHeldItem(hand);
-        if(extract.getTagCompound()==null && !(target instanceof EntityPlayer)){
-            playerIn.world.playSound((EntityPlayer)null, playerIn.posX, playerIn.posY, playerIn.posZ, TRSounds.BIO_EXTRACTOR_USE, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 0.8F));
-            addADN(extract,EntityList.getKey(target).toString());
+
+        // Condition: ADN not yet stored AND target not player
+        if (getADN(extract).equals("none") && !(target instanceof EntityPlayer)) {
+
+            playerIn.world.playSound(null, playerIn.posX, playerIn.posY, playerIn.posZ,
+                    TRSounds.BIO_EXTRACTOR_USE, SoundCategory.NEUTRAL,
+                    1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 0.8F));
+
+            // extract ADN
+            addADN(extract, EntityList.getKey(target).toString());
+
+            // deal 1 damage ONLY when ADN extracted
+            target.attackEntityFrom(DamageSource.causePlayerDamage(playerIn), 1.0F);
         }
 
-
-        //playerIn.world.spawnEntity(fog);
         return super.itemInteractionForEntity(stack, playerIn, target, hand);
     }
+
+
 
     public static void addADN(ItemStack stack,String adn){
         stack.getOrCreateSubCompound("store").setString("adn",adn);
@@ -58,6 +68,8 @@ public class BioExtractorItem extends ItemBase{
     public static String getADN(ItemStack stack){
         return stack.getTagCompound()==null ? "none" : stack.getOrCreateSubCompound("store").getString("adn");
     }
+
+
 
 
     @Override
