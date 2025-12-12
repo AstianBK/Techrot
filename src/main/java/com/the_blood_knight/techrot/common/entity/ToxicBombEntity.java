@@ -13,7 +13,7 @@ public class ToxicBombEntity extends EntityThrowable {
         super(world);
     }
     public ToxicBombEntity(World p_i1776_1_,Entity owner) {
-        this(p_i1776_1_);
+        super(p_i1776_1_, (EntityLivingBase) owner);
         this.owner = owner;
     }
 
@@ -22,14 +22,15 @@ public class ToxicBombEntity extends EntityThrowable {
         if(!this.world.isRemote){
             if(rayTraceResult.entityHit instanceof EntityLivingBase && rayTraceResult.entityHit!=owner){
                 Entity living = rayTraceResult.entityHit;
-                ToxicFogEntity toxicFog = new ToxicFogEntity(world,living.posX,living.posY,living.posZ);
-                world.spawnEntity(toxicFog);
-                this.setDead();
-            }else if(rayTraceResult.typeOfHit == RayTraceResult.Type.BLOCK){
-                ToxicFogEntity toxicFog = new ToxicFogEntity(world,rayTraceResult.getBlockPos().getX(),rayTraceResult.getBlockPos().getY(),rayTraceResult.getBlockPos().getZ());
+                ToxicFogEntity toxicFog = new ToxicFogEntity(world,living.posX,living.posY,living.posZ,owner);
                 world.spawnEntity(toxicFog);
                 this.setDead();
             }
+
+            ToxicFogEntity toxicFog = new ToxicFogEntity(world,rayTraceResult.getBlockPos().getX(),rayTraceResult.getBlockPos().getY(),rayTraceResult.getBlockPos().getZ(),owner);
+            world.spawnEntity(toxicFog);
+            this.setDead();
+
         }
     }
 }

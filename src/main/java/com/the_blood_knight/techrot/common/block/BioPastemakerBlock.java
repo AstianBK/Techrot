@@ -1,6 +1,7 @@
 package com.the_blood_knight.techrot.common.block;
 
 import com.the_blood_knight.techrot.Techrot;
+import com.the_blood_knight.techrot.common.TRSounds;
 import com.the_blood_knight.techrot.common.TRegistry;
 import com.the_blood_knight.techrot.common.tile_block.BioFurnaceTileBlock;
 import com.the_blood_knight.techrot.common.tile_block.BioPastemakerTileBlock;
@@ -39,6 +40,8 @@ public class BioPastemakerBlock extends BlockTileBase{
     @SuppressWarnings("incomplete-switch")
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         if (this.active) {
+            worldIn.playSound(null,pos.getX(),pos.getY(),pos.getZ(), TRSounds.IMPLANTEDPLAYER_BREATHE,SoundCategory.PLAYERS,1.0F,1.0F);
+
             Techrot.spawnPeste(worldIn,pos,rand,7);
         }
     }
