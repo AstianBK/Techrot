@@ -38,6 +38,7 @@ public class TechrotArmImplant extends ModelBase {
 		head.cubeList.add(new ModelBox(head, 112, 0, 4.25F, -3.5F, -4.15F, 0, 4, 8, 0.0F, true));
 		head.cubeList.add(new ModelBox(head, 65, 0, -4.5F, -4.25F, -4.85F, 9, 1, 1, 0.0F, false));
 		head.cubeList.add(new ModelBox(head, 96, 8, -11.5F, -5.475F, -4.525F, 8, 8, 0, 0.0F, false));
+		head.cubeList.add(new ModelBox(head, 106, 16, 0.5F, -8.225F, -5.1F, 3, 3, 1, -0.25F, false));
 		head.cubeList.add(new ModelBox(head, 96, 8, 3.5F, -5.475F, -4.525F, 8, 8, 0, 0.0F, true));
 
 		cube_r1 = new ModelRenderer(this);

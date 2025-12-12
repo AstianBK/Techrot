@@ -43,7 +43,7 @@ public class ToxicLaucheritem extends ItemBase{
                     return ActionResult.newResult(EnumActionResult.SUCCESS,handItem);
                 }
             }else {
-                entityPlayer.sendMessage(new TextComponentString("Hello baby !!!"));
+                entityPlayer.sendMessage(new TextComponentString("I don't know how to use this"));
             }
 
         }
