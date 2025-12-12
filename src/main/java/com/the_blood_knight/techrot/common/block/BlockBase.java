@@ -26,6 +26,10 @@ public class BlockBase extends Block {
 		this.name = name;
 		this.setCreativeTab(TRegistry.TECHROT_TAB);
 
+		setHarvestLevel("pickaxe", 2); // 2 = iron pickaxe required
+		setHardness(3.0F);
+		setResistance(5.0F);
+
 		TRegistry.BLOCKS.add(this);
 	}
 	public void registerItemModel(Item itemBlock) {

@@ -43,7 +43,7 @@ public class BioExtractorItem extends ItemBase{
     public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target, EnumHand hand) {
         ItemStack extract = playerIn.getHeldItem(hand);
         if(extract.getTagCompound()==null && !(target instanceof EntityPlayer)){
-            playerIn.world.playSound((EntityPlayer)null, playerIn.posX, playerIn.posY, playerIn.posZ, TRSounds.BIO_EXTRACTOR_USE, SoundCategory.NEUTRAL, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+            playerIn.world.playSound((EntityPlayer)null, playerIn.posX, playerIn.posY, playerIn.posZ, TRSounds.BIO_EXTRACTOR_USE, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 0.8F));
             addADN(extract,EntityList.getKey(target).toString());
         }
 

@@ -30,7 +30,7 @@ public class ToxicLaucheritem extends ItemBase{
                 ItemStack stack = getBullet(entityPlayer);
 
                 if(!stack.isEmpty()){
-                    world.playSound((EntityPlayer)null, entityPlayer.posX, entityPlayer.posY, entityPlayer.posZ, TRSounds.IMPLANTEDPLAYER_BREATHE, SoundCategory.NEUTRAL, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+                    world.playSound((EntityPlayer)null, entityPlayer.posX, entityPlayer.posY, entityPlayer.posZ, TRSounds.TOXICLAUNCHER_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 0.8F));
                     if (!entityPlayer.capabilities.isCreativeMode) {
                         stack.shrink(1);
                         entityPlayer.getCooldownTracker().setCooldown(handItem.getItem(),20);
