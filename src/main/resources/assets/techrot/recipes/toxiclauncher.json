@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " gg",
+    "RLg",
+    "Pg "
+  ],
+  "key": {
+    "g": {
+      "item": "techrot:rotplate"
+    },
+    "R": {
+      "item": "techrot:comp_necrotic_coil"
+    },
+    "L": {
+      "item": "techrot:comp_screaming_core"
+    },
+    "P": {
+      "item": "techrot:comp_agony_synapse"
+    }
+  },
+  "result": {
+    "item": "techrot:toxiclauncher",
+    "count": 1
+  }
+}
