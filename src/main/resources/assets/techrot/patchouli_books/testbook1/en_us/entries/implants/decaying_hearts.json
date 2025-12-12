@@ -1,0 +1,12 @@
+{
+  "name": "Decaying Hearts",
+  "category": "implants",
+  "icon": "techrot:textures/effect/techrot_effect.png",
+  "priority": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "Decaying Hearts can't regenerate naturally, take additional damage from fire and get damage by instant health potion effects"
+    }
+  ]
+}

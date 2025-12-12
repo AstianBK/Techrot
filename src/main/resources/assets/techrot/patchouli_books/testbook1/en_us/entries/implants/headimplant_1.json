@@ -2,7 +2,7 @@
   "name": "Rotplate Head",
   "category": "implants",
   "icon": "techrot:rotplate_head1",
-  "priority": true,
+  "priority": false,
   "pages": [
     {
       "type": "crafting",
