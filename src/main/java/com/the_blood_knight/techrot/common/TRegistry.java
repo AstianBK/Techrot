@@ -65,6 +65,8 @@ public class TRegistry {
     public static final ItemBase ROTPLATE = new ItemBase("rotplate");
     public static final ItemBase BIO_WRENCH = new ItemBase("bio_wrench");
 
+    public static final ItemBase TOXICLAUNCHER = new ItemBase("toxiclauncher");
+
     //COMPONENTS
 
     public static final ItemBase COMP_AGONY_SYNAPSE = new ItemBase("comp_agony_synapse");
@@ -104,7 +106,7 @@ public class TRegistry {
 
 
     public static void registerItems(IForgeRegistry<Item> registry) {
-        registry.registerAll(BIO_EXTRACTOR,BIO_WRENCH,BIO_CUBE,BIO_CHUNK,COMP_AGONY_SYNAPSE,COMP_NECROTIC_COIL,COMP_SCREAMING_CORE,ROTPLATE,ROTPLATE_HEAD,ROTPLATE_CHEST,ROTPLATE_ARM);
+        registry.registerAll(BIO_EXTRACTOR,BIO_WRENCH,BIO_CUBE,BIO_CHUNK,COMP_AGONY_SYNAPSE,COMP_NECROTIC_COIL,COMP_SCREAMING_CORE,ROTPLATE,ROTPLATE_HEAD,ROTPLATE_CHEST,ROTPLATE_ARM,TOXICLAUNCHER);
     }
 
 

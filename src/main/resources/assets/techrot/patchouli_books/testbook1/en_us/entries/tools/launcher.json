@@ -1,0 +1,13 @@
+{
+  "name": "Caustic Howitzerr",
+  "category": "tools",
+  "icon": "techrot:toxiclauncher",
+  "priority": true,
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "techrot:toxiclauncher",
+      "text": "A heavy rotplate artillery that slots directly into a modified arm. It fires canisters of corrosive fumes, exploding into rotting clouds that devours living matter before thinning into the air."
+    }
+  ]
+}
