@@ -1,6 +1,6 @@
 {
   "name": "Small Rot Cube",
-  "category": "components",
+  "category": "rotplatematerial",
   "icon": "techrot:bio_cube",
   "priority": true,
   "pages": [
