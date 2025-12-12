@@ -1,22 +1,13 @@
 {
-    "entity.test.test_ambient":
-    {
-        "category": "entity",
-        "subtitle": "entity.test.test_ambient",
-        "sounds": [{ "name": "tutorialmod:entity/test/test_ambient", "stream": true }]
+    "implatedplayer_breathe": {
+        "sounds": [
+            "techrot:implantedplayer_breathe"
+        ]
     },
-    
-    "entity.test.test_hurt":
-    {
-        "category": "entity",
-        "subtitle": "entity.test.test_hurt",
-        "sounds": [{ "name": "tutorialmod:entity/test/test_hurt", "stream": true }]
-    },
-    
-    "entity.test.test_death":
-    {
-        "category": "entity",
-        "subtitle": "entity.test.test_death",
-        "sounds": [{ "name": "tutorialmod:entity/test/test_death", "stream": true}]
+    "implantedplayer_talk": {
+        "sounds": [
+            "techrot:implantedplayer_talk_0",
+            "techrot:implantedplayer_talk_1"
+        ]
     }
 }
