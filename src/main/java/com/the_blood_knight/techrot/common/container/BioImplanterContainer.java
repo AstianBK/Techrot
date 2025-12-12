@@ -179,6 +179,7 @@ public class BioImplanterContainer extends Container {
             ITechRotPlayer cap = playerIn.getCapability(Techrot.CapabilityRegistry.PLAYER_UPGRADES,null);
             if(cap!=null){
                 int rot = 0;
+                int currentRot = cap.getHeartRot();
                 for (int i = 0 ; i < 6 ; i++){
                     ItemStack stack = this.tileFurnace.getStackInSlot(i);
                     if(stack.getItem() == TRegistry.ROTPLATE_HEAD){
@@ -195,7 +196,11 @@ public class BioImplanterContainer extends Container {
                         stack.shrink(1);
                     }
                 }
-                cap.setHeartRot(rot);
+                if(currentRot!=rot){
+                    cap.setHeartRot(rot);
+                    cap.setDirty();
+                }
+
             }
         }
     }

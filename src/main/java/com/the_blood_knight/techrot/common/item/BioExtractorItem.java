@@ -3,6 +3,8 @@ package com.the_blood_knight.techrot.common.item;
 import com.the_blood_knight.techrot.Techrot;
 import com.the_blood_knight.techrot.common.TRegistry;
 import com.the_blood_knight.techrot.common.api.ITechRotPlayer;
+import com.the_blood_knight.techrot.common.entity.ToxicBombEntity;
+import com.the_blood_knight.techrot.common.entity.ToxicFogEntity;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityList;
@@ -35,9 +37,6 @@ public class BioExtractorItem extends ItemBase{
         return getADN(stack).equals("none") ? 1 : super.getDamage(stack);
     }
 
-    public static void clearADN(ItemStack stack){
-        stack.getOrCreateSubCompound("store").setString("adn","none");
-    }
 
     @Override
     public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target, EnumHand hand) {
@@ -45,6 +44,10 @@ public class BioExtractorItem extends ItemBase{
         if(extract.getTagCompound()==null && !(target instanceof EntityPlayer)){
             addADN(extract,EntityList.getKey(target).toString());
         }
+        ToxicBombEntity bullet = new ToxicBombEntity(playerIn.world);
+
+
+        //playerIn.world.spawnEntity(fog);
         return super.itemInteractionForEntity(stack, playerIn, target, hand);
     }
 

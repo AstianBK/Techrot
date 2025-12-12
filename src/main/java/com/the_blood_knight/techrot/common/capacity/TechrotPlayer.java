@@ -1,14 +1,11 @@
 package com.the_blood_knight.techrot.common.capacity;
 
 import com.the_blood_knight.techrot.Techrot;
-import com.the_blood_knight.techrot.common.TRegistry;
 import com.the_blood_knight.techrot.common.api.ITechRotPlayer;
 import com.the_blood_knight.techrot.messager.PacketHandler;
 import com.the_blood_knight.techrot.messager.SyncDataPacket;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -25,7 +22,7 @@ public class TechrotPlayer implements ITechRotPlayer {
 
     };
     public int regTimer = 0;
-    public int heartRot = 4;
+    public int heartRot = 0;
 
     public boolean dirty = false;
 
@@ -65,12 +62,13 @@ public class TechrotPlayer implements ITechRotPlayer {
     }
 
     @Override
-    public void reg() {
-        if(this.regTimer<=0){
-            this.regTimer=200;
-
+    public void reg(EntityPlayer player) {
+        if(player.getHealth()<this.heartRot){
+            if(this.regTimer<=0){
+                this.regTimer=80;
+                player.heal(1);
+            }
         }
-
     }
 
     @Override

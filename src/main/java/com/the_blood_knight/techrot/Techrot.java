@@ -1,14 +1,12 @@
 package com.the_blood_knight.techrot;
 
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-import com.google.gson.*;
 import com.the_blood_knight.techrot.client.layer.ImplantLayer;
 import com.the_blood_knight.techrot.client.particles.ToxicFogParticle;
+import com.the_blood_knight.techrot.common.TRSounds;
 import com.the_blood_knight.techrot.common.TRegistry;
 import com.the_blood_knight.techrot.common.api.ITechRotPlayer;
 import com.the_blood_knight.techrot.common.capacity.TechrotPlayer;
+import com.the_blood_knight.techrot.common.entity.TEntityRegister;
 import com.the_blood_knight.techrot.common.proxy.CommonProxy;
 import com.the_blood_knight.techrot.common.recipes.BioCrafterRecipe;
 import com.the_blood_knight.techrot.common.tile_block.*;
@@ -16,20 +14,11 @@ import com.the_blood_knight.techrot.messager.PacketHandler;
 import com.the_blood_knight.techrot.messager.SyncDataPacket;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelPlayer;
-import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.MobEffects;
-import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -58,12 +47,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 import org.apache.logging.log4j.Logger;
-import org.spongepowered.asm.launch.MixinBootstrap;
-import org.spongepowered.asm.mixin.Mixins;
 
-import javax.annotation.Nullable;
-import java.io.File;
-import java.io.FileReader;
 import java.util.*;
 
 @Mod(modid = "techrot", name = Techrot.NAME, version = Techrot.VERSION)
@@ -89,6 +73,7 @@ public class Techrot
         GameRegistry.registerTileEntity(BioFurnaceTileBlock.class,new ResourceLocation(MODID,"biofurnace"));
         GameRegistry.registerTileEntity(BioFleshClonerTileBlock.class,new ResourceLocation(MODID,"biofleshcloner"));
         NetworkRegistry.INSTANCE.registerGuiHandler(Techrot.this, new GuiHandler());
+        TEntityRegister.registerEntities();
     }
     public Map<EnumFacing, BlockPos> getMapEmpty(){
         Map<EnumFacing,BlockPos> map = new HashMap<>();
@@ -101,7 +86,7 @@ public class Techrot
         return map;
     }
 
-    public static void spawnPeste(World worldIn , BlockPos pos, Random rand,int radius){
+    public static void spawnPeste(World worldIn , BlockPos pos, Random rand,double radius){
         for (int pass = 0; pass < 15; pass++) {
             BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos(pos);
             float theta = (float) (2 * Math.PI * rand.nextFloat());
@@ -125,12 +110,11 @@ public class Techrot
             boolean hasTechrotHead = living instanceof EntityPlayer && Util.hasTechrotHead((EntityPlayer)living);
             boolean hasTechrotChest = living instanceof EntityPlayer && Util.hasTechrotChest((EntityPlayer)living);
             if(hasTechrotChest){
-                Util.getCap((EntityPlayer)living).reg();
+                Util.getCap((EntityPlayer)living).reg((EntityPlayer)living);
             }
             if(hasTechrotHead)continue;
             living.attackEntityFrom(DamageSource.FALL,1.0F);
-            living.addPotionEffect(new PotionEffect(TRegistry.TECHROT_EFFECT,10,0));
-
+            living.addPotionEffect(new PotionEffect(TRegistry.TECHROT_EFFECT,60,0));
         }
     }
     @EventHandler
@@ -147,7 +131,16 @@ public class Techrot
         public static void registerBlocks(RegistryEvent.Register<Block> event) {
             TRegistry.registerBlocks(event.getRegistry());
         }
-
+        @SubscribeEvent
+        public static void registerSound(RegistryEvent.Register<SoundEvent> event) throws Exception {
+            try {
+                TRSounds.registerSound(event);
+            }
+            catch(Throwable ex) {
+                String message = ex.getMessage();
+                throw ex;
+            }
+        }
         @SubscribeEvent
         public static void registerPotion(RegistryEvent.Register<Potion> event) throws Exception {
             try {

@@ -62,17 +62,17 @@ public class RotGui extends Gui {
     }
     @SubscribeEvent
     public void onRenderOverlay(RenderGameOverlayEvent.Post event) {
-        // Solo dibujar al final del render del HUD
         if (event.getType() != RenderGameOverlayEvent.ElementType.ALL) return;
 
         Minecraft mc = Minecraft.getMinecraft();
 
         if (mc.player == null) return;
 
-        // Si el jugador tiene el efecto, dibujamos el overlay
         if (mc.player.isPotionActive(TRegistry.TECHROT_EFFECT)) {
 
-            mc.getTextureManager().bindTexture(new ResourceLocation(Techrot.MODID,"textures/gui/toxicgas_overlay_0.png"));
+            int frame = (int) ((0.07F * (event.getPartialTicks()+mc.player.ticksExisted)) % 7);
+
+            mc.getTextureManager().bindTexture(new ResourceLocation(Techrot.MODID,"textures/overlay/toxicgas_overlay_"+frame+".png"));
 
             GlStateManager.disableDepth();
             GlStateManager.depthMask(false);
@@ -80,22 +80,16 @@ public class RotGui extends Gui {
             GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
             GlStateManager.color(1F, 1F, 1F, 1F);
 
-            // Tamaño completo de la pantalla
-            int width = mc.displayWidth;
-            int height = mc.displayHeight;
 
-            // Convertir a escala GUI
-            // Importante: en 1.12.2 el framebuffer se escala, hay que usar ScaledResolution
             ScaledResolution res = new ScaledResolution(mc);
             int w = res.getScaledWidth();
             int h = res.getScaledHeight();
 
-            // Dibuja toda la pantalla
             Gui.drawModalRectWithCustomSizedTexture(
-                    0, 0,         // x, y
-                    0, 0,         // u, v
-                    w, h,         // ancho, alto
-                    w, h          // tamaño real de la textura
+                    0, 0,
+                    0, 0,
+                    w, h,
+                    w, h
             );
 
             GlStateManager.depthMask(true);
@@ -170,7 +164,7 @@ public class RotGui extends Gui {
             if (rowHeight != 10){
                 //top += 10 - rowHeight;
             }
-            final int TOP = 9 *  0;
+            final int TOP = 0;
             final int BACKGROUND = (highlight ? 25 : 16);
             int MARGIN = 16;
             rand.setSeed(mc.ingameGUI.getUpdateCounter() * 312871L);

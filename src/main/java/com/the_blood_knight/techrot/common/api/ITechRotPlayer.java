@@ -9,6 +9,6 @@ public interface ITechRotPlayer {
     void setDirty();
     int getHeartRot();
     int getRegTimer();
-    void reg();
+    void reg(EntityPlayer player);
     void setHeartRot(int value);
 }

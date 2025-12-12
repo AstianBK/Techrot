@@ -43,6 +43,7 @@ public class ImplantLayer<T extends EntityPlayer> implements LayerRenderer<T> {
                     Minecraft.getMinecraft().getTextureManager().bindTexture(TEXTURE);
                     modelArm.renderRightArm(this.renderer.getMainModel().bipedRightArm);
                     modelArm.right_arm.render(scale);
+                    hasArm = true;
                 }
                 if(stack.getItem() == TRegistry.ROTPLATE_CHEST){
                     Minecraft.getMinecraft().getTextureManager().bindTexture(TEXTURE);
@@ -55,7 +56,7 @@ public class ImplantLayer<T extends EntityPlayer> implements LayerRenderer<T> {
                     modelArm.head.render(scale);
                 }
             }
-            if(!hasArm){
+            if(hasArm){
                 renderHeldItem(entitylivingbaseIn,entitylivingbaseIn.getHeldItemMainhand(), ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND,EnumHandSide.RIGHT);
             }
         }
