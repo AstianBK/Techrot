@@ -11,6 +11,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
@@ -67,6 +68,9 @@ public class BioEggMakerBlock extends BlockTileBase{
     @SuppressWarnings("incomplete-switch")
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         if (this.isWork) {
+            if (rand.nextDouble() < 0.1) {
+                worldIn.playSound((double)pos.getX() + 0.5, (double)pos.getY(), (double)pos.getZ() + 0.5, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
+            }
             Techrot.spawnPeste(worldIn,pos,rand,7);
         }
     }

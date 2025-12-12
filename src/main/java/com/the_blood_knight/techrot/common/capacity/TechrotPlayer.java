@@ -1,6 +1,7 @@
 package com.the_blood_knight.techrot.common.capacity;
 
 import com.the_blood_knight.techrot.Techrot;
+import com.the_blood_knight.techrot.common.TRSounds;
 import com.the_blood_knight.techrot.common.api.ITechRotPlayer;
 import com.the_blood_knight.techrot.messager.PacketHandler;
 import com.the_blood_knight.techrot.messager.SyncDataPacket;
@@ -9,6 +10,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.SoundCategory;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.items.ItemStackHandler;
@@ -65,6 +67,8 @@ public class TechrotPlayer implements ITechRotPlayer {
     public void reg(EntityPlayer player) {
         if(player.getHealth()<this.heartRot){
             if(this.regTimer<=0){
+                player.world.playSound(null,player.posX,player.posY,player.posZ, TRSounds.IMPLANTEDPLAYER_BREATHE, SoundCategory.PLAYERS,1.0F,1.0F);
+
                 this.regTimer=80;
                 player.heal(1);
             }

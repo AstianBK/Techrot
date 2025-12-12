@@ -1,6 +1,7 @@
 package com.the_blood_knight.techrot.common.block;
 
 import com.the_blood_knight.techrot.Techrot;
+import com.the_blood_knight.techrot.common.TRSounds;
 import com.the_blood_knight.techrot.common.TRegistry;
 import com.the_blood_knight.techrot.common.tile_block.BioImplanterTileBlock;
 import com.the_blood_knight.techrot.common.tile_block.BioPastemakerTileBlock;
@@ -71,6 +72,7 @@ public class BioImplanterBlock extends BlockTileBase{
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (worldIn.isRemote)
         {
+            worldIn.playSound(null,pos.getX(),pos.getY(),pos.getZ(), TRSounds.IMPLANTEDPLAYER_BREATHE,SoundCategory.PLAYERS,1.0F,1.0F);
             return true;
         }
         else

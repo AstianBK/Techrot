@@ -13,11 +13,13 @@ import com.the_blood_knight.techrot.common.tile_block.*;
 import com.the_blood_knight.techrot.messager.PacketHandler;
 import com.the_blood_knight.techrot.messager.SyncDataPacket;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
@@ -32,6 +34,7 @@ import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -62,6 +65,8 @@ public class Techrot
     @Mod.Instance
     public static Techrot main;
     public static final List<BioCrafterRecipe> RECIPES = new ArrayList<>();
+    public static final SoundType ROTPLATE = new SoundType(0.3F, 1.0F, SoundEvents.BLOCK_ANVIL_BREAK, SoundEvents.BLOCK_METAL_STEP, SoundEvents.BLOCK_ANVIL_PLACE, SoundEvents.BLOCK_ANVIL_HIT, SoundEvents.BLOCK_ANVIL_FALL);
+
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         logger = event.getModLog();
@@ -163,7 +168,21 @@ public class Techrot
                 throw ex;
             }
         }
+        @SubscribeEvent
+        public void onPlayerChat(ServerChatEvent event) {
+            net.minecraft.entity.player.EntityPlayerMP player = event.getPlayer();
 
+            player.world.playSound(
+                    null,
+                    player.posX,
+                    player.posY,
+                    player.posZ,
+                    SoundEvents.BLOCK_NOTE_HARP,
+                    SoundCategory.PLAYERS,
+                    1.0F,
+                    1.0F
+            );
+        }
         @SubscribeEvent
         public static void registerItems(ModelRegistryEvent event) {
             TRegistry.registerModels();

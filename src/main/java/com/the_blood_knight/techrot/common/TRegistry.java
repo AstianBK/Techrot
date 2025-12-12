@@ -10,12 +10,17 @@ import net.minecraft.block.BlockBreakable;
 import net.minecraft.block.BlockFurnace;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistry;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
@@ -35,7 +40,12 @@ public class TRegistry {
 
     public static final BlockBase BIOCUBE_BLOCK = new BlockBase(Material.IRON,"biocube_block");
 
-    public static final BlockBase ROTPLATE_BLOCK = new BlockBase(Material.IRON,"rotplate_block");
+    public static final BlockBase ROTPLATE_BLOCK = new BlockBase(Material.IRON,"rotplate_block"){
+        @Override
+        public SoundType getSoundType(IBlockState p_getSoundType_1_, World p_getSoundType_2_, BlockPos p_getSoundType_3_, @Nullable Entity p_getSoundType_4_) {
+            return super.getSoundType(p_getSoundType_1_, p_getSoundType_2_, p_getSoundType_3_, p_getSoundType_4_);
+        }
+    };
 
     public static final BlockBase ROTPLATE_SECTIONED_BLOCK = new BlockBase(Material.IRON,"rotplate_sectioned_block");
 

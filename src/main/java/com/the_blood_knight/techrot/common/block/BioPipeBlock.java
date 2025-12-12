@@ -1,6 +1,8 @@
 package com.the_blood_knight.techrot.common.block;
 
 import com.the_blood_knight.techrot.Techrot;
+import com.the_blood_knight.techrot.common.TRSounds;
+import com.the_blood_knight.techrot.common.TRegistry;
 import com.the_blood_knight.techrot.common.tile_block.BioPipeTileBlock;
 import net.minecraft.block.Block;
 
@@ -112,6 +114,8 @@ public class BioPipeBlock extends BlockTileBase{
             //state = ;
         }
 
+        worldIn.playSound(null,pos.getX(),pos.getY(),pos.getZ(), TRSounds.IMPLANTEDPLAYER_BREATHE,SoundCategory.PLAYERS,1.0F,1.0F);
+
         return state;
     }
 
@@ -160,7 +164,7 @@ public class BioPipeBlock extends BlockTileBase{
                 breakPie.breakConnect(worldIn,facing);
             }
         }
-
+        worldIn.playSound(null,pos.getX(),pos.getY(),pos.getZ(), TRSounds.IMPLANTEDPLAYER_BREATHE,SoundCategory.PLAYERS,1.0F,1.0F);
         super.breakBlock(worldIn, pos, state);
         worldIn.notifyNeighborsOfStateChange(pos, this, false);
         worldIn.notifyNeighborsOfStateChange(pos.down(), this, false);
