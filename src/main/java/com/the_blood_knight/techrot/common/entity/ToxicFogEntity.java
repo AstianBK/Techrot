@@ -9,6 +9,7 @@ import com.the_blood_knight.techrot.common.TRegistry;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityAreaEffectCloud;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.PotionTypes;
@@ -34,7 +35,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class ToxicFogEntity extends Entity {
+public class ToxicFogEntity extends EntityAreaEffectCloud {
     private static final DataParameter<Float> RADIUS;
     private static final DataParameter<Integer> COLOR;
     private static final DataParameter<Boolean> IGNORE_RADIUS;
@@ -173,11 +174,14 @@ public class ToxicFogEntity extends Entity {
     }
 
     public void onUpdate() {
-        super.onUpdate();
+        if (!this.world.isRemote) {
+            this.setFlag(6, this.isGlowing());
+        }
+
+        this.onEntityUpdate();
         boolean lvt_1_1_ = this.shouldIgnoreRadius();
         float lvt_2_1_ = this.getRadius();
         if (this.world.isRemote) {
-            Techrot.spawnPeste(world,this.getPosition(),rand,getRadius());
             BlockPos pos = this.getPosition();
             double radius = this.getRadius();
             for (int pass = 0; pass < 15; pass++) {

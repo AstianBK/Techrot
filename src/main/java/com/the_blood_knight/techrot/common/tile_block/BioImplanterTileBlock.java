@@ -7,6 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
@@ -175,7 +176,23 @@ public class BioImplanterTileBlock extends TileEntity implements ITickable, ISid
         }
     }
 
+    @Override
+    public void readFromNBT(NBTTagCompound compound) {
+        super.readFromNBT(compound);
+        this.container = NonNullList.<ItemStack>withSize(this.getSizeInventory(), ItemStack.EMPTY);
+        ItemStackHelper.loadAllItems(compound, this.container);
 
+        this.currentNutrient = compound.getInteger("currentNutrient");
+
+    }
+
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+        compound.setInteger("currentNutrient",this.currentNutrient);
+        ItemStackHelper.saveAllItems(compound, this.container);
+
+        return super.writeToNBT(compound);
+    }
     @Override
     public String getName() {
         return "Bio Crafter";

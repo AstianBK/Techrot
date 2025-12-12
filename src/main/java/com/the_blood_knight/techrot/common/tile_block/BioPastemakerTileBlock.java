@@ -276,6 +276,9 @@ public class BioPastemakerTileBlock extends TileEntityLockable implements ITicka
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
+        this.container = NonNullList.<ItemStack>withSize(this.getSizeInventory(), ItemStack.EMPTY);
+        ItemStackHelper.loadAllItems(compound, this.container);
+
         this.eatTime = compound.getInteger("eatTime");
         this.totalEatTime = compound.getInteger("totalEatTime");
         this.maxNutrition = compound.getInteger("maxNutrition");
@@ -284,6 +287,8 @@ public class BioPastemakerTileBlock extends TileEntityLockable implements ITicka
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+        ItemStackHelper.saveAllItems(compound, this.container);
+
         compound.setInteger("eatTime",this.eatTime);
         compound.setInteger("totalEatTime",this.totalEatTime);
         compound.setInteger("maxNutrition",this.maxNutrition);

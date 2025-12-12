@@ -27,14 +27,14 @@ public class BioImplanterContainer extends Container {
                 return stack.getItem() == TRegistry.ROTPLATE_HEAD;
             }
         });
-        this.addSlotToContainer(new Slot(furnaceInventory, 1, 112,18 ){
+        this.addSlotToContainer(new Slot(furnaceInventory, 1,35 ,27 ){
             @Override
             public boolean isItemValid(ItemStack stack) {
                 return stack.getItem() == TRegistry.ROTPLATE_ARM;
             }
         });
 
-        this.addSlotToContainer(new Slot(furnaceInventory, 2,35 ,27 ){
+        this.addSlotToContainer(new Slot(furnaceInventory, 2,112 ,18 ){
             @Override
             public boolean isItemValid(ItemStack stack) {
                 return stack.getItem() == TRegistry.ROTPLATE_CHEST;
@@ -192,7 +192,6 @@ public class BioImplanterContainer extends Container {
                             rot +=6;
                         }
                         stack.shrink(1);
-
                     }
                 }
                 if(rot>0){

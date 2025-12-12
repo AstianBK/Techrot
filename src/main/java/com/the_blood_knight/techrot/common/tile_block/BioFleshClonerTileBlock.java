@@ -364,9 +364,13 @@ public class BioFleshClonerTileBlock extends TileEntityLockable implements ITick
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
+        this.container = NonNullList.<ItemStack>withSize(this.getSizeInventory(), ItemStack.EMPTY);
+        ItemStackHelper.loadAllItems(compound, this.container);
+
         this.currentNutrient = compound.getInteger("currentNutrient");
         this.clonerTimer = compound.getInteger("clonerTimer");
         this.maxClonerTimer = compound.getInteger("maxClonerTimer");
+
     }
 
     @Override
@@ -374,6 +378,8 @@ public class BioFleshClonerTileBlock extends TileEntityLockable implements ITick
         compound.setInteger("currentNutrient",this.currentNutrient);
         compound.setInteger("clonerTimer",this.clonerTimer);
         compound.setInteger("maxClonerTimer",this.maxClonerTimer);
+        ItemStackHelper.saveAllItems(compound, this.container);
+
         return super.writeToNBT(compound);
     }
 

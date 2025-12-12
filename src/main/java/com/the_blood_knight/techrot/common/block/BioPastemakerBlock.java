@@ -92,14 +92,11 @@ public class BioPastemakerBlock extends BlockTileBase{
                         bullet.grow(1);
                         stack.shrink(1);
                         return true;
-
                     }else {
-                        if(!playerIn.inventory.add(playerIn.inventory.getFirstEmptyStack(),new ItemStack(TRegistry.TOXIC_CANISTER))){
-                            playerIn.dropItem(new ItemStack(TRegistry.TOXIC_CANISTER),false);
+                        if(playerIn.inventory.add(-1,new ItemStack(TRegistry.TOXIC_CANISTER))){
+                            stack.shrink(1);
+                            return true;
                         }
-
-                        stack.shrink(1);
-                        return true;
 
                     }
 

@@ -19,12 +19,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TRegistry {
     public static final CreativeTabs TECHROT_TAB = new CreativeTabs("techrot_tab") {
@@ -55,7 +57,22 @@ public class TRegistry {
 
     public static final BlockBase ROTPLATE_SOLID_BLOCK = new BlockBase(Material.IRON,"rotplate_solid_block");
 
-    public static final BlockBase ROTPLATE_ORE = new BlockBase(Material.IRON,"rotplate_ore");
+    public static final BlockBase ROTPLATE_ORE = new BlockBase(Material.IRON,"rotplate_ore"){
+        @Override
+        public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+            List<ItemStack> drops = new ArrayList<>();
+
+            // Siempre dropea 2 ROTPLATE
+            drops.add(new ItemStack(TRegistry.ROTPLATE, 2));
+
+            // 30% de chances de dropear 1 BioChunk
+            if (RANDOM.nextFloat() < 0.30F) {
+                drops.add(new ItemStack(TRegistry.BIO_CHUNK, 1));
+            }
+
+            return drops;
+        }
+    };
 
     //FUNCTIONAL-BLOCKS
 
