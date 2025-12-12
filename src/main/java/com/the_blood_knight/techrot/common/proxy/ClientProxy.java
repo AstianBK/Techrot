@@ -4,11 +4,15 @@ import com.the_blood_knight.techrot.Techrot;
 import com.the_blood_knight.techrot.client.gui.RotGui;
 import com.the_blood_knight.techrot.client.particles.BioGasParticle;
 import com.the_blood_knight.techrot.client.particles.ToxicFogParticle;
+import com.the_blood_knight.techrot.client.renderer.ToxicFogRenderer;
 import com.the_blood_knight.techrot.common.TRegistry;
 import com.the_blood_knight.techrot.common.entity.ToxicBombEntity;
+import com.the_blood_knight.techrot.common.entity.ToxicFogEntity;
 import com.the_blood_knight.techrot.common.item.BioExtractorItem;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.entity.RenderAreaEffectCloud;
 import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.IItemPropertyGetter;
@@ -42,6 +46,7 @@ public class ClientProxy extends CommonProxy{
 		super.init();
 		MinecraftForge.EVENT_BUS.register(new RotGui());
 		RenderingRegistry.registerEntityRenderingHandler(ToxicBombEntity.class, new RenderSnowball<>(Minecraft.getMinecraft().getRenderManager(),TRegistry.TOXIC_CANISTER,Minecraft.getMinecraft().getRenderItem()));
+		RenderingRegistry.registerEntityRenderingHandler(ToxicFogEntity.class, ToxicFogRenderer::new);
 
 		TRegistry.BIO_EXTRACTOR.addPropertyOverride(
 				new ResourceLocation("fill"),

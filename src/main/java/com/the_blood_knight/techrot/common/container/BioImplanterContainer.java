@@ -182,7 +182,6 @@ public class BioImplanterContainer extends Container {
 
                     if(cap.getInventory().getStackInSlot(i).isEmpty()){
                         cap.getInventory().setStackInSlot(i,stack.copy());
-                        stack.shrink(1);
                         if(stack.getItem() == TRegistry.ROTPLATE_HEAD){
                             rot +=2;
                         }
@@ -192,6 +191,8 @@ public class BioImplanterContainer extends Container {
                         if(stack.getItem() == TRegistry.ROTPLATE_CHEST){
                             rot +=6;
                         }
+                        stack.shrink(1);
+
                     }
                 }
                 if(rot>0){

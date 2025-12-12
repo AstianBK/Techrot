@@ -139,10 +139,13 @@ public class BioFurnaceBlock extends BlockTileBase {
                         return true;
 
                     }else {
-                        if(playerIn.inventory.add(playerIn.inventory.getFirstEmptyStack(),new ItemStack(TRegistry.TOXIC_CANISTER))){
-                            stack.shrink(1);
-                            return true;
+                        if(!playerIn.inventory.add(playerIn.inventory.getFirstEmptyStack(),new ItemStack(TRegistry.TOXIC_CANISTER))){
+                            playerIn.dropItem(new ItemStack(TRegistry.TOXIC_CANISTER),false);
                         }
+
+                        stack.shrink(1);
+                        return true;
+
                     }
 
                 }
