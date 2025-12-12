@@ -3,6 +3,7 @@ package com.the_blood_knight.techrot.common.block;
 import com.the_blood_knight.techrot.Techrot;
 import com.the_blood_knight.techrot.common.TRSounds;
 import com.the_blood_knight.techrot.common.TRegistry;
+import com.the_blood_knight.techrot.common.item.ToxicLaucheritem;
 import com.the_blood_knight.techrot.common.tile_block.BioEggMakerTileBlock;
 import com.the_blood_knight.techrot.common.tile_block.BioFleshClonerTileBlock;
 import net.minecraft.block.BlockHorizontal;
@@ -14,6 +15,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
@@ -99,12 +101,30 @@ public class BioEggMakerBlock extends BlockTileBase{
         if (worldIn.isRemote)
         {
             return true;
-        }
-        else
-        {
+        } else {
+            IBlockState current = worldIn.getBlockState(pos);
+            if(current.getBlock() == TRegistry.LIT_BIOEGGMAKER){
+                ItemStack stack = playerIn.getHeldItem(hand);
+                if(stack.getItem()==TRegistry.TOXIC_CANISTER_EMPTY){
+                    ItemStack bullet = ToxicLaucheritem.getBullet(playerIn);
+                    if(!bullet.isEmpty() && bullet.getCount()<63){
+                        bullet.grow(1);
+                        stack.shrink(1);
+                        return true;
+
+                    }else {
+                        if(playerIn.inventory.add(playerIn.inventory.getFirstEmptyStack(),new ItemStack(TRegistry.TOXIC_CANISTER))){
+                            stack.shrink(1);
+                            return true;
+                        }
+                    }
+
+                }
+            }
             TileEntity tileentity = worldIn.getTileEntity(pos);
 
             if (tileentity instanceof BioEggMakerTileBlock) {
+
                 playerIn.openGui(Techrot.main,3,worldIn,pos.getX(),pos.getY(),pos.getZ());
                 playerIn.addStat(StatList.FURNACE_INTERACTION);
             }

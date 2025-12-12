@@ -4,6 +4,7 @@ import com.the_blood_knight.techrot.common.api.IRegisterable;
 import com.the_blood_knight.techrot.common.block.*;
 import com.the_blood_knight.techrot.common.item.BioExtractorItem;
 import com.the_blood_knight.techrot.common.item.ItemBase;
+import com.the_blood_knight.techrot.common.item.ToxicCanister;
 import com.the_blood_knight.techrot.common.item.ToxicLaucheritem;
 import com.the_blood_knight.techrot.common.potion.TechRotEffect;
 import net.minecraft.block.Block;
@@ -60,17 +61,17 @@ public class TRegistry {
 
     public static final BlockBase BIOIMPLANTER = new BioImplanterBlock(Material.ROCK,"bioimplanter",false);
     public static final BlockBase BIOFURNACE = new BioFurnaceBlock(false,Material.ROCK,"biofurnace");
-    public static final BlockBase LIT_BIOFURNACE = new BioFurnaceBlock(true,Material.ROCK,"lit_biofurnace");
+    public static final BlockBase LIT_BIOFURNACE = new BioFurnaceBlock(true,Material.ROCK,"lit_biofurnace").setCreativeTab(null);
     public static final BlockBase BIOPASTEMAKER = new BioPastemakerBlock(Material.CACTUS,"biopastemaker",false);
-    public static final BlockBase LIT_BIOPASTEMAKER = new BioPastemakerBlock(Material.CACTUS,"lit_biopastemaker",true);
+    public static final BlockBase LIT_BIOPASTEMAKER = new BioPastemakerBlock(Material.CACTUS,"lit_biopastemaker",true).setCreativeTab(null);
 
     public static final BlockBase BIOPIPE = new BioPipeBlock(Material.CACTUS,"biopipe");
     public static final BlockBase BIOEGGMAKER = new BioEggMakerBlock(Material.CACTUS,"bioeggmaker",false);
-    public static final BlockBase LIT_BIOEGGMAKER = new BioEggMakerBlock(Material.CACTUS,"lit_bioeggmaker",true);
+    public static final BlockBase LIT_BIOEGGMAKER = new BioEggMakerBlock(Material.CACTUS,"lit_bioeggmaker",true).setCreativeTab(null);
 
     public static final BlockBase BIOCRAFTER = new BioCrafterBlock(Material.CACTUS,"biocrafter");
     public static final BlockBase BIOFLESHCLONER = new BioFleshClonerBlock(Material.CACTUS,"biofleshcloner",false);
-    public static final BlockBase LIT_BIOFLESHCLONER = new BioFleshClonerBlock(Material.CACTUS,"lit_biofleshcloner",true);
+    public static final BlockBase LIT_BIOFLESHCLONER = new BioFleshClonerBlock(Material.CACTUS,"lit_biofleshcloner",true).setCreativeTab(null);
 
     //ITEMS
     public static final BioExtractorItem BIO_EXTRACTOR = new BioExtractorItem("bio_extractor");
@@ -79,9 +80,9 @@ public class TRegistry {
     public static final ItemBase ROTPLATE = new ItemBase("rotplate");
     public static final ItemBase BIO_WRENCH = new ItemBase("bio_wrench");
 
-    public static final ItemBase TOXIC_CANISTER = new ItemBase("toxic_canister");
+    public static final ToxicCanister TOXIC_CANISTER = new ToxicCanister("toxic_canister",true);
 
-    public static final ItemBase TOXIC_CANISTER_EMPTY = new ItemBase("toxic_canister_empty");
+    public static final ToxicCanister TOXIC_CANISTER_EMPTY = new ToxicCanister("toxic_canister_empty",false);
     public static final ToxicLaucheritem TOXICLAUNCHER = new ToxicLaucheritem("toxiclauncher");
 
     //COMPONENTS

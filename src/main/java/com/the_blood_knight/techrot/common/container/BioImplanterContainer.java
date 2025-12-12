@@ -27,20 +27,20 @@ public class BioImplanterContainer extends Container {
                 return stack.getItem() == TRegistry.ROTPLATE_HEAD;
             }
         });
-        this.addSlotToContainer(new Slot(furnaceInventory, 1, 108, 56){
+        this.addSlotToContainer(new Slot(furnaceInventory, 1, 112,18 ){
             @Override
             public boolean isItemValid(ItemStack stack) {
                 return stack.getItem() == TRegistry.ROTPLATE_ARM;
             }
         });
 
-        this.addSlotToContainer(new Slot(furnaceInventory, 2, 112, 18){
+        this.addSlotToContainer(new Slot(furnaceInventory, 2,35 ,27 ){
             @Override
             public boolean isItemValid(ItemStack stack) {
                 return stack.getItem() == TRegistry.ROTPLATE_CHEST;
             }
         });
-        this.addSlotToContainer(new Slot(furnaceInventory, 3, 35, 27){
+        this.addSlotToContainer(new Slot(furnaceInventory, 3, 108,56 ){
             @Override
             public boolean isItemValid(ItemStack stack) {
                 return false;
@@ -179,25 +179,25 @@ public class BioImplanterContainer extends Container {
                 int currentRot = cap.getHeartRot();
                 for (int i = 0 ; i < 6 ; i++){
                     ItemStack stack = this.tileFurnace.getStackInSlot(i);
-                    if(stack.getItem() == TRegistry.ROTPLATE_HEAD){
-                        rot +=2;
-                    }
-                    if(stack.getItem() == TRegistry.ROTPLATE_ARM){
-                        rot +=2;
-                    }
-                    if(stack.getItem() == TRegistry.ROTPLATE_CHEST){
-                        rot +=6;
-                    }
+
                     if(cap.getInventory().getStackInSlot(i).isEmpty()){
                         cap.getInventory().setStackInSlot(i,stack.copy());
                         stack.shrink(1);
+                        if(stack.getItem() == TRegistry.ROTPLATE_HEAD){
+                            rot +=2;
+                        }
+                        if(stack.getItem() == TRegistry.ROTPLATE_ARM){
+                            rot +=2;
+                        }
+                        if(stack.getItem() == TRegistry.ROTPLATE_CHEST){
+                            rot +=6;
+                        }
                     }
                 }
-                if(currentRot!=rot){
-                    cap.setHeartRot(rot);
-                    cap.setDirty();
+                if(rot>0){
+                    cap.setHeartRot(rot+currentRot);
                 }
-
+                cap.setDirty();
             }
         }
     }

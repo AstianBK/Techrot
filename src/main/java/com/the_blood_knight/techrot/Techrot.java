@@ -65,8 +65,6 @@ public class Techrot
     public static Logger logger;
     @Mod.Instance
     public static Techrot main;
-    public static final List<BioCrafterRecipe> RECIPES = new ArrayList<>();
-    public static final SoundType ROTPLATE = new SoundType(0.3F, 1.0F, SoundEvents.BLOCK_ANVIL_BREAK, SoundEvents.BLOCK_METAL_STEP, SoundEvents.BLOCK_ANVIL_PLACE, SoundEvents.BLOCK_ANVIL_HIT, SoundEvents.BLOCK_ANVIL_FALL);
 
 
     @EventHandler

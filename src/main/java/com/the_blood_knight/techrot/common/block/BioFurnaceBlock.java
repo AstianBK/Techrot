@@ -5,6 +5,7 @@ import com.the_blood_knight.techrot.client.particles.BioGasParticle;
 import com.the_blood_knight.techrot.client.particles.ToxicFogParticle;
 import com.the_blood_knight.techrot.common.TRSounds;
 import com.the_blood_knight.techrot.common.TRegistry;
+import com.the_blood_knight.techrot.common.item.ToxicLaucheritem;
 import com.the_blood_knight.techrot.common.tile_block.BioFurnaceTileBlock;
 import net.minecraft.block.BlockFurnace;
 import net.minecraft.block.BlockHorizontal;
@@ -127,6 +128,25 @@ public class BioFurnaceBlock extends BlockTileBase {
         }
         else
         {
+            IBlockState current = worldIn.getBlockState(pos);
+            if(current.getBlock() == TRegistry.LIT_BIOFURNACE){
+                ItemStack stack = playerIn.getHeldItem(hand);
+                if(stack.getItem()==TRegistry.TOXIC_CANISTER_EMPTY){
+                    ItemStack bullet = ToxicLaucheritem.getBullet(playerIn);
+                    if(!bullet.isEmpty() && bullet.getCount()<63){
+                        bullet.grow(1);
+                        stack.shrink(1);
+                        return true;
+
+                    }else {
+                        if(playerIn.inventory.add(playerIn.inventory.getFirstEmptyStack(),new ItemStack(TRegistry.TOXIC_CANISTER))){
+                            stack.shrink(1);
+                            return true;
+                        }
+                    }
+
+                }
+            }
             TileEntity tileentity = worldIn.getTileEntity(pos);
 
             if (tileentity instanceof BioFurnaceTileBlock) {

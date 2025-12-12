@@ -28,7 +28,6 @@ public class ToxicLaucheritem extends ItemBase{
         if(handItem.getItem() == this) {
             if(Util.hasTechrotArm(entityPlayer)){
                 ItemStack stack = getBullet(entityPlayer);
-
                 if(!stack.isEmpty()){
                     world.playSound((EntityPlayer)null, entityPlayer.posX, entityPlayer.posY, entityPlayer.posZ, TRSounds.TOXICLAUNCHER_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 0.8F));
                     if (!entityPlayer.capabilities.isCreativeMode) {
@@ -53,6 +52,15 @@ public class ToxicLaucheritem extends ItemBase{
     }
 
     public static ItemStack getBullet(EntityPlayer entityPlayer){
+        IInventory container = entityPlayer.inventory;
+        for (int i = 0 ; i< container.getSizeInventory() ; i++){
+            if(container.getStackInSlot(i).getItem() == TRegistry.TOXIC_CANISTER){
+                return container.getStackInSlot(i);
+            }
+        }
+        return ItemStack.EMPTY;
+    }
+    public static ItemStack getFreeBullet(EntityPlayer entityPlayer){
         IInventory container = entityPlayer.inventory;
         for (int i = 0 ; i< container.getSizeInventory() ; i++){
             if(container.getStackInSlot(i).getItem() == TRegistry.TOXIC_CANISTER){

@@ -1,7 +1,7 @@
 {
   "pools": [
     {
-      "name": "main",
+      "name": "drops",
       "rolls": 1,
       "entries": [
         {
@@ -14,7 +14,7 @@
       ]
     },
     {
-      "name": "rare",
+      "name": "drops",
       "rolls": 1,
       "entries": [
         {

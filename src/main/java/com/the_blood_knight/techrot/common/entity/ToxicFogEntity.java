@@ -4,7 +4,10 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.the_blood_knight.techrot.Techrot;
 import com.the_blood_knight.techrot.Util;
+import com.the_blood_knight.techrot.client.particles.ToxicFogParticle;
+import com.the_blood_knight.techrot.common.TRegistry;
 import net.minecraft.block.material.EnumPushReaction;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,6 +23,7 @@ import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -53,7 +57,7 @@ public class ToxicFogEntity extends Entity {
     public ToxicFogEntity(World p_i46809_1_) {
         super(p_i46809_1_);
         this.potion = PotionTypes.EMPTY;
-        this.effects = Lists.newArrayList();
+        this.effects = Lists.newArrayList(new PotionEffect(TRegistry.TECHROT_EFFECT,50,0));
         this.reapplicationDelayMap = Maps.newHashMap();
         this.duration = 300;
         this.waitTime = 5;
@@ -61,6 +65,7 @@ public class ToxicFogEntity extends Entity {
         this.noClip = true;
         this.isImmuneToFire = true;
         this.setRadius(5.0F);
+
     }
 
     public ToxicFogEntity(World p_i46810_1_, double posX, double posY, double posZ, Entity owner) {
@@ -173,6 +178,19 @@ public class ToxicFogEntity extends Entity {
         float lvt_2_1_ = this.getRadius();
         if (this.world.isRemote) {
             Techrot.spawnPeste(world,this.getPosition(),rand,getRadius());
+            BlockPos pos = this.getPosition();
+            double radius = this.getRadius();
+            for (int pass = 0; pass < 15; pass++) {
+                BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos(pos);
+                float theta = (float) (2 * Math.PI * rand.nextFloat());
+                float phi = (float) Math.acos(2 * rand.nextFloat() - 1);
+                double x = radius * Math.sin(phi) * Math.cos(theta);
+                double y = radius * Math.sin(phi) * Math.sin(theta);
+                double z = radius * Math.cos(phi);
+
+                mutableBlockPos.setPos(x + pos.getX(), y + pos.getY(), z + pos.getZ());
+                Minecraft.getMinecraft().effectRenderer.addEffect(new ToxicFogParticle(world, mutableBlockPos.getX(), mutableBlockPos.getY() + rand.nextFloat(), mutableBlockPos.getZ(), 0, 0, 0));
+            }
         } else {
             if (this.ticksExisted >= this.waitTime + this.duration) {
                 this.setDead();
@@ -255,7 +273,6 @@ public class ToxicFogEntity extends Entity {
                                 if (lvt_15_1_.getPotion().isInstant()) {
                                     lvt_15_1_.getPotion().affectEntity(this, this.getOwner(), lvt_7_3_, lvt_15_1_.getAmplifier(), 0.5);
                                 } else {
-
                                     lvt_7_3_.addPotionEffect(new PotionEffect(lvt_15_1_));
                                 }
                                 lvt_7_3_.attackEntityFrom(DamageSource.GENERIC,1);

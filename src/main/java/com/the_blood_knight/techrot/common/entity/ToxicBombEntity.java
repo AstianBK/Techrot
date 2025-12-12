@@ -25,9 +25,10 @@ public class ToxicBombEntity extends EntityThrowable {
                 ToxicFogEntity toxicFog = new ToxicFogEntity(world,living.posX,living.posY,living.posZ,owner);
                 world.spawnEntity(toxicFog);
                 this.setDead();
+                return;
             }
 
-            ToxicFogEntity toxicFog = new ToxicFogEntity(world,rayTraceResult.getBlockPos().getX(),rayTraceResult.getBlockPos().getY(),rayTraceResult.getBlockPos().getZ(),owner);
+            ToxicFogEntity toxicFog = new ToxicFogEntity(world,rayTraceResult.hitVec.x,rayTraceResult.hitVec.y,rayTraceResult.hitVec.z,owner);
             world.spawnEntity(toxicFog);
             this.setDead();
 
