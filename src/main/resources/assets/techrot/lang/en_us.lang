@@ -9,7 +9,7 @@ item.rotplate.name=Rotplate
 item.toxiclauncher.name=Caustic Howitzerr
 
 item.toxic_canister.name=Fume Canister
-item.toxic_canister_empty.name=Depleted Fume Canister
+item.toxic_canister_empty.name=Empty Fume Canister
 
 item.bio_extractor.name=Genome Extractor
 item.bio_wrench.name=Rot-Wrench
