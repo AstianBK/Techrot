@@ -1,6 +1,7 @@
 package com.the_blood_knight.techrot.common.proxy;
 
 import com.the_blood_knight.techrot.Techrot;
+import com.the_blood_knight.techrot.client.gui.RotGui;
 import com.the_blood_knight.techrot.client.particles.BioGasParticle;
 import com.the_blood_knight.techrot.client.particles.ToxicFogParticle;
 import com.the_blood_knight.techrot.common.TRegistry;
@@ -15,6 +16,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -35,6 +37,7 @@ public class ClientProxy extends CommonProxy{
 	@Override
 	public void init() {
 		super.init();
+		MinecraftForge.EVENT_BUS.register(new RotGui());
 		TRegistry.BIO_EXTRACTOR.addPropertyOverride(
 				new ResourceLocation("fill"),
 				new IItemPropertyGetter() {

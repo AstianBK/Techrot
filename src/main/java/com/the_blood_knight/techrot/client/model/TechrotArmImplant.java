@@ -100,7 +100,7 @@ public class TechrotArmImplant extends ModelBase {
 	}
 
 	public void renderChest(ModelRenderer chest){
-		this.head.rotationPointX = chest.rotationPointX;
+		this.torso.rotationPointX = chest.rotationPointX;
 		this.torso.rotationPointY = chest.rotationPointY;
 		this.torso.rotationPointZ = chest.rotationPointZ;
 

@@ -6,11 +6,14 @@ import com.the_blood_knight.techrot.common.TRegistry;
 import com.the_blood_knight.techrot.common.api.ITechRotPlayer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.entity.layers.LayerElytra;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.ResourceLocation;
 
 public class ImplantLayer<T extends EntityPlayer> implements LayerRenderer<T> {
@@ -27,15 +30,18 @@ public class ImplantLayer<T extends EntityPlayer> implements LayerRenderer<T> {
 
         GlStateManager.pushMatrix();
 
-        //renderer.getMainModel().bipedRightArm.postRender(scale);
         ITechRotPlayer cap = entitylivingbaseIn.getCapability(Techrot.CapabilityRegistry.PLAYER_UPGRADES,null);
         if(cap!=null){
+            if (entitylivingbaseIn.isSneaking()) {
+                GlStateManager.translate(0.0F, 0.2F, 0.0F);
+            }
             for (int i = 0 ; i < cap.getInventory().getSlots() ; i++){
                 ItemStack stack = cap.getInventory().getStackInSlot(i);
 
                 if(stack.getItem() == TRegistry.ROTPLATE_ARM){
                     modelArm.renderRightArm(this.renderer.getMainModel().bipedRightArm);
                     modelArm.right_arm.render(scale);
+                    renderHeldItem(entitylivingbaseIn,entitylivingbaseIn.getHeldItemMainhand(), ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND,EnumHandSide.RIGHT);
                 }
                 if(stack.getItem() == TRegistry.ROTPLATE_CHEST){
                     modelArm.renderChest(this.renderer.getMainModel().bipedBody);
@@ -48,6 +54,24 @@ public class ImplantLayer<T extends EntityPlayer> implements LayerRenderer<T> {
             }
         }
         GlStateManager.popMatrix();
+    }
+
+    private void renderHeldItem(EntityLivingBase p_renderHeldItem_1_, ItemStack p_renderHeldItem_2_, ItemCameraTransforms.TransformType p_renderHeldItem_3_, EnumHandSide p_renderHeldItem_4_) {
+        if (!p_renderHeldItem_2_.isEmpty()) {
+            GlStateManager.pushMatrix();
+            if (p_renderHeldItem_1_.isSneaking()) {
+                GlStateManager.translate(0.0F, 0.2F, 0.0F);
+            }
+
+            this.modelArm.right_arm.postRender(0.0625F);
+            GlStateManager.rotate(-90.0F, 1.0F, 0.0F, 0.0F);
+            GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
+            boolean flag = p_renderHeldItem_4_ == EnumHandSide.LEFT;
+            GlStateManager.translate((float)(flag ? -1 : 1) / 16.0F, 0.125F, -0.625F);
+            Minecraft.getMinecraft().getItemRenderer().renderItemSide(p_renderHeldItem_1_, p_renderHeldItem_2_, p_renderHeldItem_3_, flag);
+            GlStateManager.popMatrix();
+        }
+
     }
 
     @Override

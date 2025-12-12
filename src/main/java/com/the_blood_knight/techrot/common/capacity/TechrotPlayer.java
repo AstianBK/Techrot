@@ -24,7 +24,8 @@ public class TechrotPlayer implements ITechRotPlayer {
         }
 
     };
-
+    public int regTimer = 0;
+    public int heartRot = 4;
 
     public boolean dirty = false;
 
@@ -40,15 +41,11 @@ public class TechrotPlayer implements ITechRotPlayer {
                 this.dirty=false;
                 NBTTagCompound tag = new NBTTagCompound();
                 tag.setTag("Inv", this.getInventory().serializeNBT());
+                tag.setInteger("rotHealth",this.getHeartRot());
                 PacketHandler.sendTo(new SyncDataPacket(tag), (EntityPlayerMP) player);
             }
-        }
-
-        for (int i = 0; i < inventory.getSlots(); i++) {
-            ItemStack stack = inventory.getStackInSlot(i);
-            if ((stack.getItem() == TRegistry.BIO_EXTRACTOR)) {
-                player.getEntityAttribute(SharedMonsterAttributes.ARMOR)
-                        .setBaseValue(2.0);
+            if(this.regTimer>0){
+                this.regTimer--;
             }
         }
     }
@@ -57,11 +54,32 @@ public class TechrotPlayer implements ITechRotPlayer {
         this.dirty = true;
     }
 
+    @Override
+    public int getHeartRot() {
+        return this.heartRot;
+    }
+
+    @Override
+    public int getRegTimer() {
+        return this.regTimer;
+    }
+
+    @Override
+    public void reg() {
+        this.regTimer=200;
+    }
+
+    @Override
+    public void setHeartRot(int value) {
+        this.heartRot = value;
+    }
+
     public static class TechrotPlayerStorage implements Capability.IStorage<ITechRotPlayer>{
         @Override
         public NBTBase writeNBT(Capability<ITechRotPlayer> capability, ITechRotPlayer instance, EnumFacing side) {
             NBTTagCompound tag = new NBTTagCompound();
             tag.setTag("Inv", instance.getInventory().serializeNBT());
+            tag.setInteger("rotHealth",instance.getHeartRot());
             return tag;
         }
 
@@ -69,6 +87,7 @@ public class TechrotPlayer implements ITechRotPlayer {
         public void readNBT(Capability<ITechRotPlayer> capability, ITechRotPlayer instance, EnumFacing side, NBTBase nbt) {
             NBTTagCompound tag = (NBTTagCompound) nbt;
             instance.getInventory().deserializeNBT(tag.getCompoundTag("Inv"));
+            instance.setHeartRot(tag.getInteger("rotHealth"));
             instance.setDirty();
         }
     }
