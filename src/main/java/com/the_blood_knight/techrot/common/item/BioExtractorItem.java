@@ -40,19 +40,6 @@ public class BioExtractorItem extends ItemBase{
 
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityPlayer, EnumHand hand) {
-        ItemStack stack = entityPlayer.getHeldItem(hand);
-        world.playSound((EntityPlayer)null, entityPlayer.posX, entityPlayer.posY, entityPlayer.posZ, TRSounds.IMPLANTEDPLAYER_BREATHE, SoundCategory.NEUTRAL, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
-
-        if(!world.isRemote){
-            ToxicBombEntity bullet = new ToxicBombEntity(world,entityPlayer);
-            bullet.shoot(entityPlayer,entityPlayer.rotationYaw  ,entityPlayer.rotationPitch,0.0F,1.5F,1.0F);
-            world.spawnEntity(bullet);
-        }
-        return new ActionResult<>(EnumActionResult.PASS,stack);
-    }
-
-    @Override
     public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target, EnumHand hand) {
         ItemStack extract = playerIn.getHeldItem(hand);
         if(extract.getTagCompound()==null && !(target instanceof EntityPlayer)){

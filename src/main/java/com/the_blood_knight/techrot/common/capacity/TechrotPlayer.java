@@ -70,7 +70,7 @@ public class TechrotPlayer implements ITechRotPlayer {
                 player.world.playSound(null,player.posX,player.posY,player.posZ, TRSounds.IMPLANTEDPLAYER_BREATHE, SoundCategory.PLAYERS,1.0F,1.0F);
 
                 this.regTimer=80;
-                player.heal(1);
+                player.setHealth(Math.min(player.getHealth()+1,player.getMaxHealth()));
             }
         }
     }

@@ -114,14 +114,14 @@ public class BioFleshClonerContainer extends Container {
             }
             else if (index != 1 && index != 0)
             {
-                if (!FurnaceRecipes.instance().getSmeltingResult(itemstack1).isEmpty())
+                if (itemstack1.getItem() instanceof BioExtractorItem)
                 {
                     if (!this.mergeItemStack(itemstack1, 0, 1, false))
                     {
                         return ItemStack.EMPTY;
                     }
                 }
-                else if (TileEntityFurnace.isItemFuel(itemstack1))
+                else if (itemstack1.getItem() == TRegistry.BIO_CUBE)
                 {
                     if (!this.mergeItemStack(itemstack1, 1, 2, false))
                     {

@@ -40,6 +40,7 @@ public class SyncDataPacket implements IMessage {
                 ITechRotPlayer cap = player.getCapability(Techrot.CapabilityRegistry.PLAYER_UPGRADES, null);
 
                 cap.getInventory().deserializeNBT(message.data.getCompoundTag("Inv"));
+                cap.setHeartRot(message.data.getInteger("rotHealth"));
             });
 
             return null;

@@ -4,6 +4,7 @@ import com.the_blood_knight.techrot.common.api.IRegisterable;
 import com.the_blood_knight.techrot.common.block.*;
 import com.the_blood_knight.techrot.common.item.BioExtractorItem;
 import com.the_blood_knight.techrot.common.item.ItemBase;
+import com.the_blood_knight.techrot.common.item.ToxicLaucheritem;
 import com.the_blood_knight.techrot.common.potion.TechRotEffect;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBreakable;
@@ -81,7 +82,7 @@ public class TRegistry {
     public static final ItemBase TOXIC_CANISTER = new ItemBase("toxic_canister");
 
     public static final ItemBase TOXIC_CANISTER_EMPTY = new ItemBase("toxic_canister_empty");
-    public static final ItemBase TOXICLAUNCHER = new ItemBase("toxiclauncher");
+    public static final ToxicLaucheritem TOXICLAUNCHER = new ToxicLaucheritem("toxiclauncher");
 
     //COMPONENTS
 
