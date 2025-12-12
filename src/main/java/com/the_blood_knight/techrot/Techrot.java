@@ -20,6 +20,7 @@ import net.minecraft.client.model.ModelPlayer;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
@@ -30,6 +31,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
@@ -42,6 +44,7 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingHealEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -115,28 +118,10 @@ public class Techrot
         }
     }
 
-    public static NonNullList<ItemStack> getRemainingItems(InventoryCrafting craftMatrix, World worldIn)
-    {
-        for (IRecipe irecipe : RECIPES)
-        {
-            if (irecipe.matches(craftMatrix, worldIn))
-            {
-                return irecipe.getRemainingItems(craftMatrix);
-            }
-        }
 
-        NonNullList<ItemStack> nonnulllist = NonNullList.<ItemStack>withSize(craftMatrix.getSizeInventory(), ItemStack.EMPTY);
-
-        for (int i = 0; i < nonnulllist.size(); ++i)
-        {
-            nonnulllist.set(i, craftMatrix.getStackInSlot(i));
-        }
-
-        return nonnulllist;
-    }
 
     public static void damageTick(World world,BlockPos pos,int radius){
-        for (EntityLiving living : world.getEntities(EntityLiving.class, e-> e.isEntityAlive() && e.getDistance(pos.getX(),pos.getY(),pos.getZ())<radius)){
+        for (EntityLivingBase living : world.getEntities(EntityLivingBase.class, e-> e.isEntityAlive() && e.getDistance(pos.getX(),pos.getY(),pos.getZ())<radius)){
             living.attackEntityFrom(DamageSource.FALL,1.0F);
             living.addPotionEffect(new PotionEffect(MobEffects.POISON,100,0));
         }
@@ -156,7 +141,16 @@ public class Techrot
             TRegistry.registerBlocks(event.getRegistry());
         }
 
-
+        @SubscribeEvent
+        public static void registerPotion(RegistryEvent.Register<Potion> event) throws Exception {
+            try {
+                TRegistry.registerMobEffect(event);
+            }
+            catch(Throwable ex) {
+                String message = ex.getMessage();
+                throw ex;
+            }
+        }
         @SubscribeEvent
         public static void registerItem(RegistryEvent.Register<Item> event) throws Exception {
             try {
@@ -179,6 +173,18 @@ public class Techrot
             if (event.getObject() instanceof EntityPlayer) {
                 event.addCapability(
                         CapabilityRegistry.PLAYER_UPGRADES_ID,new TechrotPlayer.TechrotPlayerProvider());
+            }
+        }
+        @SubscribeEvent
+        public static void onHeal(LivingHealEvent event) {
+            if (event.getEntityLiving() instanceof EntityPlayer) {
+                EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+                ITechRotPlayer cap = player.getCapability(CapabilityRegistry.PLAYER_UPGRADES,null);
+                if(cap!=null){
+                    if (player.getHealth()<=cap.getHeartRot()) {
+                        event.setCanceled(true);
+                    }
+                }
             }
         }
         @SubscribeEvent

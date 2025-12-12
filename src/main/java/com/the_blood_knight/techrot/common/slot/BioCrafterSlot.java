@@ -73,15 +73,7 @@ public class BioCrafterSlot extends SlotCrafting {
     @Override
     public ItemStack onTake(EntityPlayer thePlayer, ItemStack stack) {
         this.onCrafting(stack);
-        NonNullList<ItemStack> nonnulllist = Techrot.getRemainingItems(this.craftMatrix, thePlayer.world);
-        for (int i = 0; i < nonnulllist.size(); ++i) {
-            ItemStack itemstack = this.craftMatrix.getStackInSlot(i);
 
-            if (!itemstack.isEmpty())
-            {
-                this.craftMatrix.decrStackSize(i, 1);
-            }
-        }
         return stack;
     }
 }

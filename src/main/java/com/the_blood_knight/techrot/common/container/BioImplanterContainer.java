@@ -24,13 +24,13 @@ public class BioImplanterContainer extends Container {
         this.addSlotToContainer(new Slot(furnaceInventory, 0, 52, -2){
             @Override
             public boolean isItemValid(ItemStack stack) {
-                return stack.getItem() == TRegistry.ROTPLATE_ARM;
+                return stack.getItem() == TRegistry.ROTPLATE_HEAD;
             }
         });
         this.addSlotToContainer(new Slot(furnaceInventory, 1, 108, 56){
             @Override
             public boolean isItemValid(ItemStack stack) {
-                return stack.getItem() == TRegistry.ROTPLATE_HEAD;
+                return stack.getItem() == TRegistry.ROTPLATE_ARM;
             }
         });
 
@@ -178,13 +178,24 @@ public class BioImplanterContainer extends Container {
 
             ITechRotPlayer cap = playerIn.getCapability(Techrot.CapabilityRegistry.PLAYER_UPGRADES,null);
             if(cap!=null){
+                int rot = 0;
                 for (int i = 0 ; i < 6 ; i++){
                     ItemStack stack = this.tileFurnace.getStackInSlot(i);
+                    if(stack.getItem() == TRegistry.ROTPLATE_HEAD){
+                        rot +=1;
+                    }
+                    if(stack.getItem() == TRegistry.ROTPLATE_ARM){
+                        rot +=1;
+                    }
+                    if(stack.getItem() == TRegistry.ROTPLATE_CHEST){
+                        rot +=3;
+                    }
                     if(cap.getInventory().getStackInSlot(i).isEmpty()){
                         cap.getInventory().setStackInSlot(i,stack.copy());
                         stack.shrink(1);
                     }
                 }
+                cap.setHeartRot(rot);
             }
         }
     }

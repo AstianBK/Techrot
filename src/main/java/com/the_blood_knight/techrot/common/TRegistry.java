@@ -4,6 +4,7 @@ import com.the_blood_knight.techrot.common.api.IRegisterable;
 import com.the_blood_knight.techrot.common.block.*;
 import com.the_blood_knight.techrot.common.item.BioExtractorItem;
 import com.the_blood_knight.techrot.common.item.ItemBase;
+import com.the_blood_knight.techrot.common.potion.TechRotEffect;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBreakable;
 import net.minecraft.block.BlockFurnace;
@@ -12,6 +13,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.ArrayList;
@@ -83,6 +86,10 @@ public class TRegistry {
 
     public static final ItemBase ROTPLATE_ARM = new ItemBase("rotplate_arm1");
 
+    //EFFECT
+    public static Potion TECHROT_EFFECT = new TechRotEffect();
+
+
     public static void registerBlocks(IForgeRegistry<Block> registry) {
         for(BlockBase block : BLOCKS) {
             registry.register(block);
@@ -109,7 +116,9 @@ public class TRegistry {
         registry.registerAll(BIO_EXTRACTOR,BIO_WRENCH,BIO_CUBE,BIO_CHUNK,COMP_AGONY_SYNAPSE,COMP_NECROTIC_COIL,COMP_SCREAMING_CORE,ROTPLATE,ROTPLATE_HEAD,ROTPLATE_CHEST,ROTPLATE_ARM,TOXICLAUNCHER);
     }
 
-
+    public static void registerMobEffect(RegistryEvent.Register<Potion> potionRegister){
+        potionRegister.getRegistry().register(TECHROT_EFFECT);
+    }
 
 
 }

@@ -7,4 +7,8 @@ public interface ITechRotPlayer {
     ItemStackHandler getInventory();
     void tick(EntityPlayer player);
     void setDirty();
+    int getHeartRot();
+    int getRegTimer();
+    void reg();
+    void setHeartRot(int value);
 }
