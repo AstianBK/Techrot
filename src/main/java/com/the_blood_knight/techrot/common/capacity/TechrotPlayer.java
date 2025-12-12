@@ -66,7 +66,11 @@ public class TechrotPlayer implements ITechRotPlayer {
 
     @Override
     public void reg() {
-        this.regTimer=200;
+        if(this.regTimer<=0){
+            this.regTimer=200;
+
+        }
+
     }
 
     @Override

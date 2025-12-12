@@ -26,12 +26,13 @@ public class ImplantLayer<T extends EntityPlayer> implements LayerRenderer<T> {
     }
     @Override
     public void doRenderLayer(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-        Minecraft.getMinecraft().getTextureManager().bindTexture(TEXTURE);
+
 
         GlStateManager.pushMatrix();
 
         ITechRotPlayer cap = entitylivingbaseIn.getCapability(Techrot.CapabilityRegistry.PLAYER_UPGRADES,null);
         if(cap!=null){
+            boolean hasArm = false;
             if (entitylivingbaseIn.isSneaking()) {
                 GlStateManager.translate(0.0F, 0.2F, 0.0F);
             }
@@ -39,18 +40,23 @@ public class ImplantLayer<T extends EntityPlayer> implements LayerRenderer<T> {
                 ItemStack stack = cap.getInventory().getStackInSlot(i);
 
                 if(stack.getItem() == TRegistry.ROTPLATE_ARM){
+                    Minecraft.getMinecraft().getTextureManager().bindTexture(TEXTURE);
                     modelArm.renderRightArm(this.renderer.getMainModel().bipedRightArm);
                     modelArm.right_arm.render(scale);
-                    renderHeldItem(entitylivingbaseIn,entitylivingbaseIn.getHeldItemMainhand(), ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND,EnumHandSide.RIGHT);
                 }
                 if(stack.getItem() == TRegistry.ROTPLATE_CHEST){
+                    Minecraft.getMinecraft().getTextureManager().bindTexture(TEXTURE);
                     modelArm.renderChest(this.renderer.getMainModel().bipedBody);
                     modelArm.torso.render(scale);
                 }
                 if(stack.getItem() == TRegistry.ROTPLATE_HEAD){
+                    Minecraft.getMinecraft().getTextureManager().bindTexture(TEXTURE);
                     modelArm.renderHead(this.renderer.getMainModel().bipedHead);
                     modelArm.head.render(scale);
                 }
+            }
+            if(!hasArm){
+                renderHeldItem(entitylivingbaseIn,entitylivingbaseIn.getHeldItemMainhand(), ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND,EnumHandSide.RIGHT);
             }
         }
         GlStateManager.popMatrix();

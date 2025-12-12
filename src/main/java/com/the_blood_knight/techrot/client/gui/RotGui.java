@@ -3,6 +3,7 @@ package com.the_blood_knight.techrot.client.gui;
 import com.the_blood_knight.techrot.Techrot;
 import com.the_blood_knight.techrot.Util;
 import com.the_blood_knight.techrot.common.TRegistry;
+import com.the_blood_knight.techrot.common.api.ITechRotPlayer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.Gui;
@@ -56,7 +57,6 @@ public class RotGui extends Gui {
     @SubscribeEvent
     public void onPreRenderOverlay(RenderGameOverlayEvent.Pre event) {
         if(event.getType() == RenderGameOverlayEvent.ElementType.HEALTH) {
-            event.setCanceled(true);
             onRenderOverlay(event);
         }
     }
@@ -106,99 +106,102 @@ public class RotGui extends Gui {
 
     public void onRenderOverlay(RenderGameOverlayEvent.Pre event) {
         if (mc.player == null) return;
-
-        GlStateManager.enableBlend();
-
-        ScaledResolution sr = event.getResolution();
-        int screenW = sr.getScaledWidth();
-        int screenH = sr.getScaledHeight();
-
-
         EntityPlayer player = mc.player;
 
+        ITechRotPlayer cap = player.getCapability(Techrot.CapabilityRegistry.PLAYER_UPGRADES,null);
+        if(cap!=null){
+            event.setCanceled(true);
+            GlStateManager.enableBlend();
 
-        int health = ceil(player.getHealth());
-        float absorb = ceil(player.getAbsorptionAmount());
-        float healthMax = ceil(player.getMaxHealth());
-        int ticks = mc.ingameGUI.getUpdateCounter();
-        boolean highlight = this.healthBlinkTime > (long)ticks && (this.healthBlinkTime - (long)ticks) / 3L % 2L == 1L;
-        if (health < this.lastHealth && player.hurtResistantTime > 0)
-        {
-            this.lastHealthTime = System.currentTimeMillis();
-            this.healthBlinkTime = (long) (ticks + 20);
-        }
-        else if (health > this.lastHealth && player.hurtResistantTime> 0)
-        {
-            this.lastHealthTime = System.currentTimeMillis();
-            this.healthBlinkTime = (long) (ticks + 10);
-        }
+            ScaledResolution sr = event.getResolution();
+            int screenW = sr.getScaledWidth();
+            int screenH = sr.getScaledHeight();
 
-        if (System.currentTimeMillis() - this.lastHealthTime > 1000L)
-        {
+
+
+
+            int health = ceil(player.getHealth());
+            float absorb = ceil(player.getAbsorptionAmount());
+            float healthMax = ceil(player.getMaxHealth());
+            int ticks = mc.ingameGUI.getUpdateCounter();
+            boolean highlight = this.healthBlinkTime > (long)ticks && (this.healthBlinkTime - (long)ticks) / 3L % 2L == 1L;
+            if (health < this.lastHealth && player.hurtResistantTime > 0)
+            {
+                this.lastHealthTime = System.currentTimeMillis();
+                this.healthBlinkTime = (long) (ticks + 20);
+            }
+            else if (health > this.lastHealth && player.hurtResistantTime> 0)
+            {
+                this.lastHealthTime = System.currentTimeMillis();
+                this.healthBlinkTime = (long) (ticks + 10);
+            }
+
+            if (System.currentTimeMillis() - this.lastHealthTime > 1000L)
+            {
+                this.lastHealth = health;
+                this.displayHealth = health;
+                this.lastHealthTime = System.currentTimeMillis();
+            }
+            int absorptionHearts = ceil(absorb / 2.0f) - 1;
+            int hearts = ceil(healthMax / 2.0f) - 1;
+            int healthRows = ceil((healthMax + absorb) / 2.0F / 10.0F);
+            int totalHealthRows = ceil((healthMax + absorb) / 2.0F / 10.0F);
+            int rowHeight = Math.max(10 - (healthRows - 2), 3);
+            int extraHealthRows = totalHealthRows - healthRows;
+            int extraRowHeight = clamp(10 - (healthRows - 2), 3, 10);
+
+            if (lastHealth < 0) lastHealth = health;
+            if (health > lastHealth) {
+                healFlashTimer = 20;
+            }
             this.lastHealth = health;
-            this.displayHealth = health;
-            this.lastHealthTime = System.currentTimeMillis();
-        }
-        int absorptionHearts = ceil(absorb / 2.0f) - 1;
-        int hearts = ceil(healthMax / 2.0f) - 1;
-        int healthRows = ceil((healthMax + absorb) / 2.0F / 10.0F);
-        int totalHealthRows = ceil((healthMax + absorb) / 2.0F / 10.0F);
-        int rowHeight = Math.max(10 - (healthRows - 2), 3);
-        int extraHealthRows = totalHealthRows - healthRows;
-        int extraRowHeight = clamp(10 - (healthRows - 2), 3, 10);
+            int healthLast = this.displayHealth;
 
-        if (lastHealth < 0) lastHealth = health;
-        if (health > lastHealth) {
-            healFlashTimer = 20;
-        }
-        this.lastHealth = health;
-        int healthLast = this.displayHealth;
-
-        float f = Math.max(player.getMaxHealth(), (float)Math.max(health, healthLast));
-        int regen = -1;
-        if (player.isPotionActive(MobEffects.REGENERATION)){
-            regen = ticks % ceil(f + 5.0F);
-        }
-        if (healFlashTimer > 0) healFlashTimer--;
-
-
-        int left = screenW / 2 - 91;
-        int top = screenH - 39;
-        if (rowHeight != 10){
-            //top += 10 - rowHeight;
-        }
-        final int TOP = 9 *  0;
-        final int BACKGROUND = (highlight ? 25 : 16);
-        int MARGIN = 16;
-        rand.setSeed(mc.ingameGUI.getUpdateCounter() * 312871L);
-        int[] random = new int[10];
-        for (int i = 0; i < random.length; ++i) random[i] = rand.nextInt(2);
-
-        drawVanillaHearts(health,highlight,healthLast,player.getMaxHealth(),rowHeight,left,top,regen,random,TOP,BACKGROUND,MARGIN);
-
-        mc.getTextureManager().bindTexture(HEARTS_TEX);
-        healthMax = 3;
-
-        for (int i = ceil((healthMax) / 2.0F) - 1; i >= 0; -- i) {
-            int row = i / 10;
-            int heart = i % 10;
-            int x = left + heart * 8;
-            int y = top - row * rowHeight;
-            if (health <= 4) y += random[MathHelper.clamp(i, 0, random.length - 1)];
-            if (i == regen) y -= 2;
-            drawTexturedModalRect( x, y, highlight ? 9 : 0, 0, 9, 9);
-            if (i * 2 + 1 < healthLast && highlight){
-                drawTexturedModalRect( x, y,54 , 0, 9, 9);
+            float f = Math.max(player.getMaxHealth(), (float)Math.max(health, healthLast));
+            int regen = -1;
+            if (player.isPotionActive(MobEffects.REGENERATION)){
+                regen = ticks % ceil(f + 5.0F);
             }
-            if (i * 2 + 1 < health){
-                drawTexturedModalRect( x, y, 36, 0, 9, 9);
-            } else if (i * 2 + 1 == health){
-                drawTexturedModalRect( x, y, 45, 0, 9, 9);
-            }
-        }
-        GlStateManager.disableBlend();
-        mc.renderEngine.bindTexture(Gui.ICONS);
+            if (healFlashTimer > 0) healFlashTimer--;
 
+
+            int left = screenW / 2 - 91;
+            int top = screenH - 39;
+            if (rowHeight != 10){
+                //top += 10 - rowHeight;
+            }
+            final int TOP = 9 *  0;
+            final int BACKGROUND = (highlight ? 25 : 16);
+            int MARGIN = 16;
+            rand.setSeed(mc.ingameGUI.getUpdateCounter() * 312871L);
+            int[] random = new int[10];
+            for (int i = 0; i < random.length; ++i) random[i] = rand.nextInt(2);
+
+            drawVanillaHearts(health,highlight,healthLast,player.getMaxHealth(),rowHeight,left,top,regen,random,TOP,BACKGROUND,MARGIN);
+
+            mc.getTextureManager().bindTexture(HEARTS_TEX);
+            healthMax = cap.getHeartRot();
+
+            for (int i = ceil((healthMax) / 2.0F) - 1; i >= 0; -- i) {
+                int row = i / 10;
+                int heart = i % 10;
+                int x = left + heart * 8;
+                int y = top - row * rowHeight;
+                if (health <= 4) y += random[MathHelper.clamp(i, 0, random.length - 1)];
+                if (i == regen) y -= 2;
+                drawTexturedModalRect( x, y, highlight ? 9 : 0, 0, 9, 9);
+                if (i * 2 + 1 < healthLast && highlight){
+                    drawTexturedModalRect( x, y,54 , 0, 9, 9);
+                }
+                if (i * 2 + 1 < health){
+                    drawTexturedModalRect( x, y, 36, 0, 9, 9);
+                } else if (i * 2 + 1 == health){
+                    drawTexturedModalRect( x, y, 45, 0, 9, 9);
+                }
+            }
+            GlStateManager.disableBlend();
+            mc.renderEngine.bindTexture(Gui.ICONS);
+        }
     }
 
     private void drawVanillaHearts(int health, boolean highlight, int healthLast, float healthMax, int rowHeight, int left, int top, int regen, int[] lowHealthBob, int TOP, int BACKGROUND, int MARGIN) {

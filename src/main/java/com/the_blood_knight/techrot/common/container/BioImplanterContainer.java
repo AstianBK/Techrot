@@ -182,13 +182,13 @@ public class BioImplanterContainer extends Container {
                 for (int i = 0 ; i < 6 ; i++){
                     ItemStack stack = this.tileFurnace.getStackInSlot(i);
                     if(stack.getItem() == TRegistry.ROTPLATE_HEAD){
-                        rot +=1;
+                        rot +=2;
                     }
                     if(stack.getItem() == TRegistry.ROTPLATE_ARM){
-                        rot +=1;
+                        rot +=2;
                     }
                     if(stack.getItem() == TRegistry.ROTPLATE_CHEST){
-                        rot +=3;
+                        rot +=6;
                     }
                     if(cap.getInventory().getStackInSlot(i).isEmpty()){
                         cap.getInventory().setStackInSlot(i,stack.copy());

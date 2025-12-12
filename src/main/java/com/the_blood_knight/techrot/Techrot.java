@@ -122,8 +122,15 @@ public class Techrot
 
     public static void damageTick(World world,BlockPos pos,int radius){
         for (EntityLivingBase living : world.getEntities(EntityLivingBase.class, e-> e.isEntityAlive() && e.getDistance(pos.getX(),pos.getY(),pos.getZ())<radius)){
+            boolean hasTechrotHead = living instanceof EntityPlayer && Util.hasTechrotHead((EntityPlayer)living);
+            boolean hasTechrotChest = living instanceof EntityPlayer && Util.hasTechrotChest((EntityPlayer)living);
+            if(hasTechrotChest){
+                Util.getCap((EntityPlayer)living).reg();
+            }
+            if(hasTechrotHead)continue;
             living.attackEntityFrom(DamageSource.FALL,1.0F);
-            living.addPotionEffect(new PotionEffect(MobEffects.POISON,100,0));
+            living.addPotionEffect(new PotionEffect(TRegistry.TECHROT_EFFECT,10,0));
+
         }
     }
     @EventHandler
