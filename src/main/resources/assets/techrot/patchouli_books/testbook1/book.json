@@ -1,6 +1,7 @@
 {
   "name": "item.techrot:techrot_guide.name",
   "landing_text":"info.techrot:techrot_guide.landing",
+  "version": "1",
   "book_texture": "patchouli:textures/gui/book_green.png",
   "index_icon": "patchouli:textures/items/book_green.png",
   "creative_tab": "techrot_tab",
