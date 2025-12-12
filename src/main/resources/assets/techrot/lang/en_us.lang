@@ -6,6 +6,11 @@ info.techrot:techrot_guide.landing=Here you'll learn to efficiently harness the 
 
 item.rotplate.name=Rotplate
 
+item.toxiclauncher.name=Caustic Howitzerr
+
+item.toxic_canister.name=Fume Canister
+item.toxic_canister_empty.name=Depleted Fume Canister
+
 item.bio_extractor.name=Genome Extractor
 item.bio_wrench.name=Rot-Wrench
 item.bio_cube.name=Small Rot Cube
