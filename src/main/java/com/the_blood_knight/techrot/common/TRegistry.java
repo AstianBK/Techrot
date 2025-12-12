@@ -75,11 +75,11 @@ public class TRegistry {
 
     //IMPLANTS
 
-    public static final ItemBase ROTPLATE_HEAD = new ItemBase("rotplate_head");
+    public static final ItemBase ROTPLATE_HEAD = new ItemBase("rotplate_head1");
 
-    public static final ItemBase ROTPLATE_CHEST = new ItemBase("rotplate_chest");
+    public static final ItemBase ROTPLATE_CHEST = new ItemBase("rotplate_chest1");
 
-    public static final ItemBase ROTPLATE_ARM = new ItemBase("rotplate_arm");
+    public static final ItemBase ROTPLATE_ARM = new ItemBase("rotplate_arm1");
 
     public static void registerBlocks(IForgeRegistry<Block> registry) {
         for(BlockBase block : BLOCKS) {
