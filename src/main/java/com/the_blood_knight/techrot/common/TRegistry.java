@@ -44,7 +44,7 @@ public class TRegistry {
 
     //FUNCTIONAL-BLOCKS
 
-    public static final BlockBase BIOIMPLANTER = new BioFurnaceBlock(false,Material.ROCK,"bioimplanter");
+    public static final BlockBase BIOIMPLANTER = new BioImplanterBlock(Material.ROCK,"bioimplanter",false);
     public static final BlockBase BIOFURNACE = new BioFurnaceBlock(false,Material.ROCK,"biofurnace");
     public static final BlockBase LIT_BIOFURNACE = new BioFurnaceBlock(true,Material.ROCK,"lit_biofurnace");
     public static final BlockBase BIOPASTEMAKER = new BioPastemakerBlock(Material.CACTUS,"biopastemaker",false);
@@ -75,11 +75,11 @@ public class TRegistry {
 
     //IMPLANTS
 
-    public static final ItemBase ROTPLATE_HEAD1 = new ItemBase("rotplate_head1");
+    public static final ItemBase ROTPLATE_HEAD = new ItemBase("rotplate_head");
 
-    public static final ItemBase ROTPLATE_CHEST1 = new ItemBase("rotplate_chest1");
+    public static final ItemBase ROTPLATE_CHEST = new ItemBase("rotplate_chest");
 
-    public static final ItemBase ROTPLATE_ARM1 = new ItemBase("rotplate_arm1");
+    public static final ItemBase ROTPLATE_ARM = new ItemBase("rotplate_arm");
 
     public static void registerBlocks(IForgeRegistry<Block> registry) {
         for(BlockBase block : BLOCKS) {
@@ -104,7 +104,7 @@ public class TRegistry {
 
 
     public static void registerItems(IForgeRegistry<Item> registry) {
-        registry.registerAll(BIO_EXTRACTOR,BIO_WRENCH,BIO_CUBE,BIO_CHUNK,COMP_AGONY_SYNAPSE,COMP_NECROTIC_COIL,COMP_SCREAMING_CORE,ROTPLATE,ROTPLATE_HEAD1,ROTPLATE_CHEST1,ROTPLATE_ARM1);
+        registry.registerAll(BIO_EXTRACTOR,BIO_WRENCH,BIO_CUBE,BIO_CHUNK,COMP_AGONY_SYNAPSE,COMP_NECROTIC_COIL,COMP_SCREAMING_CORE,ROTPLATE,ROTPLATE_HEAD,ROTPLATE_CHEST,ROTPLATE_ARM);
     }
 
 

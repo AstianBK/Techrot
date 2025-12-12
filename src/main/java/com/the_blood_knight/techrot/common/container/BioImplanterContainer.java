@@ -24,20 +24,20 @@ public class BioImplanterContainer extends Container {
         this.addSlotToContainer(new Slot(furnaceInventory, 0, 52, -2){
             @Override
             public boolean isItemValid(ItemStack stack) {
-                return stack.getItem() == TRegistry.ROTPLATE_ARM1;
+                return stack.getItem() == TRegistry.ROTPLATE_ARM;
             }
         });
         this.addSlotToContainer(new Slot(furnaceInventory, 1, 108, 56){
             @Override
             public boolean isItemValid(ItemStack stack) {
-                return stack.getItem() == TRegistry.ROTPLATE_HEAD1;
+                return stack.getItem() == TRegistry.ROTPLATE_HEAD;
             }
         });
 
         this.addSlotToContainer(new Slot(furnaceInventory, 2, 112, 18){
             @Override
             public boolean isItemValid(ItemStack stack) {
-                return stack.getItem() == TRegistry.ROTPLATE_CHEST1;
+                return stack.getItem() == TRegistry.ROTPLATE_CHEST;
             }
         });
         this.addSlotToContainer(new Slot(furnaceInventory, 3, 35, 27){

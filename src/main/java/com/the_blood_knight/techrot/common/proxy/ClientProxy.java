@@ -31,6 +31,7 @@ public class ClientProxy extends CommonProxy{
 		event.getMap().registerSprite(new ResourceLocation("techrot:particles/toxic_fog"));
 
 	}
+
 	@Override
 	public void init() {
 		super.init();

@@ -184,20 +184,5 @@ public class BioCrafterContainer extends Container {
 
     protected void slotChangedCraftingGrid(World p_192389_1_, EntityPlayer p_192389_2_, InventoryCrafting p_192389_3_, InventoryCraftResult p_192389_4_)
     {
-        if (!p_192389_1_.isRemote)
-        {
-            EntityPlayerMP entityplayermp = (EntityPlayerMP)p_192389_2_;
-            ItemStack itemstack = ItemStack.EMPTY;
-            IRecipe irecipe = Techrot.getMatch(p_192389_3_,world);
-
-            if (irecipe != null) {
-                Techrot.logger.info("recipes :"+irecipe.getRemainingItems(p_192389_3_));
-                p_192389_4_.setRecipeUsed(irecipe);
-                itemstack = irecipe.getCraftingResult(p_192389_3_);
-            }
-
-            p_192389_4_.setInventorySlotContents(0, itemstack);
-            entityplayermp.connection.sendPacket(new SPacketSetSlot(this.windowId, 0, itemstack));
-        }
     }
 }

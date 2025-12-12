@@ -1,53 +1,123 @@
 buildscript {
     repositories {
+        mavenLocal()
         jcenter()
+        mavenCentral()
+
+        maven { url = "http://files.minecraftforge.net/maven" }
         maven {
-            name = "forge"
-            url = "https://maven.minecraftforge.net"
+            name = 'sponge'
+            url = 'https://repo.spongepowered.org/maven'
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3.+'
+        classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
     }
 }
 
-apply plugin: 'idea'
 apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'org.spongepowered.mixin'
 
-version = "1.0"
+
+version = "1.12.2-0.0.22.65"
 group = "com.the_blood_knight.techrot"
 archivesBaseName = "techrot"
 
 sourceCompatibility = targetCompatibility = '1.8'
 compileJava {
     sourceCompatibility = targetCompatibility = '1.8'
-    options.encoding = 'UTF-8'
 }
 
 minecraft {
-    version = project.forge_version
+    version = forge_version
     runDir = "run"
-    mappings = project.mcp_version
+    mappings = "stable_39"
+    clientJvmArgs += "-Dfml.coreMods.load=com.the_blood_knight.techrot.TechrotPlugin"
+    serverJvmArgs += "-Dfml.coreMods.load=com.the_blood_knight.techrot.TechrotPlugin"
 }
 
 repositories {
-    maven { url "https://maven.blamejared.com" }
+    maven { url "https://repo.spongepowered.org/maven" }
+    
+}
+
+configurations {
+    shade
+    compile.extendsFrom shade
 }
 
 dependencies {
-    deobfCompile "vazkii.patchouli:Patchouli:1.0-23.6"
-}
 
-processResources {
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
-
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-        expand 'version': project.version, 'mcversion': project.minecraft.version
+    implementation 'org.jetbrains:annotations:20.1.0'
+    shade('org.spongepowered:mixin:0.8') {
+        transitive = false
+        // }
+        // if(isFat) {
+        //     embed('org.spongepowered:mixin:0.8-SNAPSHOT') {
+        //        ['gson','guava','commons-io'].each {
+        //            exclude module: it
+        //        }
+        //        exclude module: 'launchwrapper'
+        //    }
+        // }else{
+        //     compile ('org.spongepowered:mixin:0.8-SNAPSHOT'){
+        //        ['gson','guava','commons-io'].each {
+        //            exclude module: it
+        //        }
+        //    }
+        // }
     }
 
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
+    jar {
+        manifest.attributes(
+                'FMLCorePlugin': 'com.the_blood_knight.techrot.TechrotPlugin',
+                'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker',
+                'MixinConfigs': 'mixins.techrot.json',
+                'FMLCorePluginContainsFMLMod': 'true',
+                'ForceLoadAsMod': 'true'
+        )
+
+        configurations.shade.each { dep ->
+            from(project.zipTree(dep)) {
+                rename 'LICENSE.txt', 'org/spongepowered/LICENSE.txt'
+
+                exclude 'META-INF/*.SF'
+                exclude 'META-INF/*.RSA'
+                exclude 'META-INF/*.MF'
+
+                exclude '**/*.html'
+            }
+        }
+    }
+
+    processResources {
+        inputs.property "version", project.version
+        inputs.property "mcversion", project.minecraft.version
+        from(sourceSets.main.resources.srcDirs) {
+            include 'mcmod.info'
+            expand 'version': project.version, 'mcversion': project.minecraft.version
+        }
+        from(sourceSets.main.resources.srcDirs) {
+            exclude 'mcmod.info'
+        }
+    }
+
+    mixin {
+        add sourceSets.main, "mixins.techrot.refmap.json"
+    }
+
+    sourceSets {
+        main {
+            refMap = "mixins.techrot.refmap.json" as SourceSet
+        }
     }
 }
+// Copiar el mod compilado al directorio run/mods
+task copyMod(type: Copy) {
+    from jar
+    into "${project.projectDir}/run/mods"
+}
+
+// Ejecutar la copia después de generar el JAR
+jar.finalizedBy copyMod
