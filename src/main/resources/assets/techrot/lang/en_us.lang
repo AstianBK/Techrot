@@ -1,4 +1,4 @@
-tile.biopipe.name=Bio Pipe
+tile.biopipe.name=Transport Pipe
 
 
 item.techrot:techrot_guide.name=Techrot Guide
@@ -15,9 +15,9 @@ item.comp_agony_synapse.name=Agony Synapse
 item.comp_necrotic_coil.name=Necrotic Coil
 item.comp_screaming_core.name=Screaming Core
 
-item.rotplate_head1.name=Implant Head
-item.rotplate_arm1.name=Implant Arm
-item.rotplate_chest1.name=Implant Chest
+item.rotplate_head1.name=Rotpiercer Skullplate
+item.rotplate_arm1.name=Torq-Rot Armature
+item.rotplate_chest1.name=Pneumic Reactor
 
 tile.rotplate_ore.name=Rotplate Ore
 

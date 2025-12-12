@@ -1,7 +1,7 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "  #",
+    "  H",
     " G ",
     "#  "
   ],
@@ -11,6 +11,9 @@
     },
     "G": {
       "item": "minecraft:glass_bottle"
+    },
+    "H": {
+      "item": "minecraft:iron_ingot"
     }
   },
   "result": {
