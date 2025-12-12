@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " g ",
+    " G ",
+    " g "
+  ],
+  "key": {
+    "g": {
+      "item": "techrot:rotplate"
+    },
+    "G": {
+      "item": "minecraft:glass"
+    }
+  },
+  "result": {
+    "item": "techrot:toxic_canister_empty",
+    "count": 3
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Fume Canister",
+  "category": "tools",
+  "icon": "techrot:toxic_canister",
+  "priority": true,
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "techrot:toxic_canister_empty",
+      "text": "Can be used as ammunition for the Caustic Howitzerr. Empty canisters can be charged in toxic fume clouds."
+    }
+  ]
+}
