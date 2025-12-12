@@ -3,7 +3,7 @@
   "landing_text":"info.techrot:techrot_guide.landing",
   "book_texture": "patchouli:textures/gui/book_green.png",
   "version": "1",
-  "index_icon": "minecraft:diamond",
+  "index_icon": "patchouli:textures/gui/book_green.png",
   "creative_tab": "techrot_tab",
   "use_blocky_font": true
 }

@@ -2,7 +2,7 @@
   "name": "Screaming Core",
   "category": "components",
   "icon": "techrot:comp_screaming_core",
-  "priority": true,
+  "priority": false,
   "pages": [
     {
       "type": "crafting",
