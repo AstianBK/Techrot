@@ -1,0 +1,13 @@
+{
+  "name": "Dense Rotplate Block",
+  "category": "decorative",
+  "icon": "techrot:rotplate_solid_block",
+  "priority": false,
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "techrot:rotplate_solid_block",
+      "text": "Decorative Block."
+    }
+  ]
+}

@@ -7,7 +7,7 @@
     {
       "type": "crafting",
       "recipe": "techrot:bioeggmaker",
-      "text": "Incubates an identical egg clone of the deposited genome"
+      "text": "Incubates an identical egg clone of the deposited genome."
     }
   ]
 }

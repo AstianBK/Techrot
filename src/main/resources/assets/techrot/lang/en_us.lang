@@ -23,9 +23,9 @@ tile.rotplate_ore.name=Rotplate Ore
 
 tile.biocube_block.name=Rot Cube
 tile.rotplate_block.name=Rotplate Block
-tile.biocube_solid_block.name=Dense Rotplate Block
-tile.biocube_sectioned_block.name=Sectioned Rotplate Block
-tile.biocube_pattern_block.name=Patterned Rotplate Block
+tile.rotplate_solid_block.name=Dense Rotplate Block
+tile.rotplate_sectioned_block.name=Sectioned Rotplate Block
+tile.rotplate_pattern_block.name=Patterned Rotplate Block
 
 tile.biofurnace.name=Rot Furnace
 tile.bioimplanter.name=Implant Chamber

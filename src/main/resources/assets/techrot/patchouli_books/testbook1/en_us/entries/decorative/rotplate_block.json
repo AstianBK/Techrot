@@ -1,0 +1,13 @@
+{
+  "name": "Rotplate Block",
+  "category": "decorative",
+  "icon": "techrot:rotplate_block",
+  "priority": false,
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "techrot:rotplate_block",
+      "text": "Decorative Block."
+    }
+  ]
+}

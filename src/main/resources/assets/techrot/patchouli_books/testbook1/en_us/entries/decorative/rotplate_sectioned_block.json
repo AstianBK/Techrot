@@ -1,0 +1,13 @@
+{
+  "name": "Sectioned Rotplate Block",
+  "category": "decorative",
+  "icon": "techrot:rotplate_sectioned_block",
+  "priority": false,
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "techrot:rotplate_sectioned_block",
+      "text": "Decorative Block."
+    }
+  ]
+}

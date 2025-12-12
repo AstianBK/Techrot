@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ggg",
+    "ggg",
+    "ggg"
+  ],
+  "key": {
+    "g": {
+      "item": "techrot:bio_cube"
+    }
+  },
+  "result": {
+    "item": "techrot:biocube_block",
+    "count": 1
+  }
+}

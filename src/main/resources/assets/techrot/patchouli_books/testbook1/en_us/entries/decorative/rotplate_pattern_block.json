@@ -1,0 +1,13 @@
+{
+  "name": "Patterned Rotplate Block",
+  "category": "decorative",
+  "icon": "techrot:rotplate_pattern_block",
+  "priority": false,
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "techrot:rotplate_pattern_block",
+      "text": "Decorative Block."
+    }
+  ]
+}

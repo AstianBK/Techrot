@@ -1,0 +1,13 @@
+{
+  "name": "Giant Rot Cube",
+  "category": "decorative",
+  "icon": "techrot:biocube_block",
+  "priority": false,
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "techrot:biocube_block",
+      "text": "Decorative Block."
+    }
+  ]
+}

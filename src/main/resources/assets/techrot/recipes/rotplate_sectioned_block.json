@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "g g",
+    " G ",
+    "g g"
+  ],
+  "key": {
+    "g": {
+      "item": "techrot:rotplate"
+    },
+    "G": {
+      "item": "techrot:rotplate_block"
+    }
+  },
+  "result": {
+    "item": "techrot:rotplate_sectioned_block",
+    "count": 1
+  }
+}
