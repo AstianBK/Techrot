@@ -1,5 +1,5 @@
 {
-    "implatedplayer_breathe": {
+    "implantedplayer_breathe": {
         "sounds": [
             "techrot:implantedplayer_breathe"
         ]
@@ -8,6 +8,56 @@
         "sounds": [
             "techrot:implantedplayer_talk_0",
             "techrot:implantedplayer_talk_1"
+        ]
+    },
+    "biofleshcloner_active": {
+        "sounds": [
+            "techrot:biofleshcloner_active"
+        ]
+    },
+    "biopastemaker_active": {
+        "sounds": [
+            "techrot:biopastemaker_active"
+        ]
+    },
+    "biofurnace_active": {
+        "sounds": [
+            "techrot:biofurnace_active"
+        ]
+    },
+    "rotplate_block_place": {
+        "sounds": [
+            "techrot:rotplate_block_place"
+        ]
+    },
+    "rotplate_block_step": {
+        "sounds": [
+            "techrot:rotplate_block_place"
+        ]
+    },
+    "rotplate_block_break": {
+        "sounds": [
+            "techrot:rotplate_block_break"
+        ]
+    },
+    "biopipe_block_break": {
+        "sounds": [
+            "techrot:biopipe_block_break"
+        ]
+    },
+    "biopipe_block_place": {
+        "sounds": [
+            "techrot:biopipe_block_place"
+        ]
+    },
+    "bioimplanter_block_use": {
+        "sounds": [
+            "techrot:bioimplanter_block_use"
+        ]
+    },
+    "toxiclauncher_shoot": {
+        "sounds": [
+            "techrot:toxiclauncher_shoot"
         ]
     }
 }
