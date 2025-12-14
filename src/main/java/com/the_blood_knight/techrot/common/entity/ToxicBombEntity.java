@@ -25,7 +25,7 @@ public class ToxicBombEntity extends EntityThrowable {
             double y = rayTraceResult.hitVec.y;
             double z = rayTraceResult.hitVec.z;
 
-            // Create explosion on impact
+
             world.createExplosion(this, x, y, z, 2.0F, false);
 
             if (rayTraceResult.entityHit instanceof EntityLivingBase && rayTraceResult.entityHit != owner) {

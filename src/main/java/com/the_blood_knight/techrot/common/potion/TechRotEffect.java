@@ -17,11 +17,11 @@ public class TechRotEffect extends Potion {
 
     @Override
     public void performEffect(EntityLivingBase entity, int amplifier) {
-        // efecto cada tick
+
     }
 
     @Override
     public boolean isReady(int duration, int amplifier) {
-        return true; // se ejecuta cada tick
+        return true;
     }
 }
