@@ -113,7 +113,6 @@ public class BioFurnaceBlock extends BlockTileBase {
     }
 
     @SideOnly(Side.CLIENT)
-    @SuppressWarnings("incomplete-switch")
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         if (this.isBurning) {
             Techrot.spawnPeste(worldIn,pos,rand,4);

@@ -92,22 +92,37 @@ public class Techrot
         return map;
     }
 
-    public static void spawnPeste(World worldIn , BlockPos pos, Random rand,double radius){
+    public static void spawnPeste(World worldIn, BlockPos pos, Random rand, double radius) {
         for (int pass = 0; pass < 15; pass++) {
             BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos(pos);
+
             float theta = (float) (2 * Math.PI * rand.nextFloat());
             float phi = (float) Math.acos(2 * rand.nextFloat() - 1);
+
             double x = radius * Math.sin(phi) * Math.cos(theta);
             double y = radius * Math.sin(phi) * Math.sin(theta);
             double z = radius * Math.cos(phi);
 
-            mutableBlockPos.setPos(x + pos.getX(), y + pos.getY(), z + pos.getZ());
-            if (worldIn.getHeight(mutableBlockPos.getX(), mutableBlockPos.getZ()) > pos.getY())
-                continue;
-            double height = worldIn.getHeight(mutableBlockPos.getX(),mutableBlockPos.getZ());
-            Minecraft.getMinecraft().effectRenderer.addEffect(new ToxicFogParticle(worldIn, mutableBlockPos.getX(), height + rand.nextFloat(), mutableBlockPos.getZ(), 0, 0, 0));
+            mutableBlockPos.setPos(
+                    pos.getX() + x,
+                    pos.getY() + y,
+                    pos.getZ() + z
+            );
+
+            double height = pos.getY() + 1.0D;
+
+            Minecraft.getMinecraft().effectRenderer.addEffect(
+                    new ToxicFogParticle(
+                            worldIn,
+                            pos.getX() + x + 0.5D,
+                            height + rand.nextFloat() * 0.3D,
+                            pos.getZ() + z + 0.5D,
+                            0, 0, 0
+                    )
+            );
         }
     }
+
 
 
 
