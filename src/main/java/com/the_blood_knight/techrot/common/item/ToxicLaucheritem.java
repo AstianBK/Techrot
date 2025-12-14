@@ -8,13 +8,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.util.*;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -32,11 +30,15 @@ public class ToxicLaucheritem extends ItemBase{
             if(Util.hasTechrotArm(entityPlayer)){
                 ItemStack stack = getBullet(entityPlayer);
                 if(!stack.isEmpty()){
-                    world.playSound((EntityPlayer)null, entityPlayer.posX, entityPlayer.posY, entityPlayer.posZ, TRSounds.TOXICLAUNCHER_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 0.8F));
+                    world.playSound((EntityPlayer)null, entityPlayer.posX, entityPlayer.posY, entityPlayer.posZ,
+                            TRSounds.TOXICLAUNCHER_SHOOT, SoundCategory.NEUTRAL,
+                            1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 0.8F));
+
                     if (!entityPlayer.capabilities.isCreativeMode) {
                         stack.shrink(1);
                         entityPlayer.getCooldownTracker().setCooldown(handItem.getItem(),20);
                     }
+
                     if(!world.isRemote){
                         ToxicBombEntity bullet = new ToxicBombEntity(world,entityPlayer);
                         bullet.shoot(entityPlayer,entityPlayer.rotationPitch ,entityPlayer.rotationYaw,0.0F,1.5F,1.0F);
@@ -44,7 +46,21 @@ public class ToxicLaucheritem extends ItemBase{
                     }
 
                     return ActionResult.newResult(EnumActionResult.SUCCESS,handItem);
+
+                } else {
+
+                    world.playSound(
+                            (EntityPlayer)null,
+                            entityPlayer.posX,
+                            entityPlayer.posY,
+                            entityPlayer.posZ,
+                            SoundEvents.ITEM_FLINTANDSTEEL_USE,
+                            SoundCategory.PLAYERS,
+                            1.0F,
+                            1.0F
+                    );
                 }
+
             }else {
                 entityPlayer.sendMessage(new TextComponentString("I don't know how to use this"));
             }
