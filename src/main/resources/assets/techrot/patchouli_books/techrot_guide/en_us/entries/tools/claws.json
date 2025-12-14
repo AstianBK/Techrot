@@ -7,7 +7,7 @@
     {
       "type": "crafting",
       "recipe": "techrot:rotclaws",
-      "text": "Each strike injects poison directly into the wound. It's damage increases as your health lowers"
+      "text": "Each strike injects poison directly into the wound. It's damage increases as your health lowers."
     }
   ]
 }

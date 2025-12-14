@@ -2,7 +2,7 @@
   "name": "Fume Canister",
   "category": "tools",
   "icon": "techrot:toxic_canister",
-  "priority": true,
+  "priority": false,
   "pages": [
     {
       "type": "crafting",

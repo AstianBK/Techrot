@@ -59,10 +59,10 @@ public class TRegistry {
         public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
             List<ItemStack> drops = new ArrayList<>();
 
-            // Siempre dropea 2 ROTPLATE
+
             drops.add(new ItemStack(TRegistry.ROTPLATE, 2));
 
-            // 30% de chances de dropear 1 BioChunk
+
             if (RANDOM.nextFloat() < 0.30F) {
                 drops.add(new ItemStack(TRegistry.BIO_CHUNK, 1));
             }
@@ -82,8 +82,6 @@ public class TRegistry {
     public static final BlockBase BIOPIPE = new BioPipeBlock(Material.CACTUS,"biopipe");
     public static final BlockBase BIOEGGMAKER = new BioEggMakerBlock(Material.CACTUS,"bioeggmaker",false);
     public static final BlockBase LIT_BIOEGGMAKER = new BioEggMakerBlock(Material.CACTUS,"lit_bioeggmaker",true).setCreativeTab(null);
-
-    public static final BlockBase BIOCRAFTER = new BioCrafterBlock(Material.CACTUS,"biocrafter");
     public static final BlockBase BIOFLESHCLONER = new BioFleshClonerBlock(Material.CACTUS,"biofleshcloner",false);
     public static final BlockBase LIT_BIOFLESHCLONER = new BioFleshClonerBlock(Material.CACTUS,"lit_biofleshcloner",true).setCreativeTab(null);
 
@@ -92,7 +90,8 @@ public class TRegistry {
     public static final ItemBase BIO_CUBE = new ItemBase("bio_cube");
     public static final ItemBase BIO_CHUNK = new ItemBase("bio_chunk");
     public static final ItemBase ROTPLATE = new ItemBase("rotplate");
-    public static final ItemBase BIO_WRENCH = new ItemBase("bio_wrench");
+
+    public static final ItemBase BIO_WRENCH = new ItemBase("bio_wrench"); // CUT-CONTENT
 
     public static final ToxicCanister TOXIC_CANISTER = new ToxicCanister("toxic_canister",true);
 
@@ -111,11 +110,11 @@ public class TRegistry {
 
     //IMPLANTS
 
-    public static final ItemBase ROTPLATE_HEAD = new ItemBase("rotplate_head1");
+    public static final ImplantItemBase ROTPLATE_HEAD = new ImplantItemBase("rotplate_head1");
 
-    public static final ItemBase ROTPLATE_CHEST = new ItemBase("rotplate_chest1");
+    public static final ImplantItemBase ROTPLATE_CHEST = new ImplantItemBase("rotplate_chest1");
 
-    public static final ItemBase ROTPLATE_ARM = new ItemBase("rotplate_arm1");
+    public static final ImplantItemBase ROTPLATE_ARM = new ImplantItemBase("rotplate_arm1");
 
     //EFFECT
     public static Potion TECHROT_EFFECT = new TechRotEffect();
@@ -144,7 +143,7 @@ public class TRegistry {
 
 
     public static void registerItems(IForgeRegistry<Item> registry) {
-        registry.registerAll(BIO_EXTRACTOR,BIO_WRENCH,BIO_CUBE,BIO_CHUNK,COMP_AGONY_SYNAPSE,COMP_NECROTIC_COIL,COMP_SCREAMING_CORE,ROTPLATE,ROTPLATE_HEAD,ROTPLATE_CHEST,ROTPLATE_ARM,TOXICLAUNCHER,ROTCLAWS,TOXIC_CANISTER,TOXIC_CANISTER_EMPTY);
+        registry.registerAll(BIO_EXTRACTOR,BIO_CUBE,BIO_CHUNK,COMP_AGONY_SYNAPSE,COMP_NECROTIC_COIL,COMP_SCREAMING_CORE,ROTPLATE,ROTPLATE_HEAD,ROTPLATE_CHEST,ROTPLATE_ARM,TOXICLAUNCHER,ROTCLAWS,TOXIC_CANISTER,TOXIC_CANISTER_EMPTY);
     }
 
     public static void registerMobEffect(RegistryEvent.Register<Potion> potionRegister){
