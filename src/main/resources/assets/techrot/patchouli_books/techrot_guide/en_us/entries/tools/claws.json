@@ -1,0 +1,13 @@
+{
+  "name": "Rotrend Talon",
+  "category": "tools",
+  "icon": "techrot:rotclaws",
+  "priority": true,
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "techrot:rotclaws",
+      "text": "Each strike injects poison directly into the wound. It's damage increases as your health lowers"
+    }
+  ]
+}

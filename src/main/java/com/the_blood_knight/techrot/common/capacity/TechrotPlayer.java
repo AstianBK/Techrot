@@ -116,7 +116,7 @@ public class TechrotPlayer implements ITechRotPlayer {
 
         @Override
         public NBTTagCompound serializeNBT() {
-            // Forge -> llama writeNBT()
+
             return (NBTTagCompound)
                     Techrot.CapabilityRegistry.PLAYER_UPGRADES.getStorage()
                             .writeNBT(Techrot.CapabilityRegistry.PLAYER_UPGRADES, instance, null);
@@ -124,7 +124,7 @@ public class TechrotPlayer implements ITechRotPlayer {
 
         @Override
         public void deserializeNBT(NBTTagCompound nbt) {
-            // Forge -> llama readNBT()
+
             Techrot.CapabilityRegistry.PLAYER_UPGRADES.getStorage()
                     .readNBT(Techrot.CapabilityRegistry.PLAYER_UPGRADES, instance, null, nbt);
         }

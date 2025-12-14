@@ -7,7 +7,7 @@
     {
       "type": "crafting",
       "recipe": "techrot:rotplate_head1",
-      "text": "Grants immunity to techrot fumes and prevents your vision from getting impaired in any way. Doesn't filter in poison."
+      "text": "Grants immunity to techrot fumes and prevents your vision from getting impaired in any way. Filters in poison too."
     }
   ]
 }

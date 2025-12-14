@@ -4,10 +4,13 @@ import com.the_blood_knight.techrot.Util;
 import com.the_blood_knight.techrot.common.TRSounds;
 import com.the_blood_knight.techrot.common.TRegistry;
 import com.the_blood_knight.techrot.common.entity.ToxicBombEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
@@ -47,8 +50,29 @@ public class ToxicLaucheritem extends ItemBase{
             }
 
         }
-
         return new ActionResult<>(EnumActionResult.PASS,handItem);
+    }
+
+    @Override
+    public void onUpdate(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
+        if (world.isRemote) return;
+        if (!(entity instanceof EntityPlayer)) return;
+
+        EntityPlayer player = (EntityPlayer) entity;
+
+        boolean holding =
+                player.getHeldItemMainhand() == stack ||
+                        player.getHeldItemOffhand() == stack;
+
+        if (holding && !Util.hasTechrotArm(player)) {
+            player.addPotionEffect(new PotionEffect(
+                    MobEffects.SLOWNESS,
+                    20,
+                    1,  // Slowness II
+                    true,
+                    false
+            ));
+        }
     }
 
     public static ItemStack getBullet(EntityPlayer entityPlayer){

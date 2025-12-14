@@ -43,7 +43,7 @@ public class WorldGenRotOre implements IWorldGenerator {
             new WorldGenMinable(
                     ore,
                     veinSize,
-                    state -> state.getBlock() == Blocks.STONE   // <-- FIXED LINE
+                    state -> state.getBlock() == Blocks.STONE
             ).generate(world, rand, pos);
         }
     }

@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " g ",
+    " Dg",
+    "B  "
+  ],
+  "key": {
+    "g": {
+      "item": "techrot:rotplate"
+    },
+    "D": {
+      "item": "techrot:comp_screaming_core"
+    },
+    "B": {
+      "item": "techrot:comp_agony_synapse"
+    }
+  },
+  "result": {
+    "item": "techrot:rotclaws",
+    "count": 1
+  }
+}

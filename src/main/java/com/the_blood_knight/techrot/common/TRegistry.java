@@ -2,10 +2,7 @@ package com.the_blood_knight.techrot.common;
 
 import com.the_blood_knight.techrot.common.api.IRegisterable;
 import com.the_blood_knight.techrot.common.block.*;
-import com.the_blood_knight.techrot.common.item.BioExtractorItem;
-import com.the_blood_knight.techrot.common.item.ItemBase;
-import com.the_blood_knight.techrot.common.item.ToxicCanister;
-import com.the_blood_knight.techrot.common.item.ToxicLaucheritem;
+import com.the_blood_knight.techrot.common.item.*;
 import com.the_blood_knight.techrot.common.potion.TechRotEffect;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBreakable;
@@ -102,6 +99,8 @@ public class TRegistry {
     public static final ToxicCanister TOXIC_CANISTER_EMPTY = new ToxicCanister("toxic_canister_empty",false);
     public static final ToxicLaucheritem TOXICLAUNCHER = new ToxicLaucheritem("toxiclauncher");
 
+    public static final RotrendReaverItem ROTCLAWS = new RotrendReaverItem("rotclaws");
+
     //COMPONENTS
 
     public static final ItemBase COMP_AGONY_SYNAPSE = new ItemBase("comp_agony_synapse");
@@ -145,7 +144,7 @@ public class TRegistry {
 
 
     public static void registerItems(IForgeRegistry<Item> registry) {
-        registry.registerAll(BIO_EXTRACTOR,BIO_WRENCH,BIO_CUBE,BIO_CHUNK,COMP_AGONY_SYNAPSE,COMP_NECROTIC_COIL,COMP_SCREAMING_CORE,ROTPLATE,ROTPLATE_HEAD,ROTPLATE_CHEST,ROTPLATE_ARM,TOXICLAUNCHER,TOXIC_CANISTER,TOXIC_CANISTER_EMPTY);
+        registry.registerAll(BIO_EXTRACTOR,BIO_WRENCH,BIO_CUBE,BIO_CHUNK,COMP_AGONY_SYNAPSE,COMP_NECROTIC_COIL,COMP_SCREAMING_CORE,ROTPLATE,ROTPLATE_HEAD,ROTPLATE_CHEST,ROTPLATE_ARM,TOXICLAUNCHER,ROTCLAWS,TOXIC_CANISTER,TOXIC_CANISTER_EMPTY);
     }
 
     public static void registerMobEffect(RegistryEvent.Register<Potion> potionRegister){

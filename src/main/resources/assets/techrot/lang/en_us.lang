@@ -1,5 +1,6 @@
 tile.biopipe.name=Transport Pipe
 
+itemGroup.techrot_tab=Techrot Tab
 
 item.techrot:techrot_guide.name=Techrot Guide
 info.techrot:techrot_guide.landing=Here you'll learn to efficiently harness the power of sentient rot.
@@ -7,6 +8,7 @@ info.techrot:techrot_guide.landing=Here you'll learn to efficiently harness the 
 item.rotplate.name=Rotplate
 
 item.toxiclauncher.name=Caustic Howitzerr
+item.rotclaws.name=Rotrend Talon
 
 item.toxic_canister.name=Fume Canister
 item.toxic_canister_empty.name=Empty Fume Canister
