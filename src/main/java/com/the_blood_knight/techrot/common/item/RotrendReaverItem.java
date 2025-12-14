@@ -1,7 +1,14 @@
 package com.the_blood_knight.techrot.common.item;
 
+import com.google.common.collect.Multimap;
 import com.the_blood_knight.techrot.Util;
 import com.the_blood_knight.techrot.common.item.ItemBase;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,6 +19,9 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class RotrendReaverItem extends ItemBase {
 
@@ -88,4 +98,50 @@ public class RotrendReaverItem extends ItemBase {
 
         return true;
     }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+
+        tooltip.add(TextFormatting.GRAY + "Injects poison into the wound, damage ramps up as wielder's health decreases.");
+
+        EntityPlayer player = net.minecraft.client.Minecraft.getMinecraft().player;
+        if (player != null) {
+
+            float maxHealth = player.getMaxHealth();
+            float currentHealth = player.getHealth();
+            float missingRatio = 1.0F - (currentHealth / maxHealth);
+
+            float minDamage = 8.0F;
+            float maxDamage = 30.0F;
+            float damage = minDamage + (maxDamage - minDamage) * missingRatio;
+
+            tooltip.add(""); // spacing
+            tooltip.add(TextFormatting.GRAY + "Damage:");
+            tooltip.add(TextFormatting.DARK_RED + "  " +
+                    String.format("%.1f", damage) +
+                    TextFormatting.GRAY);
+            tooltip.add(TextFormatting.DARK_GRAY +
+                    "  Min: " + minDamage + "  Max: " + maxDamage);
+        }
+    }
+
+    @Override
+    public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
+        Multimap<String, AttributeModifier> modifiers = super.getAttributeModifiers(slot, stack);
+
+        if (slot == EntityEquipmentSlot.MAINHAND) {
+
+            modifiers.removeAll(SharedMonsterAttributes.ATTACK_SPEED.getName());
+
+            modifiers.put(
+                    SharedMonsterAttributes.ATTACK_SPEED.getName(),
+                    new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -3.4, 0)
+            );
+        }
+
+        return modifiers;
+    }
+
+
 }

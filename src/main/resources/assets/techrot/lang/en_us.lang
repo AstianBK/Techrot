@@ -10,6 +10,8 @@ info.techrot:techrot_guide.landing=Here you'll learn to efficiently harness the 
 item.rotplate.name=Rotplate
 
 item.toxiclauncher.name=Caustic Howitzerr
+item.toxiclauncher.tooltip=Shoots fume canisters at targeted location, exploding on impact, creating gas clouds.
+
 item.rotclaws.name=Rotrend Talon
 
 item.toxic_canister.name=Fume Canister
@@ -24,9 +26,14 @@ item.comp_agony_synapse.name=Agony Synapse
 item.comp_necrotic_coil.name=Necrotic Coil
 item.comp_screaming_core.name=Screaming Core
 
-item.rotplate_head1.name=Rotpiercer Skullplate
-item.rotplate_arm1.name=Torq-Rot Armature
-item.rotplate_chest1.name=Pneumic Reactor
+item.techrot.rotplate_head1.name=Rotpiercer Skullplate
+item.techrot.rotplate_head1.tooltip=Allows breathing inside of techrot clouds & prevents vision impairment.
+
+item.techrot.rotplate_arm1.name=Torq-Rot Armature
+item.techrot.rotplate_arm1.tooltip=Allows operation of rotplate weaponry & increases melee damage.
+
+item.techrot.rotplate_chest1.name=Pneumic Reactor
+item.techrot.rotplate_chest1.tooltip=Heals decaying hearts while inside techrot clouds, and grants infinite water breathing.
 
 tile.rotplate_ore.name=Rotplate Ore
 

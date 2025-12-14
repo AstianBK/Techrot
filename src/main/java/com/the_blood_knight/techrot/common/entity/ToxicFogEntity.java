@@ -60,9 +60,7 @@ public class ToxicFogEntity extends EntityAreaEffectCloud {
         super(p_i46809_1_);
         this.potion = PotionTypes.EMPTY;
         this.effects = Lists.newArrayList
-                (new PotionEffect(TRegistry.TECHROT_EFFECT,50,0),
-                new PotionEffect(MobEffects.NAUSEA, 40, 0, true, false)
-                );
+                (new PotionEffect(TRegistry.TECHROT_EFFECT,50,0));
         this.reapplicationDelayMap = Maps.newHashMap();
         this.duration = 300;
         this.waitTime = 5;

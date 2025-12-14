@@ -4,6 +4,7 @@ import com.the_blood_knight.techrot.Util;
 import com.the_blood_knight.techrot.common.TRSounds;
 import com.the_blood_knight.techrot.common.TRegistry;
 import com.the_blood_knight.techrot.common.entity.ToxicBombEntity;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -18,6 +19,11 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ToxicLaucheritem extends ItemBase{
     public ToxicLaucheritem(String name) {
@@ -74,6 +80,19 @@ public class ToxicLaucheritem extends ItemBase{
     public String getItemStackDisplayName(ItemStack stack) {
         return TextFormatting.GREEN
                 + super.getItemStackDisplayName(stack);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        super.addInformation(stack, worldIn, tooltip, flagIn);
+
+        String key = this.getTranslationKey(stack) + ".tooltip";
+
+        if (net.minecraft.client.resources.I18n.hasKey(key)) {
+            tooltip.add(net.minecraft.util.text.TextFormatting.GRAY +
+                    net.minecraft.client.resources.I18n.format(key));
+        }
     }
 
     @Override
