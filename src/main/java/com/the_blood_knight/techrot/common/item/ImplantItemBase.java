@@ -27,7 +27,7 @@ public class ImplantItemBase extends Item implements IRegisterable, ICreativeTab
 
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
-        return net.minecraft.util.text.TextFormatting.GREEN
+        return net.minecraft.util.text.TextFormatting.DARK_GREEN
                 + super.getItemStackDisplayName(stack);
     }
 

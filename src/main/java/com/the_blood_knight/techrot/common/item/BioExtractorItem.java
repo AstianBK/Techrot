@@ -15,8 +15,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
 import net.minecraft.util.datafix.walkers.EntityTag;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -30,7 +32,15 @@ public class BioExtractorItem extends ItemBase{
         super(name);
         this.setMaxDamage(15);
         this.maxStackSize = 1;
+
+        this.addPropertyOverride(
+                new ResourceLocation("minecraft", "fill"),
+                (stack, world, entity) ->
+                        getADN(stack).equals("none") ? 0.0F : 1.0F
+        );
+
     }
+
 
 
     @Override
@@ -43,17 +53,17 @@ public class BioExtractorItem extends ItemBase{
     public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target, EnumHand hand) {
         ItemStack extract = playerIn.getHeldItem(hand);
 
-        // Condition: ADN not yet stored AND target not player
+
         if (getADN(extract).equals("none") && !(target instanceof EntityPlayer)) {
 
             playerIn.world.playSound(null, playerIn.posX, playerIn.posY, playerIn.posZ,
                     TRSounds.BIO_EXTRACTOR_USE, SoundCategory.NEUTRAL,
                     1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 0.8F));
 
-            // extract ADN
+
             addADN(extract, EntityList.getKey(target).toString());
 
-            // deal 1 damage ONLY when ADN extracted
+
             target.attackEntityFrom(DamageSource.causePlayerDamage(playerIn), 1.0F);
         }
 
@@ -65,10 +75,45 @@ public class BioExtractorItem extends ItemBase{
     public static void addADN(ItemStack stack,String adn){
         stack.getOrCreateSubCompound("store").setString("adn",adn);
     }
-    public static String getADN(ItemStack stack){
-        return stack.getTagCompound()==null ? "none" : stack.getOrCreateSubCompound("store").getString("adn");
+    public static String getADN(ItemStack stack) {
+        if (!stack.hasTagCompound()) return "none";
+
+        NBTTagCompound store = stack.getTagCompound().getCompoundTag("store");
+        if (!store.hasKey("adn")) return "none";
+
+        String adn = store.getString("adn");
+        return adn.isEmpty() ? "none" : adn;
     }
 
+
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+        ItemStack stack = player.getHeldItem(hand);
+
+        if (player.isSneaking()) {
+            if (!getADN(stack).equals("none")) {
+
+                if (!world.isRemote) {
+                    stack.getOrCreateSubCompound("store").removeTag("adn");
+
+                    world.playSound(
+                            null,
+                            player.posX,
+                            player.posY,
+                            player.posZ,
+                            SoundEvents.ITEM_FLINTANDSTEEL_USE,
+                            SoundCategory.PLAYERS,
+                            0.8F,
+                            1.2F
+                    );
+                }
+
+                return new ActionResult<>(EnumActionResult.SUCCESS, stack);
+            }
+        }
+
+        return super.onItemRightClick(world, player, hand);
+    }
 
 
 
@@ -77,6 +122,8 @@ public class BioExtractorItem extends ItemBase{
         super.addInformation(stack, worldIn, tooltip, flagIn);
         String adn = getADN(stack);
         if(adn.equals("none") || !adn.contains(":"))return;
-        tooltip.add(adn.split(":")[1]);
+        String creatureName = adn.split(":")[1];
+        tooltip.add(TextFormatting.GREEN + "Genome: " + creatureName);
+
     }
 }

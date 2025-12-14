@@ -12,6 +12,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAreaEffectCloud;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.init.PotionTypes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -58,7 +59,10 @@ public class ToxicFogEntity extends EntityAreaEffectCloud {
     public ToxicFogEntity(World p_i46809_1_) {
         super(p_i46809_1_);
         this.potion = PotionTypes.EMPTY;
-        this.effects = Lists.newArrayList(new PotionEffect(TRegistry.TECHROT_EFFECT,50,0));
+        this.effects = Lists.newArrayList
+                (new PotionEffect(TRegistry.TECHROT_EFFECT,50,0),
+                new PotionEffect(MobEffects.NAUSEA, 40, 0, true, false)
+                );
         this.reapplicationDelayMap = Maps.newHashMap();
         this.duration = 300;
         this.waitTime = 5;

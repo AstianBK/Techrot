@@ -28,18 +28,21 @@ public class RotGui extends Gui {
     private final Random rand = new Random();
 
 
-    // Tamaño de cada icono en la spritesheet
+
     private static final int HEART_W = 9;
     private static final int HEART_H = 9;
 
 
-    // Offsets u,v en la textura
+
     private static final int U_FULL = 36;
     private static final int U_HALF = 63;
     private static final int U_EMPTY = 0;
     private static final int U_GLOW = 27;
     private static final int U_ABS_FULL = 36;
     private static final int U_ABS_HALF = 45;
+    private float gasAlpha = 0.0F;
+    private static final float FADE_IN_SPEED = 0.04F;
+    private static final float FADE_OUT_SPEED = 0.08F;
 
 
     long healthBlinkTime = 0;
@@ -65,38 +68,47 @@ public class RotGui extends Gui {
         if (event.getType() != RenderGameOverlayEvent.ElementType.ALL) return;
 
         Minecraft mc = Minecraft.getMinecraft();
-
         if (mc.player == null) return;
 
-        if (mc.player.isPotionActive(TRegistry.TECHROT_EFFECT)) {
+        boolean inGas = mc.player.isPotionActive(TRegistry.TECHROT_EFFECT);
 
-            int frame = (int) ((0.07F * (event.getPartialTicks()+mc.player.ticksExisted)) % 7);
-
-            mc.getTextureManager().bindTexture(new ResourceLocation(Techrot.MODID,"textures/overlay/toxicgas_overlay_"+frame+".png"));
-
-            GlStateManager.disableDepth();
-            GlStateManager.depthMask(false);
-            GlStateManager.enableBlend();
-            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-            GlStateManager.color(1F, 1F, 1F, 1F);
-
-
-            ScaledResolution res = new ScaledResolution(mc);
-            int w = res.getScaledWidth();
-            int h = res.getScaledHeight();
-
-            Gui.drawModalRectWithCustomSizedTexture(
-                    0, 0,
-                    0, 0,
-                    w, h,
-                    w, h
-            );
-
-            GlStateManager.depthMask(true);
-            GlStateManager.enableDepth();
-            GlStateManager.disableBlend();
+        if (inGas) {
+            gasAlpha = Math.min(1.0F, gasAlpha + FADE_IN_SPEED);
+        } else {
+            gasAlpha = Math.max(0.0F, gasAlpha - FADE_OUT_SPEED);
         }
+
+
+        if (gasAlpha <= 0.01F) return;
+
+        int frame = (int) ((0.07F * (event.getPartialTicks() + mc.player.ticksExisted)) % 7);
+        mc.getTextureManager().bindTexture(
+                new ResourceLocation(Techrot.MODID, "textures/overlay/toxicgas_overlay_" + frame + ".png")
+        );
+
+        GlStateManager.disableDepth();
+        GlStateManager.depthMask(false);
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(
+                GlStateManager.SourceFactor.SRC_ALPHA,
+                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA
+        );
+        GlStateManager.color(1F, 1F, 1F, gasAlpha);
+
+        ScaledResolution res = new ScaledResolution(mc);
+        Gui.drawModalRectWithCustomSizedTexture(
+                0, 0, 0, 0,
+                res.getScaledWidth(),
+                res.getScaledHeight(),
+                res.getScaledWidth(),
+                res.getScaledHeight()
+        );
+
+        GlStateManager.depthMask(true);
+        GlStateManager.enableDepth();
+        GlStateManager.disableBlend();
     }
+
 
     public void onRenderOverlay(RenderGameOverlayEvent.Pre event) {
         if (mc.player == null) return;

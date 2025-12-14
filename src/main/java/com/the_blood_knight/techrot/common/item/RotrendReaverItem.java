@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 public class RotrendReaverItem extends ItemBase {
@@ -39,6 +40,12 @@ public class RotrendReaverItem extends ItemBase {
                     false
             ));
         }
+    }
+
+    @Override
+    public String getItemStackDisplayName(ItemStack stack) {
+        return TextFormatting.GREEN
+                + super.getItemStackDisplayName(stack);
     }
 
     @Override

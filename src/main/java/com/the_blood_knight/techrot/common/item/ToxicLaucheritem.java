@@ -16,6 +16,7 @@ import net.minecraft.util.*;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 public class ToxicLaucheritem extends ItemBase{
@@ -67,6 +68,12 @@ public class ToxicLaucheritem extends ItemBase{
 
         }
         return new ActionResult<>(EnumActionResult.PASS,handItem);
+    }
+
+    @Override
+    public String getItemStackDisplayName(ItemStack stack) {
+        return TextFormatting.GREEN
+                + super.getItemStackDisplayName(stack);
     }
 
     @Override
