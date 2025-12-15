@@ -12,7 +12,6 @@ to the original repository.
 Outside of GitHub, you may NOT:
 - Redistribute this software or its derivatives
 - Publish it on other platforms or websites
-- Include it in modpacks
 - Distribute compiled binaries (JARs)
 - Reupload or mirror the source code
 - Create derivative works for public release
