@@ -49,7 +49,7 @@ public class RotGui extends Gui {
     long lastHealthTime = 0;
     int displayHealth;
     private float lastHealth = -1f;
-    private int healFlashTimer = 0; // frames para glow al curarse
+    private int healFlashTimer = 0;
 
 
     public RotGui() {

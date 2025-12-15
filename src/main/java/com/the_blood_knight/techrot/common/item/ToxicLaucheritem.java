@@ -87,6 +87,7 @@ public class ToxicLaucheritem extends ItemBase{
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
+        tooltip.add(TextFormatting.ITALIC + "Rot-Weapon");
 
         String key = this.getTranslationKey(stack) + ".tooltip";
 

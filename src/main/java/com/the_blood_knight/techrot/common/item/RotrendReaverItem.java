@@ -43,7 +43,7 @@ public class RotrendReaverItem extends ItemBase {
 
         if (holding && !Util.hasTechrotArm(player)) {
             player.addPotionEffect(new PotionEffect(
-                    MobEffects.WEAKNESS,
+                    MobEffects.SLOWNESS,
                     20,
                     1,  // WEAKNESS 2
                     true,
@@ -103,6 +103,7 @@ public class RotrendReaverItem extends ItemBase {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 
+        tooltip.add(TextFormatting.ITALIC + "Rot-Weapon");
         tooltip.add(TextFormatting.GRAY + "Injects poison into the wound, damage ramps up as wielder's health decreases.");
 
         EntityPlayer player = net.minecraft.client.Minecraft.getMinecraft().player;

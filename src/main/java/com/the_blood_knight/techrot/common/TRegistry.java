@@ -111,11 +111,17 @@ public class TRegistry {
 
     //IMPLANTS
 
-    public static final ImplantItemBase ROTPLATE_HEAD = new ImplantItemBase("rotplate_head1");
+// IMPLANTS
 
-    public static final ImplantItemBase ROTPLATE_CHEST = new ImplantItemBase("rotplate_chest1");
+    public static final ImplantItemBase ROTPLATE_HEAD =
+            new ImplantItemBase("rotplate_head1", 2);
 
-    public static final ImplantItemBase ROTPLATE_ARM = new ImplantItemBase("rotplate_arm1");
+    public static final ImplantItemBase ROTPLATE_CHEST =
+            new ImplantItemBase("rotplate_chest1", 6);
+
+    public static final ImplantItemBase ROTPLATE_ARM =
+            new ImplantItemBase("rotplate_arm1", 2);
+
 
     //EFFECT
     public static Potion TECHROT_EFFECT = new TechRotEffect();
