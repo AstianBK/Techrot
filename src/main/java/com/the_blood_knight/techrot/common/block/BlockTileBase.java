@@ -56,29 +56,20 @@ public class BlockTileBase extends BlockBase implements ITileEntityProvider {
         return this.isInvalidNeighbor(worldIn, pos, EnumFacing.NORTH) || this.isInvalidNeighbor(worldIn, pos, EnumFacing.SOUTH) || this.isInvalidNeighbor(worldIn, pos, EnumFacing.WEST) || this.isInvalidNeighbor(worldIn, pos, EnumFacing.EAST);
     }
 
-    /**
-     * The type of render function called. MODEL for mixed tesr and static model, MODELBLOCK_ANIMATED for TESR-only,
-     * LIQUID for vanilla liquids, INVISIBLE to skip all rendering
-     * @deprecated call via {@link IBlockState#getRenderType()} whenever possible. Implementing/overriding is fine.
-     */
+
     public EnumBlockRenderType getRenderType(IBlockState state)
     {
         return EnumBlockRenderType.INVISIBLE;
     }
 
-    /**
-     * Called serverside after this block is replaced with another in Chunk, but before the Tile Entity is updated
-     */
+
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
     {
         super.breakBlock(worldIn, pos, state);
         worldIn.removeTileEntity(pos);
     }
 
-    /**
-     * Spawns the block's drops in the world. By the time this is called the Block has possibly been set to air via
-     * Block.removedByPlayer
-     */
+
     public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, ItemStack stack)
     {
         if (te instanceof IWorldNameable && ((IWorldNameable)te).hasCustomName())
@@ -109,13 +100,10 @@ public class BlockTileBase extends BlockBase implements ITileEntityProvider {
         }
     }
 
-    /**
-     * Called on server when World#addBlockEvent is called. If server returns true, then also called on the client. On
-     * the Server, this may perform additional changes to the world, like pistons replacing the block with an extended
-     * base. On the client, the update may involve replacing tile entities or effects such as sounds or particle
-     * @deprecated call via {@link IBlockState#onBlockEventReceived(World,BlockPos,int,int)} whenever possible.
-     * Implementing/overriding is fine.
-     */
+    public boolean hasItemBlock() {
+        return true;
+    }
+
     public boolean eventReceived(IBlockState state, World worldIn, BlockPos pos, int id, int param) {
         super.eventReceived(state, worldIn, pos, id, param);
         TileEntity tileentity = worldIn.getTileEntity(pos);

@@ -28,6 +28,7 @@ import java.util.List;
 public class ToxicLaucheritem extends ItemBase{
     public ToxicLaucheritem(String name) {
         super(name);
+        this.setMaxStackSize(1);
     }
 
     @Override

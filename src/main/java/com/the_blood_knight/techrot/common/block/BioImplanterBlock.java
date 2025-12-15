@@ -100,20 +100,33 @@ public class BioImplanterBlock extends BlockTileBase{
     }
 
 
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
+    @Override
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state,
+                                EntityLivingBase placer, ItemStack stack) {
+        super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
 
-        if (stack.hasDisplayName())
-        {
-
+        if (!worldIn.isRemote) {
+            BlockPos above = pos.up();
+            worldIn.setBlockState(
+                    above,
+                    TRegistry.BIOIMPLANTER_TOP.getDefaultState(),
+                    3
+            );
         }
     }
 
+
+    @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-
-
+        if (!worldIn.isRemote) {
+            BlockPos above = pos.up();
+            if (worldIn.getBlockState(above).getBlock() == TRegistry.BIOIMPLANTER_TOP) {
+                worldIn.setBlockToAir(above);
+            }
+        }
         super.breakBlock(worldIn, pos, state);
     }
+
     public boolean validConnectPipe(IBlockState state,EnumFacing facing){
         switch (state.getValue(FACING)){
             case EAST:{
@@ -192,5 +205,13 @@ public class BioImplanterBlock extends BlockTileBase{
     {
         return new BlockStateContainer(this, FACING);
     }
+
+    @Override
+    public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
+        return super.canPlaceBlockAt(worldIn, pos)
+                && worldIn.isAirBlock(pos.up());
+    }
+
+
 
 }

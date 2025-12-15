@@ -27,17 +27,28 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.Random;
 
+
+
 public class BioEggMakerBlock extends BlockTileBase{
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
     public final boolean isWork;
-    public BioEggMakerBlock(Material material, String name,boolean isWork) {
+    public BioEggMakerBlock(Material material, String name, boolean isWork) {
         super(material, name);
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
         this.isWork = isWork;
+
+        if (isWork) {
+            this.setTickRandomly(true); // THIS enables randomDisplayTick
+        }
     }
+
+
+
     public Item getItemDropped(IBlockState state, Random rand, int fortune) {
         return Item.getItemFromBlock(TRegistry.BIOEGGMAKER);
     }
+
+    private static boolean keepInventory;
 
     @Nullable
     @Override
@@ -67,36 +78,66 @@ public class BioEggMakerBlock extends BlockTileBase{
             }
         }
     }
+    @Override
     @SideOnly(Side.CLIENT)
-    @SuppressWarnings("incomplete-switch")
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-        if (this.isWork) {
-            Techrot.spawnPeste(worldIn,pos,rand,7);
+        if (stateIn.getBlock() == TRegistry.LIT_BIOEGGMAKER) {
+            Techrot.spawnPeste(worldIn, pos, rand, 7);
         }
+
     }
 
+
     public static void setState(boolean active, World worldIn, BlockPos pos) {
-        IBlockState iblockstate = worldIn.getBlockState(pos);
+        IBlockState state = worldIn.getBlockState(pos);
         TileEntity tileentity = worldIn.getTileEntity(pos);
+
+        keepInventory = true;
 
         if (active)
         {
-            worldIn.setBlockState(pos, TRegistry.LIT_BIOEGGMAKER.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
-            worldIn.setBlockState(pos, TRegistry.LIT_BIOEGGMAKER.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
+            worldIn.setBlockState(
+                    pos,
+                    TRegistry.LIT_BIOEGGMAKER
+                            .getDefaultState()
+                            .withProperty(FACING, state.getValue(FACING)),
+                    3
+            );
+            worldIn.setBlockState(
+                    pos,
+                    TRegistry.LIT_BIOEGGMAKER
+                            .getDefaultState()
+                            .withProperty(FACING, state.getValue(FACING)),
+                    3
+            );
         }
         else
         {
-            worldIn.setBlockState(pos, TRegistry.BIOEGGMAKER.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
-            worldIn.setBlockState(pos, TRegistry.BIOEGGMAKER.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
+            worldIn.setBlockState(
+                    pos,
+                    TRegistry.BIOEGGMAKER
+                            .getDefaultState()
+                            .withProperty(FACING, state.getValue(FACING)),
+                    3
+            );
+            worldIn.setBlockState(
+                    pos,
+                    TRegistry.BIOEGGMAKER
+                            .getDefaultState()
+                            .withProperty(FACING, state.getValue(FACING)),
+                    3
+            );
         }
 
 
-        if (tileentity != null)
-        {
+        keepInventory = false;
+
+        if (tileentity != null) {
             tileentity.validate();
             worldIn.setTileEntity(pos, tileentity);
         }
     }
+
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (worldIn.isRemote)
         {
@@ -216,4 +257,6 @@ public class BioEggMakerBlock extends BlockTileBase{
     {
         return new BlockStateContainer(this, FACING);
     }
+
+
 }

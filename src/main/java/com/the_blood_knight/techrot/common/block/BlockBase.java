@@ -43,6 +43,9 @@ public class BlockBase extends Block {
 		return itemBlock;
 	}
 
+	public boolean hasItemBlock() {
+		return true;
+	}
 
 	
 	@Override

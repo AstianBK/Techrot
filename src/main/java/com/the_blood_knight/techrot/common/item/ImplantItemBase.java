@@ -20,10 +20,13 @@ public class ImplantItemBase extends Item implements IRegisterable, ICreativeTab
 
     public ImplantItemBase(String name) {
         this.name = name;
+
         this.setCreativeTab(TRegistry.TECHROT_TAB);
+        this.setMaxStackSize(1);
 
         updateRegistryAndLocalizedName(name);
     }
+
     public ImplantItemBase(ToolMaterial material, String name) {
         this.name = name;
     }

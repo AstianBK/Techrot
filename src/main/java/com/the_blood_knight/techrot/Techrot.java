@@ -20,6 +20,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
@@ -223,18 +224,32 @@ public class Techrot
             }
         }
         @SubscribeEvent
-        public static void onTick(TickEvent.PlayerTickEvent event){
-            if(event.side == Side.SERVER){
-                ITechRotPlayer cap = event.player.getCapability(
-                        CapabilityRegistry.PLAYER_UPGRADES,
-                        null
-                );
-                if(cap!=null){
-                    cap.tick(event.player);
-                }
+        public static void onTick(TickEvent.PlayerTickEvent event) {
+            if (event.side != Side.SERVER) return;
 
+            EntityPlayer player = event.player;
+
+            if (Util.hasTechrotChest(player)) {
+
+                if (player.isInWater()) {
+                    player.addPotionEffect(new PotionEffect(
+                            MobEffects.WATER_BREATHING,
+                            90,
+                            0,
+                            true,
+                            false
+                    ));
+                }
+            }
+            ITechRotPlayer cap = player.getCapability(
+                    CapabilityRegistry.PLAYER_UPGRADES,
+                    null
+            );
+            if (cap != null) {
+                cap.tick(player);
             }
         }
+
         @SubscribeEvent
         @SideOnly(Side.CLIENT)
         public static void onRenderPlayerPre(RenderPlayerEvent.Pre event) {
@@ -258,6 +273,23 @@ public class Techrot
                 PacketHandler.sendTo(new SyncDataPacket(tag), mp);
             }
         }
+
+        @SubscribeEvent
+        public static void onPotionApplicable(net.minecraftforge.event.entity.living.PotionEvent.PotionApplicableEvent event) {
+            if (!(event.getEntityLiving() instanceof EntityPlayer)) {
+                return;
+            }
+
+            EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+
+            if (event.getPotionEffect().getPotion() == MobEffects.BLINDNESS) {
+
+                if (Util.hasTechrotHead(player)) {
+                    event.setResult(net.minecraftforge.fml.common.eventhandler.Event.Result.DENY);
+                }
+            }
+        }
+
     }
     @Mod.EventBusSubscriber
     public static class CapabilityRegistry {

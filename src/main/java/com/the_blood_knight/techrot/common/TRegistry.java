@@ -74,6 +74,7 @@ public class TRegistry {
     //FUNCTIONAL-BLOCKS
 
     public static final BlockBase BIOIMPLANTER = new BioImplanterBlock(Material.ROCK,"bioimplanter",false);
+    public static final BlockTileBase BIOIMPLANTER_TOP = new BioImplanterTopBlock(Material.ROCK,"bioimplantertop");
     public static final BlockBase BIOFURNACE = new BioFurnaceBlock(false,Material.ROCK,"biofurnace");
     public static final BlockBase LIT_BIOFURNACE = new BioFurnaceBlock(true,Material.ROCK,"lit_biofurnace").setCreativeTab(null);
     public static final BlockBase BIOPASTEMAKER = new BioPastemakerBlock(Material.CACTUS,"biopastemaker",false);
@@ -127,10 +128,13 @@ public class TRegistry {
     }
 
     public static void registerItemBlocks(IForgeRegistry<Item> registry) {
-        for(BlockBase block : BLOCKS) {
-            registry.register(block.createItemBlock());
+        for (BlockBase block : BLOCKS) {
+            if (block.hasItemBlock()) {
+                registry.register(block.createItemBlock());
+            }
         }
     }
+
 
     public static void registerModels() {
         for(BlockBase block : BLOCKS) {
