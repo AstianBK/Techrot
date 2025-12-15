@@ -50,7 +50,7 @@ public class BioEggMakerTileBlock extends TileEntityLockable implements ITickabl
     @Override
     public void update() {
         boolean flag = false;
-        boolean flag1 = this.maxClonerTimer>0;
+        boolean flag1 = this.clonerTimer>0;
 
         if(!this.world.isRemote){
             if(this.maxClonerTimer>0 && this.clonerTimer%10==0){
