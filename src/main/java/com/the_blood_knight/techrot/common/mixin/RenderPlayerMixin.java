@@ -29,10 +29,10 @@ public abstract class RenderPlayerMixin {
                     getMainModel().bipedRightArm.showModel = false;
                 }
                 if(stack.getItem() == TRegistry.ROTPLATE_CHEST){
-                   // getMainModel().bipedBody.showModel = false;
+
                 }
                 if(stack.getItem() == TRegistry.ROTPLATE_HEAD){
-                   // getMainModel().bipedHead.showModel = false;
+
                 }
             }
         }

@@ -1,0 +1,17 @@
+{
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:book"
+    },
+    {
+      "item": "minecraft:rotten_flesh"
+    }
+  ],
+  "result": {
+    "item": "patchouli:guide_book",
+    "nbt": {
+      "patchouli:book": "techrot:techrot_guide"
+    }
+  }
+}

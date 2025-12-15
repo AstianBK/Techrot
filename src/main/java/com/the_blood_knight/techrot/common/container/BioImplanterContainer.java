@@ -1,6 +1,8 @@
 package com.the_blood_knight.techrot.common.container;
 
 import com.the_blood_knight.techrot.Techrot;
+import com.the_blood_knight.techrot.client.gui.BlackoutOverlay;
+import com.the_blood_knight.techrot.common.TRSounds;
 import com.the_blood_knight.techrot.common.TRegistry;
 import com.the_blood_knight.techrot.common.api.ITechRotPlayer;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,6 +14,8 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundCategory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -171,34 +175,58 @@ public class BioImplanterContainer extends Container {
 
     @Override
     public void onContainerClosed(EntityPlayer playerIn) {
-        if(!playerIn.world.isRemote){
+        super.onContainerClosed(playerIn);
 
-            ITechRotPlayer cap = playerIn.getCapability(Techrot.CapabilityRegistry.PLAYER_UPGRADES,null);
-            if(cap!=null){
-                int rot = 0;
-                int currentRot = cap.getHeartRot();
-                for (int i = 0 ; i < 6 ; i++){
-                    ItemStack stack = this.tileFurnace.getStackInSlot(i);
+        ITechRotPlayer cap = playerIn.getCapability(Techrot.CapabilityRegistry.PLAYER_UPGRADES, null);
+        if (cap != null) {
+            int rot = 0;
+            int currentRot = cap.getHeartRot();
 
-                    if(cap.getInventory().getStackInSlot(i).isEmpty()){
-                        cap.getInventory().setStackInSlot(i,stack.copy());
-                        if(stack.getItem() == TRegistry.ROTPLATE_HEAD){
-                            rot +=2;
-                        }
-                        if(stack.getItem() == TRegistry.ROTPLATE_ARM){
-                            rot +=2;
-                        }
-                        if(stack.getItem() == TRegistry.ROTPLATE_CHEST){
-                            rot +=6;
-                        }
-                        stack.shrink(1);
+            for (int i = 0; i < 6; i++) {
+                ItemStack stack = this.tileFurnace.getStackInSlot(i);
+
+                if (cap.getInventory().getStackInSlot(i).isEmpty() && !stack.isEmpty()) {
+                    cap.getInventory().setStackInSlot(i, stack.copy());
+
+                    if (stack.getItem() == TRegistry.ROTPLATE_HEAD) {
+                        rot += 2;
                     }
+                    if (stack.getItem() == TRegistry.ROTPLATE_ARM) {
+                        rot += 2;
+                    }
+                    if (stack.getItem() == TRegistry.ROTPLATE_CHEST) {
+                        rot += 6;
+                    }
+
+                    stack.shrink(1);
                 }
-                if(rot>0){
-                    cap.setHeartRot(rot+currentRot);
-                }
-                cap.setDirty();
             }
+
+            if (rot > 0) {
+                cap.setHeartRot(rot + currentRot);
+                cap.setDirty();
+
+                playerIn.attackEntityFrom(DamageSource.OUT_OF_WORLD, 4.0F);
+
+                playerIn.world.playSound(
+                        null,
+                        playerIn.posX,
+                        playerIn.posY,
+                        playerIn.posZ,
+                        TRSounds.BIOIMPLANTER_USE,
+                        SoundCategory.BLOCKS,
+                        1.0F,
+                        1.0F
+                );
+
+                if (playerIn.world.isRemote) {
+                    BlackoutOverlay overlay = new BlackoutOverlay();
+                    overlay.start();
+                }
+            }
+
         }
     }
 }
+
+

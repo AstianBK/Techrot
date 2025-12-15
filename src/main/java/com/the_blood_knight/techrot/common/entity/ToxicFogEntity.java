@@ -12,6 +12,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAreaEffectCloud;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.init.PotionTypes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -58,7 +59,8 @@ public class ToxicFogEntity extends EntityAreaEffectCloud {
     public ToxicFogEntity(World p_i46809_1_) {
         super(p_i46809_1_);
         this.potion = PotionTypes.EMPTY;
-        this.effects = Lists.newArrayList(new PotionEffect(TRegistry.TECHROT_EFFECT,50,0));
+        this.effects = Lists.newArrayList
+                (new PotionEffect(TRegistry.TECHROT_EFFECT,50,0));
         this.reapplicationDelayMap = Maps.newHashMap();
         this.duration = 300;
         this.waitTime = 5;
@@ -182,20 +184,50 @@ public class ToxicFogEntity extends EntityAreaEffectCloud {
         boolean lvt_1_1_ = this.shouldIgnoreRadius();
         float lvt_2_1_ = this.getRadius();
         if (this.world.isRemote) {
-            BlockPos pos = this.getPosition();
-            double radius = this.getRadius();
-            for (int pass = 0; pass < 15; pass++) {
-                BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos(pos);
-                float theta = (float) (2 * Math.PI * rand.nextFloat());
-                float phi = (float) Math.acos(2 * rand.nextFloat() - 1);
-                double x = radius * Math.sin(phi) * Math.cos(theta);
-                double y = radius * Math.sin(phi) * Math.sin(theta);
-                double z = radius * Math.cos(phi);
 
-                mutableBlockPos.setPos(x + pos.getX(), y + pos.getY(), z + pos.getZ());
-                Minecraft.getMinecraft().effectRenderer.addEffect(new ToxicFogParticle(world, mutableBlockPos.getX(), mutableBlockPos.getY() + rand.nextFloat(), mutableBlockPos.getZ(), 0, 0, 0));
+
+            if (this.ticksExisted % 3 != 0) return;
+
+            Minecraft mc = Minecraft.getMinecraft();
+            EntityPlayer player = mc.player;
+
+
+            if (player == null) return;
+
+
+            double maxDistSq = 64 * 64;
+            if (player.getDistanceSq(this) > maxDistSq) return;
+
+            float radius = this.getRadius();
+
+
+            int particleCount = Math.max(4, (int)(radius * 3));
+
+
+            if (mc.gameSettings.particleSetting > 0) {
+                particleCount /= 2;
             }
-        } else {
+
+            for (int i = 0; i < particleCount; i++) {
+                double angle = rand.nextDouble() * Math.PI * 2;
+                double dist = rand.nextDouble() * radius;
+
+                double x = this.posX + Math.cos(angle) * dist;
+                double z = this.posZ + Math.sin(angle) * dist;
+                double y = this.posY + rand.nextDouble() * 0.5D;
+
+                mc.effectRenderer.addEffect(
+                        new ToxicFogParticle(
+                                world,
+                                x,
+                                y,
+                                z,
+                                0, 0, 0
+                        )
+                );
+            }
+        }
+        else {
             if (this.ticksExisted >= this.waitTime + this.duration) {
                 this.setDead();
                 return;

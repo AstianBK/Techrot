@@ -20,6 +20,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
@@ -92,22 +93,37 @@ public class Techrot
         return map;
     }
 
-    public static void spawnPeste(World worldIn , BlockPos pos, Random rand,double radius){
+    public static void spawnPeste(World worldIn, BlockPos pos, Random rand, double radius) {
         for (int pass = 0; pass < 15; pass++) {
             BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos(pos);
+
             float theta = (float) (2 * Math.PI * rand.nextFloat());
             float phi = (float) Math.acos(2 * rand.nextFloat() - 1);
+
             double x = radius * Math.sin(phi) * Math.cos(theta);
             double y = radius * Math.sin(phi) * Math.sin(theta);
             double z = radius * Math.cos(phi);
 
-            mutableBlockPos.setPos(x + pos.getX(), y + pos.getY(), z + pos.getZ());
-            if (worldIn.getHeight(mutableBlockPos.getX(), mutableBlockPos.getZ()) > pos.getY())
-                continue;
-            double height = worldIn.getHeight(mutableBlockPos.getX(),mutableBlockPos.getZ());
-            Minecraft.getMinecraft().effectRenderer.addEffect(new ToxicFogParticle(worldIn, mutableBlockPos.getX(), height + rand.nextFloat(), mutableBlockPos.getZ(), 0, 0, 0));
+            mutableBlockPos.setPos(
+                    pos.getX() + x,
+                    pos.getY() + y,
+                    pos.getZ() + z
+            );
+
+            double height = pos.getY() + 1.0D;
+
+            Minecraft.getMinecraft().effectRenderer.addEffect(
+                    new ToxicFogParticle(
+                            worldIn,
+                            pos.getX() + x + 0.5D,
+                            height + rand.nextFloat() * 0.3D,
+                            pos.getZ() + z + 0.5D,
+                            0, 0, 0
+                    )
+            );
         }
     }
+
 
 
 
@@ -208,18 +224,32 @@ public class Techrot
             }
         }
         @SubscribeEvent
-        public static void onTick(TickEvent.PlayerTickEvent event){
-            if(event.side == Side.SERVER){
-                ITechRotPlayer cap = event.player.getCapability(
-                        CapabilityRegistry.PLAYER_UPGRADES,
-                        null
-                );
-                if(cap!=null){
-                    cap.tick(event.player);
-                }
+        public static void onTick(TickEvent.PlayerTickEvent event) {
+            if (event.side != Side.SERVER) return;
 
+            EntityPlayer player = event.player;
+
+            if (Util.hasTechrotChest(player)) {
+
+                if (player.isInWater()) {
+                    player.addPotionEffect(new PotionEffect(
+                            MobEffects.WATER_BREATHING,
+                            90,
+                            0,
+                            true,
+                            false
+                    ));
+                }
+            }
+            ITechRotPlayer cap = player.getCapability(
+                    CapabilityRegistry.PLAYER_UPGRADES,
+                    null
+            );
+            if (cap != null) {
+                cap.tick(player);
             }
         }
+
         @SubscribeEvent
         @SideOnly(Side.CLIENT)
         public static void onRenderPlayerPre(RenderPlayerEvent.Pre event) {
@@ -243,6 +273,23 @@ public class Techrot
                 PacketHandler.sendTo(new SyncDataPacket(tag), mp);
             }
         }
+
+        @SubscribeEvent
+        public static void onPotionApplicable(net.minecraftforge.event.entity.living.PotionEvent.PotionApplicableEvent event) {
+            if (!(event.getEntityLiving() instanceof EntityPlayer)) {
+                return;
+            }
+
+            EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+
+            if (event.getPotionEffect().getPotion() == MobEffects.BLINDNESS) {
+
+                if (Util.hasTechrotHead(player)) {
+                    event.setResult(net.minecraftforge.fml.common.eventhandler.Event.Result.DENY);
+                }
+            }
+        }
+
     }
     @Mod.EventBusSubscriber
     public static class CapabilityRegistry {

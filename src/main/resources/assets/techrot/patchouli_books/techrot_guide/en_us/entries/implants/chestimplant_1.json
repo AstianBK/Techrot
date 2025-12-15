@@ -7,7 +7,7 @@
     {
       "type": "crafting",
       "recipe": "techrot:rotplate_chest1",
-      "text": "Assimilates toxins allowing to regenerate decaying hearts while inside toxic fume clouds, grants immunity to poison and infinite water breathing."
+      "text": "Assimilates toxins allowing to regenerate decaying hearts while inside techrot fume clouds, gives poison immunity and infinite water breathing."
     }
   ]
 }

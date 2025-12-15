@@ -65,12 +65,21 @@ public class TechrotPlayer implements ITechRotPlayer {
 
     @Override
     public void reg(EntityPlayer player) {
-        if(player.getHealth()<this.heartRot){
-            if(this.regTimer<=0){
-                player.world.playSound(null,player.posX,player.posY,player.posZ, TRSounds.IMPLANTEDPLAYER_BREATHE, SoundCategory.PLAYERS,1.0F,1.0F);
+        if (player.isDead || player.getHealth() <= 0.0F) return;
 
-                this.regTimer=80;
-                player.setHealth(Math.min(player.getHealth()+1,player.getMaxHealth()));
+        if (player.getHealth() < this.heartRot) {
+            if (this.regTimer <= 0) {
+                player.world.playSound(
+                        null,
+                        player.posX, player.posY, player.posZ,
+                        TRSounds.IMPLANTEDPLAYER_BREATHE,
+                        SoundCategory.PLAYERS,
+                        1.0F,
+                        1.0F
+                );
+
+                this.regTimer = 80;
+                player.setHealth(Math.min(player.getHealth() + 1, player.getMaxHealth()));
             }
         }
     }
@@ -116,7 +125,7 @@ public class TechrotPlayer implements ITechRotPlayer {
 
         @Override
         public NBTTagCompound serializeNBT() {
-            // Forge -> llama writeNBT()
+
             return (NBTTagCompound)
                     Techrot.CapabilityRegistry.PLAYER_UPGRADES.getStorage()
                             .writeNBT(Techrot.CapabilityRegistry.PLAYER_UPGRADES, instance, null);
@@ -124,7 +133,7 @@ public class TechrotPlayer implements ITechRotPlayer {
 
         @Override
         public void deserializeNBT(NBTTagCompound nbt) {
-            // Forge -> llama readNBT()
+
             Techrot.CapabilityRegistry.PLAYER_UPGRADES.getStorage()
                     .readNBT(Techrot.CapabilityRegistry.PLAYER_UPGRADES, instance, null, nbt);
         }

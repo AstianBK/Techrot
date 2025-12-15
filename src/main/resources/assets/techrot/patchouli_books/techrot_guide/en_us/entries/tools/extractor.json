@@ -2,7 +2,7 @@
   "name": "Genome Extractor",
   "category": "tools",
   "icon": "techrot:bio_extractor",
-  "priority": true,
+  "priority": false,
   "pages": [
     {
       "type": "crafting",

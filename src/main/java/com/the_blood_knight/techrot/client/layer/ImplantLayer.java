@@ -43,11 +43,35 @@ public class ImplantLayer<T extends EntityPlayer> implements LayerRenderer<T> {
                     modelArm.renderRightArm(this.renderer.getMainModel().bipedRightArm);
                     modelArm.right_arm.render(scale);
                     hasArm = true;
+                    GlStateManager.enableBlend();
+                    int frame = (int) ((0.25F * (partialTicks+entitylivingbaseIn.ticksExisted)) % 7);
+                    ResourceLocation location = new ResourceLocation(Techrot.MODID,"textures/entity/bioglowing_"+frame+".png");
+                    Minecraft.getMinecraft().getTextureManager().bindTexture(location);
+
+                    GlStateManager.blendFunc(GL11.GL_ONE, GL11.GL_ONE); // additive glow
+                    GlStateManager.disableLighting();
+
+                    modelArm.right_arm.render(scale);
+
+                    GlStateManager.enableLighting();
+                    GlStateManager.disableBlend();
                 }
                 if(stack.getItem() == TRegistry.ROTPLATE_CHEST){
                     Minecraft.getMinecraft().getTextureManager().bindTexture(TEXTURE);
                     modelArm.renderChest(this.renderer.getMainModel().bipedBody);
                     modelArm.torso.render(scale);
+                    GlStateManager.enableBlend();
+                    int frame = (int) ((0.25F * (partialTicks+entitylivingbaseIn.ticksExisted)) % 7);
+                    ResourceLocation location = new ResourceLocation(Techrot.MODID,"textures/entity/bioglowing_"+frame+".png");
+                    Minecraft.getMinecraft().getTextureManager().bindTexture(location);
+
+                    GlStateManager.blendFunc(GL11.GL_ONE, GL11.GL_ONE); // additive glow
+                    GlStateManager.disableLighting();
+
+                    modelArm.torso.render(scale);
+
+                    GlStateManager.enableLighting();
+                    GlStateManager.disableBlend();
                 }
                 if(stack.getItem() == TRegistry.ROTPLATE_HEAD){
                     Minecraft.getMinecraft().getTextureManager().bindTexture(TEXTURE);

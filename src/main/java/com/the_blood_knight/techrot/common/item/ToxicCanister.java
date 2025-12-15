@@ -5,5 +5,6 @@ public class ToxicCanister extends ItemBase{
     public ToxicCanister(String name,boolean isFill) {
         super(name);
         this.isFill = isFill;
+        this.setMaxStackSize(16);
     }
 }
