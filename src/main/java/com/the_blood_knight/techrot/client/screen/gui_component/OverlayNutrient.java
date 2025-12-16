@@ -15,7 +15,7 @@ public class OverlayNutrient {
 
     public void render(int nutrient,FontRenderer renderer,int mouseX,int mouseY,int posX,int posY,int sizeX,int sizeY){
         if(mouseX > posX && mouseX < posX+sizeX && mouseY > posY && mouseY<posY+sizeY){
-            GuiUtils.drawHoveringText(Arrays.asList(TextFormatting.BLUE +"Paste : "+TextFormatting.GREEN +nutrient +" lts"),mouseX+100,mouseY, 176,166, 100, renderer);
+            GuiUtils.drawHoveringText(Arrays.asList(TextFormatting.DARK_RED +"Paste : "+TextFormatting.DARK_RED +nutrient +" ml"),mouseX+100,mouseY, 176,166, 100, renderer);
         }
     }
 
