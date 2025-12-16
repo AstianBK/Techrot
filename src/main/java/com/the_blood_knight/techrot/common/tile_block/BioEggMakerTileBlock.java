@@ -57,7 +57,7 @@ public class BioEggMakerTileBlock extends TileEntityLockable implements ITickabl
                 Techrot.damageTick(world,pos,7);
             }
             if(this.currentNutrient<1000){
-                this.currentNutrient+=this.requestNutrient(1);
+                this.currentNutrient+=this.requestNutrient(1,this.pos,this.world);
             }
             if(currentNutrient>0 && canCloneFlesh()){
                 if(this.maxClonerTimer<=0){
@@ -89,16 +89,7 @@ public class BioEggMakerTileBlock extends TileEntityLockable implements ITickabl
         }
     }
 
-    private int requestNutrient(int amount) {
-        for (EnumFacing facing : getValidFacingConnect()){
-            BlockPos offset = this.pos.offset(facing);
-            TileEntity tile = this.world.getTileEntity(offset);
-            if(tile instanceof BioPipeTileBlock){
-                return ((BioPipeTileBlock)tile).requestNutrients(amount,facing,new HashSet<>());
-            }
-        }
-        return 0;
-    }
+
 
     public List<EnumFacing> getValidFacingConnect(){
         IBlockState state = this.world.getBlockState(this.pos);
@@ -124,6 +115,7 @@ public class BioEggMakerTileBlock extends TileEntityLockable implements ITickabl
             }
         }
     }
+
     public static boolean equalSpawnEgg(ItemStack first,ItemStack second){
         if(first.getTagCompound() == null || second.getTagCompound()==null){
             return false;
@@ -133,6 +125,7 @@ public class BioEggMakerTileBlock extends TileEntityLockable implements ITickabl
         }
         return false;
     }
+
     public static ItemStack createSpawnEgg(ResourceLocation entityId, int primaryColor, int secondaryColor) {
         ItemStack egg = new ItemStack(Items.SPAWN_EGG);
 
@@ -186,33 +179,6 @@ public class BioEggMakerTileBlock extends TileEntityLockable implements ITickabl
     }
 
 
-
-    @Override
-    public int getNutrition() {
-        return 0;
-    }
-
-    @Override
-    public void setNutrition(int value) {
-
-    }
-
-    @Override
-    public int extractNutrition(EnumFacing facing) {
-        this.currentNutrient++;
-        this.markDirty();
-        return 1;
-    }
-
-    @Override
-    public boolean canExtract(BlockPos pos, EnumFacing facing) {
-        return false;
-    }
-
-    @Override
-    public boolean canInsert(BlockPos pos, EnumFacing facing) {
-        return this.currentNutrient<1000;
-    }
 
     public int[] getSlotsForFace(EnumFacing side) {
         if (side == EnumFacing.DOWN)

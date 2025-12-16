@@ -79,8 +79,11 @@ public class ImplantLayer<T extends EntityPlayer> implements LayerRenderer<T> {
                     modelArm.renderHead(this.renderer.getMainModel().bipedHead);
                     modelArm.head.render(scale);
                     GlStateManager.enableBlend();
+
                     int frame = (int) ((0.25F * (partialTicks+entitylivingbaseIn.ticksExisted)) % 7);
+
                     ResourceLocation location = new ResourceLocation(Techrot.MODID,"textures/entity/bioglowing_"+frame+".png");
+
                     Minecraft.getMinecraft().getTextureManager().bindTexture(location);
 
                     GlStateManager.blendFunc(GL11.GL_ONE, GL11.GL_ONE); // additive glow

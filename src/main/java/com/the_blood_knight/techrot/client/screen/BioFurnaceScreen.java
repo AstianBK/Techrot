@@ -10,11 +10,12 @@ import net.minecraft.inventory.ContainerFurnace;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class BioFurnaceScreen extends GuiContainer {
+public class BioFurnaceScreen extends NutrientContainer {
     private static final ResourceLocation[] FRAMES = new ResourceLocation[]{
             new ResourceLocation(Techrot.MODID,"textures/gui/container/biofurnace_0.png"),
             new ResourceLocation(Techrot.MODID,"textures/gui/container/biofurnace_1.png"),
@@ -70,9 +71,13 @@ public class BioFurnaceScreen extends GuiContainer {
         int k = this.getBurnLeftScaled(49);
         this.drawTexturedModalRect(i + 45, j + 54, 176, 35, k, 18);
 
+        this.nutrient.render(TextFormatting.BLUE +"Paste : "+TextFormatting.GREEN +this.tileFurnace.getField(0) +" lts",fontRenderer,mouseX,mouseY,i + 45, j + 54,49,18);
+
 
         int l = this.getCookProgressScaled(18);
         this.drawTexturedModalRect(i + 79, j + 14, 176, 16, l, 18);
+
+
     }
 
     private int getCookProgressScaled(int pixels)

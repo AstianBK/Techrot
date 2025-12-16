@@ -56,6 +56,7 @@ public class BioImplanterScreen extends GuiContainer {
         int j = (this.height - this.ySize) / 2;
         this.drawTexturedModalRect(i, j-20, 0, 0, 176, 221);
 
+
         int k = this.getNutrition(49);
         this.drawTexturedModalRect(i + 60, j + 72, 176, 20, k, 18);
 
@@ -63,6 +64,7 @@ public class BioImplanterScreen extends GuiContainer {
         /*int l = this.getCloning(34);
         this.drawTexturedModalRect(i + 91, j + 22, 176, 0, l, 19);*/
     }
+
 
     private int getNutrition(int pixels) {
         int i = this.tileFurnace.getField(0);

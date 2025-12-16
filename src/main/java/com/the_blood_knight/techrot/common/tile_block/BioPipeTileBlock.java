@@ -2,6 +2,7 @@ package com.the_blood_knight.techrot.common.tile_block;
 
 import com.the_blood_knight.techrot.Techrot;
 import com.the_blood_knight.techrot.common.api.INutritionBlock;
+import com.the_blood_knight.techrot.common.block.BioPastemakerBlock;
 import com.the_blood_knight.techrot.common.block.BioPipeBlock;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
@@ -17,7 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public class BioPipeTileBlock extends TileEntity implements ITickable,INutritionBlock {
+public class BioPipeTileBlock extends TileEntity implements ITickable {
 
     public Map<EnumFacing, BlockPos> connections = Techrot.main.getMapEmpty();
     public List<BlockPos> cores = new ArrayList<>();
@@ -69,7 +70,7 @@ public class BioPipeTileBlock extends TileEntity implements ITickable,INutrition
             BlockPos p = pos.offset(f);
             if (world.isBlockLoaded(p)) {
                 TileEntity te = world.getTileEntity(p);
-                if (te instanceof BioPipeTileBlock) list.add(p);
+                if (te instanceof BioPipeTileBlock || te instanceof BioPastemakerTileBlock || te instanceof INutritionBlock) list.add(p);
             }
         }
         return list.toArray(new BlockPos[0]);
@@ -173,31 +174,6 @@ public class BioPipeTileBlock extends TileEntity implements ITickable,INutrition
             list.add(EnumFacing.DOWN);
         }
         return list;
-    }
-    @Override
-    public int getNutrition() {
-        return 0;
-    }
-
-    @Override
-    public void setNutrition(int value) {
-
-    }
-
-    @Override
-    public int extractNutrition(EnumFacing facing) {
-
-        return 10;
-    }
-
-    @Override
-    public boolean canExtract(BlockPos pos, EnumFacing facing) {
-        return false;
-    }
-
-    @Override
-    public boolean canInsert(BlockPos pos, EnumFacing facing) {
-        return this.isConnectTo(pos,facing);
     }
 
     public boolean isConnectTo(BlockPos pos,EnumFacing facing){

@@ -10,8 +10,9 @@ import net.minecraft.inventory.ContainerFurnace;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 
-public class BioPastemakerScreen extends GuiContainer {
+public class BioPastemakerScreen extends NutrientContainer {
     private static final ResourceLocation[] FRAMES = new ResourceLocation[]{
             new ResourceLocation(Techrot.MODID,"textures/gui/container/biopastemaker_gui_0.png"),
             new ResourceLocation(Techrot.MODID,"textures/gui/container/biopastemaker_gui_1.png"),
@@ -66,7 +67,10 @@ public class BioPastemakerScreen extends GuiContainer {
         int eatingProgress = getEat(34);
         this.drawTexturedModalRect(i + 79 ,j + 26 ,176,0,eatingProgress+1,19);
         int nutrient = getNutrition(49);
+
         this.drawTexturedModalRect(i+ 114 ,j+26,176,20,nutrient+1,18);
+        this.nutrient.render(TextFormatting.BLUE +"Paste : "+TextFormatting.GREEN +this.tileFurnace.getField(1) +" lts",fontRenderer,mouseX,mouseY,i+ 114 ,j+26,49,18);
+
     }
 
 

@@ -144,7 +144,9 @@ public class BioCrafterTileBlock extends TileEntity implements ITickable, ISided
             BlockPos offset = this.pos.offset(facing);
             TileEntity tile = this.world.getTileEntity(offset);
             if(tile instanceof BioPipeTileBlock){
-                return ((BioPipeTileBlock)tile).requestNutrients(amount,facing,new HashSet<>());
+                int value = ((BioPipeTileBlock)tile).requestNutrients(amount,facing,new HashSet<>());
+                if(value == 0)continue;
+                return value;
             }
         }
         return 0;

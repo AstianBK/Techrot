@@ -140,7 +140,6 @@ public class RotrendReaverItem extends ItemBase {
                     new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -3.4, 0)
             );
         }
-
         return modifiers;
     }
 

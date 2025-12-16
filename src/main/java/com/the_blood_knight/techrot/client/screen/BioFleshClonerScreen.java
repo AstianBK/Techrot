@@ -7,8 +7,9 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 
-public class BioFleshClonerScreen extends GuiContainer {
+public class BioFleshClonerScreen extends NutrientContainer {
     private static final ResourceLocation[] FRAMES = new ResourceLocation[]{
             new ResourceLocation(Techrot.MODID,"textures/gui/container/biofleshcloner_gui_0.png"),
             new ResourceLocation(Techrot.MODID,"textures/gui/container/biofleshcloner_gui_1.png"),
@@ -60,6 +61,7 @@ public class BioFleshClonerScreen extends GuiContainer {
 
         int k = this.getNutrition(49);
         this.drawTexturedModalRect(i + 60, j + 72, 176, 20, k, 18);
+        this.nutrient.render(TextFormatting.BLUE +"Paste : "+TextFormatting.GREEN +this.tileFurnace.getField(0) +" lts",fontRenderer,mouseX,mouseY,i + 60, j + 72,49,18);
 
 
         int l = this.getCloning(34);

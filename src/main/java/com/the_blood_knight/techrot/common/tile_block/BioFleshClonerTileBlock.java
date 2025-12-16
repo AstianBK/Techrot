@@ -52,7 +52,7 @@ public class BioFleshClonerTileBlock extends TileEntityLockable implements ITick
                 Techrot.damageTick(world,pos,4);
             }
             if(this.currentNutrient<1000){
-                this.currentNutrient+=this.requestNutrient(1);
+                this.currentNutrient+=this.requestNutrient(1,pos,world);
             }
             if(currentNutrient>0 && canCloneFlesh()){
                 if(this.maxClonerTimer<=0){
@@ -85,16 +85,6 @@ public class BioFleshClonerTileBlock extends TileEntityLockable implements ITick
         }
     }
 
-    private int requestNutrient(int amount) {
-        for (EnumFacing facing : getValidFacingConnect()){
-            BlockPos offset = this.pos.offset(facing);
-            TileEntity tile = this.world.getTileEntity(offset);
-            if(tile instanceof BioPipeTileBlock){
-                return ((BioPipeTileBlock)tile).requestNutrients(amount,facing,new HashSet<>());
-            }
-        }
-        return 0;
-    }
 
     public List<EnumFacing> getValidFacingConnect(){
         IBlockState state = this.world.getBlockState(this.pos);
@@ -179,32 +169,8 @@ public class BioFleshClonerTileBlock extends TileEntityLockable implements ITick
 
 
 
-    @Override
-    public int getNutrition() {
-        return 0;
-    }
 
-    @Override
-    public void setNutrition(int value) {
 
-    }
-
-    @Override
-    public int extractNutrition(EnumFacing facing) {
-        this.currentNutrient++;
-        this.markDirty();
-        return 1;
-    }
-
-    @Override
-    public boolean canExtract(BlockPos pos, EnumFacing facing) {
-        return false;
-    }
-
-    @Override
-    public boolean canInsert(BlockPos pos, EnumFacing facing) {
-        return this.currentNutrient<1000;
-    }
 
     public int[] getSlotsForFace(EnumFacing side) {
         if (side == EnumFacing.DOWN)

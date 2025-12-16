@@ -123,10 +123,6 @@ public class BioFurnaceTileBlock extends TileEntityLockable implements ITickable
         this.furnaceCustomName = p_145951_1_;
     }
 
-    public static void registerFixesFurnace(DataFixer fixer) {
-        fixer.registerWalker(FixTypes.BLOCK_ENTITY, new ItemStackDataLists(TileEntityFurnace.class, new String[] {"Items"}));
-    }
-
     public void readFromNBT(NBTTagCompound compound)
     {
         super.readFromNBT(compound);
@@ -191,7 +187,7 @@ public class BioFurnaceTileBlock extends TileEntityLockable implements ITickable
                 Techrot.damageTick(world,pos,4);
             }
             if(this.currentNutrition<this.maxNutrient){
-                this.currentNutrition += this.requestNutrient(1);
+                this.currentNutrition += this.requestNutrient(1,pos,world);
             }
             if (this.totalCookTime>0 || !((ItemStack)this.furnaceItemStacks.get(0)).isEmpty()) {
                 if (this.canSmelt()) {
@@ -235,16 +231,7 @@ public class BioFurnaceTileBlock extends TileEntityLockable implements ITickable
         }
     }
 
-    private int requestNutrient(int amount) {
-        for (EnumFacing facing : getValidFacingConnect()){
-            BlockPos offset = this.pos.offset(facing);
-            TileEntity tile = this.world.getTileEntity(offset);
-            if(tile instanceof BioPipeTileBlock){
-                return ((BioPipeTileBlock)tile).requestNutrients(amount,facing,new HashSet<>());
-            }
-        }
-        return 0;
-    }
+
 
     public List<EnumFacing> getValidFacingConnect(){
         IBlockState state = this.world.getBlockState(this.pos);
@@ -585,32 +572,5 @@ public class BioFurnaceTileBlock extends TileEntityLockable implements ITickable
             else
                 return (T) handlerSide;
         return super.getCapability(capability, facing);
-    }
-
-    @Override
-    public int getNutrition() {
-        return this.getField(0);
-    }
-
-    @Override
-    public void setNutrition(int value) {
-        //this.setField(0,value);
-    }
-
-    @Override
-    public int extractNutrition(EnumFacing facing) {
-        this.currentNutrition++;
-        this.markDirty();
-        return 1;
-    }
-
-    @Override
-    public boolean canExtract(BlockPos pos, EnumFacing facing) {
-        return false;
-    }
-
-    @Override
-    public boolean canInsert(BlockPos pos, EnumFacing facing) {
-        return this.currentNutrition<this.maxNutrient;
     }
 }

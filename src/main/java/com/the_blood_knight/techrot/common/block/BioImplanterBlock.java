@@ -39,30 +39,6 @@ public class BioImplanterBlock extends BlockTileBase{
             Techrot.spawnPeste(worldIn,pos,rand,7);
         }
     }
-    public static void setState(boolean active, World worldIn, BlockPos pos) {
-        IBlockState iblockstate = worldIn.getBlockState(pos);
-        TileEntity tileentity = worldIn.getTileEntity(pos);
-        keepInventory = true;
-
-        if (active)
-        {
-            worldIn.setBlockState(pos, TRegistry.LIT_BIOPASTEMAKER.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
-            worldIn.setBlockState(pos, TRegistry.LIT_BIOPASTEMAKER.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
-        }
-        else
-        {
-            worldIn.setBlockState(pos, TRegistry.BIOPASTEMAKER.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
-            worldIn.setBlockState(pos, TRegistry.BIOPASTEMAKER.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
-        }
-
-        keepInventory = false;
-
-        if (tileentity != null)
-        {
-            tileentity.validate();
-            worldIn.setTileEntity(pos, tileentity);
-        }
-    }
 
     @SideOnly(Side.CLIENT)
     public BlockRenderLayer getRenderLayer()

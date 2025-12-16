@@ -78,14 +78,12 @@ public class ToxicFogParticle extends Particle {
     private float flipIfBackfaced(float rot, float prevRot, float partialTicks, Vec3d toCamera) {
         float realRot = prevRot + (rot - prevRot) * partialTicks;
 
-        // El "normal" del quad horizontal apunta hacia arriba (0,1,0)
         Vec3d normal = new Vec3d(0, 1, 0);
 
         double dot = normal.dotProduct(toCamera);
 
-        // Si da positivo → el quad está dado vuelta
         if (dot > 0) {
-            realRot += Math.PI; // girarlo 180°
+            realRot += Math.PI;
         }
 
         return realRot;
