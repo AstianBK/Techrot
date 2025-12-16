@@ -71,7 +71,7 @@ public class BioFurnaceScreen extends NutrientContainer {
         int k = this.getBurnLeftScaled(49);
         this.drawTexturedModalRect(i + 45, j + 54, 176, 35, k, 18);
 
-        this.nutrient.render(TextFormatting.BLUE +"Paste : "+TextFormatting.GREEN +this.tileFurnace.getField(0) +" lts",fontRenderer,mouseX,mouseY,i + 45, j + 54,49,18);
+        this.nutrient.render(this.tileFurnace.getField(0),fontRenderer,mouseX,mouseY,i + 45, j + 54,49,18);
 
 
         int l = this.getCookProgressScaled(18);

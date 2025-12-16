@@ -69,7 +69,7 @@ public class BioPastemakerScreen extends NutrientContainer {
         int nutrient = getNutrition(49);
 
         this.drawTexturedModalRect(i+ 114 ,j+26,176,20,nutrient+1,18);
-        this.nutrient.render(TextFormatting.BLUE +"Paste : "+TextFormatting.GREEN +this.tileFurnace.getField(1) +" lts",fontRenderer,mouseX,mouseY,i+ 114 ,j+26,49,18);
+        this.nutrient.render(this.tileFurnace.getField(1),fontRenderer,mouseX,mouseY,i+ 114 ,j+26,49,18);
 
     }
 

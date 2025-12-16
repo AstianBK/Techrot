@@ -64,7 +64,7 @@ public class BioEggMakerScreen extends NutrientContainer {
         int k = this.getNutrition(49);
         this.drawTexturedModalRect(i + 60, j + 72, 176, 20, k, 18);
 
-        this.nutrient.render(TextFormatting.BLUE +"Paste : "+TextFormatting.GREEN +this.tileFurnace.getField(0) +"lts",fontRenderer,mouseX,mouseY,i + 60, j + 72,49,18);
+        this.nutrient.render(this.tileFurnace.getField(0),fontRenderer,mouseX,mouseY,i + 60, j + 72,49,18);
 
         int l = this.getCloning(34);
         this.drawTexturedModalRect(i + 91, j + 22, 176, 0, l, 19);

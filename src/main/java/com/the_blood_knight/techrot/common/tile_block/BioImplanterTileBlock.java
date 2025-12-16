@@ -144,8 +144,8 @@ public class BioImplanterTileBlock extends TileEntity implements ITickable, ISid
         for (EnumFacing facing : getValidFacingConnect()){
             BlockPos offset = this.pos.offset(facing);
             TileEntity tile = this.world.getTileEntity(offset);
-            if(tile instanceof BioPipeTileBlock){
-                return ((BioPipeTileBlock)tile).requestNutrients(amount,facing,new HashSet<>());
+            if(tile instanceof BioPipeExtractTileBlock){
+                return ((BioPipeExtractTileBlock)tile).requestNutrients(amount,facing,new HashSet<>());
             }
         }
         return 0;

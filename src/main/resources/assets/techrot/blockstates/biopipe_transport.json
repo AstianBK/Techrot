@@ -1,0 +1,26 @@
+{
+  "multipart": [
+
+    {   "when": { "east": "true"},
+      "apply": { "model": "techrot:bioeast", "uvlock": false }
+    },
+    {   "when": { "west": "true" },
+      "apply": { "model": "techrot:biowest", "uvlock": false }
+    },
+    {   "when": { "north": "true"},
+      "apply": { "model": "techrot:bionorth", "uvlock": false }
+    },
+    {   "when": {"south": "true"},
+      "apply": { "model": "techrot:biosouth", "uvlock": false }
+    },
+    {   "when": { "up": "true"},
+      "apply": { "model": "techrot:biopipeup", "uvlock": false }
+    },
+    {   "when": {"down" :  "true"},
+      "apply": { "model": "techrot:biopipedown", "uvlock": false }
+    },
+    {
+      "apply": { "model": "techrot:biomiddle", "uvlock": false }
+    }
+  ]
+}

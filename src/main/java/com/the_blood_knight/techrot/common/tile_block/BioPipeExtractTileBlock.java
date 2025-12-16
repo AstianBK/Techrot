@@ -2,12 +2,9 @@ package com.the_blood_knight.techrot.common.tile_block;
 
 import com.the_blood_knight.techrot.Techrot;
 import com.the_blood_knight.techrot.common.api.INutritionBlock;
-import com.the_blood_knight.techrot.common.block.BioPastemakerBlock;
 import com.the_blood_knight.techrot.common.block.BioPipeBlock;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -18,12 +15,9 @@ import net.minecraft.util.math.BlockPos;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public class BioPipeTileBlock extends TileEntity implements ITickable {
+public class BioPipeExtractTileBlock extends TileEntity implements ITickable {
 
     public Map<EnumFacing, BlockPos> connections = Techrot.main.getMapEmpty();
-    public List<BlockPos> cores = new ArrayList<>();
-    public List<BlockPos> features = new ArrayList<>();
-
     public boolean loaded = false;
     public boolean north = false;
     public boolean south = false;
@@ -70,7 +64,7 @@ public class BioPipeTileBlock extends TileEntity implements ITickable {
             BlockPos p = pos.offset(f);
             if (world.isBlockLoaded(p)) {
                 TileEntity te = world.getTileEntity(p);
-                if (te instanceof BioPipeTileBlock || te instanceof BioPastemakerTileBlock || te instanceof INutritionBlock) list.add(p);
+                if (te instanceof BioPipeExtractTileBlock || te instanceof BioPastemakerTileBlock || te instanceof INutritionBlock) list.add(p);
             }
         }
         return list.toArray(new BlockPos[0]);
@@ -118,7 +112,6 @@ public class BioPipeTileBlock extends TileEntity implements ITickable {
         return null;
     }
     public int requestNutrients(int amount, @Nullable EnumFacing from,Set<BlockPos> visited) {
-
         if(visited.size()>50){
             return 0;
         }
@@ -139,8 +132,8 @@ public class BioPipeTileBlock extends TileEntity implements ITickable {
             if (!world.isBlockLoaded(nextPos)) continue;
 
             TileEntity te = world.getTileEntity(nextPos);
-            if (te instanceof BioPipeTileBlock) {
-                int got = ((BioPipeTileBlock)te).requestNutrients(amount, f, visited);
+            if (te instanceof BioPipeExtractTileBlock) {
+                int got = ((BioPipeExtractTileBlock)te).requestNutrients(amount, f, visited);
                 if (got > 0) return got;
             }
 
@@ -176,23 +169,4 @@ public class BioPipeTileBlock extends TileEntity implements ITickable {
         return list;
     }
 
-    public boolean isConnectTo(BlockPos pos,EnumFacing facing){
-        IBlockState state = this.world.getBlockState(this.pos);
-        if(facing!=EnumFacing.NORTH && state.getValue(BioPipeBlock.NORTH) && this.pos.north().equals(pos)){
-            return true;
-        }
-        if(facing!=EnumFacing.SOUTH &&state.getValue(BioPipeBlock.SOUTH) && this.pos.south().equals(pos)){
-            return true;
-        }
-        if(facing!=EnumFacing.EAST &&state.getValue(BioPipeBlock.EAST) && this.pos.east().equals(pos)){
-            return true;
-        }
-        if(facing!=EnumFacing.WEST &&state.getValue(BioPipeBlock.WEST) && this.pos.west().equals(pos)){
-            return true;
-        }
-        if(facing!=EnumFacing.UP &&state.getValue(BioPipeBlock.UP) && this.pos.up().equals(pos)){
-            return true;
-        }
-        return facing!=EnumFacing.DOWN && state.getValue(BioPipeBlock.DOWN) && this.pos.down().equals(pos);
-    }
 }

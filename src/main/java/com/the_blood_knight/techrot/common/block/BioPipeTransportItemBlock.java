@@ -4,7 +4,6 @@ import com.the_blood_knight.techrot.Techrot;
 import com.the_blood_knight.techrot.common.TRSounds;
 import com.the_blood_knight.techrot.common.tile_block.BioPipeExtractTileBlock;
 import net.minecraft.block.Block;
-
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -26,7 +25,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-public class BioPipeBlock extends BlockTileBase{
+public class BioPipeTransportItemBlock extends BlockTileBase{
     public static final PropertyBool EAST = PropertyBool.create("east");
     public static final PropertyBool WEST = PropertyBool.create("west");
     public static final PropertyBool SOUTH = PropertyBool.create("south");
@@ -36,7 +35,7 @@ public class BioPipeBlock extends BlockTileBase{
     protected static final AxisAlignedBB FLAT_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.125D, 1.0D);
     protected static final AxisAlignedBB ASCENDING_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D);
 
-    public BioPipeBlock(Material material,String name) {
+    public BioPipeTransportItemBlock(Material material, String name) {
         super(material,name);
         this.setDefaultState(this.blockState.getBaseState().withProperty(UP,false).withProperty(DOWN,false).withProperty(SOUTH,false).withProperty(NORTH,false).withProperty(EAST,false).withProperty(WEST,false));
     }
@@ -100,11 +99,11 @@ public class BioPipeBlock extends BlockTileBase{
         IBlockState state = newPipe.state;
         IBlockState sourceBlock = worldIn.getBlockState(pos.offset(facing.getOpposite()));
         if (sourceBlock.getBlock() instanceof BlockTileBase){
-            if(sourceBlock.getBlock() instanceof BioPipeBlock){
-                Pipe pipe = (new BioPipeBlock.Pipe(worldIn, pos.offset(facing.getOpposite()), sourceBlock));
+            if(sourceBlock.getBlock() instanceof BioPipeTransportItemBlock){
+                Pipe pipe = (new BioPipeTransportItemBlock.Pipe(worldIn, pos.offset(facing.getOpposite()), sourceBlock));
                 pipe.connectFacing(facing);
             }
-            Pipe pipeSource = (new BioPipeBlock.Pipe(worldIn, pos, state));
+            Pipe pipeSource = (new BioPipeTransportItemBlock.Pipe(worldIn, pos, state));
             pipeSource.connectToPipe(pos.offset(facing.getOpposite()),facing);
             state = pipeSource.state;
             return worldIn.isRemote ? state : pipeSource.state;
@@ -117,29 +116,14 @@ public class BioPipeBlock extends BlockTileBase{
         return state;
     }
 
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
-        if (!worldIn.isRemote) {
-            final IBlockState currentState = worldIn.getBlockState(pos);
-            boolean flag = false;
-        }
-    }
     
 
     protected Pipe updateDir(World worldIn, BlockPos pos, IBlockState state, boolean initialPlacement,boolean multi) {
-        return (new BioPipeBlock.Pipe(worldIn, pos, state)).place(multi, initialPlacement);
+        return (new BioPipeTransportItemBlock.Pipe(worldIn, pos, state)).place(multi, initialPlacement);
     }
     
     public EnumPushReaction getPushReaction(IBlockState state) {
         return EnumPushReaction.NORMAL;
-    }
-
-    @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        TileEntity entity = worldIn.getTileEntity(pos);
-        if(entity instanceof BioPipeExtractTileBlock && !worldIn.isRemote){
-            //((BioPipeExtractTileBlock) entity).requestNutrients(true);
-        }
-        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
     }
 
     @SideOnly(Side.CLIENT)
@@ -224,7 +208,7 @@ public class BioPipeBlock extends BlockTileBase{
     public static boolean isPipeValid(World level, BlockPos pos, int maxValue){
         IBlockState state = level.getBlockState(pos);
 
-        if(!(state.getBlock() instanceof BioPipeBlock)){
+        if(!(state.getBlock() instanceof BioPipeTransportItemBlock)){
             return false;
         }
         BioPipeExtractTileBlock bioPipe = (BioPipeExtractTileBlock) level.getTileEntity(pos);
@@ -234,13 +218,13 @@ public class BioPipeBlock extends BlockTileBase{
     public static boolean isPipeBlock(IBlockState state)
     {
         Block block = state.getBlock();
-        return block instanceof BioPipeBlock;
+        return block instanceof BioPipeTransportItemBlock;
     }
 
     public static class Pipe {
         private final World world;
         private final BlockPos pos;
-        private final BioPipeBlock block;
+        private final BioPipeTransportItemBlock block;
         private IBlockState state;
         private final BioPipeExtractTileBlock pipe;
         public Pipe(World worldIn, BlockPos pos, IBlockState state)
@@ -248,25 +232,25 @@ public class BioPipeBlock extends BlockTileBase{
             this.world = worldIn;
             this.pos = pos;
             this.state = state;
-            this.block = (BioPipeBlock)state.getBlock();
+            this.block = (BioPipeTransportItemBlock)state.getBlock();
             this.pipe = (BioPipeExtractTileBlock) worldIn.getTileEntity(pos);
         }
 
 
         
         @Nullable
-        private BioPipeBlock.Pipe findPipeAt(BlockPos pos) {
+        private BioPipeTransportItemBlock.Pipe findPipeAt(BlockPos pos) {
             IBlockState iblockstate = this.world.getBlockState(pos);
 
-            if (BioPipeBlock.isPipeBlock(iblockstate)) {
-                return new BioPipeBlock.Pipe(this.world, pos, iblockstate);
+            if (BioPipeTransportItemBlock.isPipeBlock(iblockstate)) {
+                return new BioPipeTransportItemBlock.Pipe(this.world, pos, iblockstate);
             } else {
                 return null;
             }
         }
 
         
-        private boolean canConnectTo(BioPipeBlock.Pipe rail) {
+        private boolean canConnectTo(BioPipeTransportItemBlock.Pipe rail) {
             boolean maxDirection = this.pipe.getCountConnection() < 2;
 
             return maxDirection;
@@ -386,7 +370,7 @@ public class BioPipeBlock extends BlockTileBase{
 
 
         }
-        private void connectTo(BioPipeBlock.Pipe rail,EnumFacing facing) {
+        private void connectTo(BioPipeTransportItemBlock.Pipe rail, EnumFacing facing) {
             BlockPos posNorth = this.pos.north();
             BlockPos posSouth = this.pos.south();
             BlockPos posWest = this.pos.west();
@@ -601,7 +585,7 @@ public class BioPipeBlock extends BlockTileBase{
         }
 
         private boolean hasNeighborPipe(BlockPos posIn,EnumFacing facing,boolean canConnect) {
-            BioPipeBlock.Pipe blockrailbase$rail = this.findPipeAt(posIn);
+            BioPipeTransportItemBlock.Pipe blockrailbase$rail = this.findPipeAt(posIn);
             if(blockrailbase$rail==null){
                 return isBlockValid(world,facing,posIn, 4);
             }
@@ -633,7 +617,7 @@ public class BioPipeBlock extends BlockTileBase{
             return world.getBlockState(posIn).getBlock() instanceof BioFurnaceBlock;
         }
 
-        public BioPipeBlock.Pipe place(boolean canConnect, boolean initialPlacement) {
+        public BioPipeTransportItemBlock.Pipe place(boolean canConnect, boolean initialPlacement) {
             BlockPos blockposNorth = this.pos.north();
             BlockPos blockposSouth = this.pos.south();
             BlockPos blockposWest = this.pos.west();
@@ -677,7 +661,7 @@ public class BioPipeBlock extends BlockTileBase{
                 this.world.setBlockState(this.pos, this.state, 3);
                 for (Map.Entry<EnumFacing,BlockPos> entry : map.entrySet()){
                     if(entry.getValue()==null)continue;
-                    BioPipeBlock.Pipe pipe = this.findPipeAt(entry.getValue());
+                    BioPipeTransportItemBlock.Pipe pipe = this.findPipeAt(entry.getValue());
                     if(pipe!=null && pipe.canConnectTo(this)){
                         pipe.connectTo(this,entry.getKey());
                     }

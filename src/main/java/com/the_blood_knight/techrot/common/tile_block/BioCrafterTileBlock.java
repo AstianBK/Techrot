@@ -143,8 +143,8 @@ public class BioCrafterTileBlock extends TileEntity implements ITickable, ISided
         for (EnumFacing facing : getValidFacingConnect()){
             BlockPos offset = this.pos.offset(facing);
             TileEntity tile = this.world.getTileEntity(offset);
-            if(tile instanceof BioPipeTileBlock){
-                int value = ((BioPipeTileBlock)tile).requestNutrients(amount,facing,new HashSet<>());
+            if(tile instanceof BioPipeExtractTileBlock){
+                int value = ((BioPipeExtractTileBlock)tile).requestNutrients(amount,facing,new HashSet<>());
                 if(value == 0)continue;
                 return value;
             }
