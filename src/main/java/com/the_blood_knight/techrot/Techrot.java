@@ -5,6 +5,7 @@ import com.the_blood_knight.techrot.client.particles.ToxicFogParticle;
 import com.the_blood_knight.techrot.common.TRSounds;
 import com.the_blood_knight.techrot.common.TRegistry;
 import com.the_blood_knight.techrot.common.api.ITechRotPlayer;
+import com.the_blood_knight.techrot.common.block.BioPipeTransportItemBlock;
 import com.the_blood_knight.techrot.common.capacity.TechrotPlayer;
 import com.the_blood_knight.techrot.common.entity.TEntityRegister;
 import com.the_blood_knight.techrot.common.proxy.CommonProxy;
@@ -72,6 +73,8 @@ public class Techrot
         GameRegistry.registerTileEntity(BioCrafterTileBlock.class,new ResourceLocation(MODID,"biocrafter"));
         GameRegistry.registerTileEntity(BioImplanterTileBlock.class,new ResourceLocation(MODID,"bioimplanter"));
         GameRegistry.registerTileEntity(BioPipeExtractTileBlock.class,new ResourceLocation(MODID,"biopipe"));
+        GameRegistry.registerTileEntity(BioPipeTransportItemTileBlock.class,new ResourceLocation(MODID,"biopipe_transport"));
+
         GameRegistry.registerTileEntity(BioPastemakerTileBlock.class,new ResourceLocation(MODID,"biopastemaker"));
         GameRegistry.registerTileEntity(BioFurnaceTileBlock.class,new ResourceLocation(MODID,"biofurnace"));
         GameRegistry.registerTileEntity(BioFleshClonerTileBlock.class,new ResourceLocation(MODID,"biofleshcloner"));

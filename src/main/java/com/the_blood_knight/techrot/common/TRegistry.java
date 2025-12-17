@@ -81,6 +81,8 @@ public class TRegistry {
     public static final BlockBase LIT_BIOPASTEMAKER = new BioPastemakerBlock(Material.CACTUS,"lit_biopastemaker",true).setCreativeTab(null);
 
     public static final BlockBase BIOPIPE = new BioPipeBlock(Material.CACTUS,"biopipe");
+    public static final BlockBase BIOPIPE_TRANSPORT = new BioPipeTransportItemBlock(Material.CACTUS,"biopipe_transport");
+
     public static final BlockBase BIOEGGMAKER = new BioEggMakerBlock(Material.CACTUS,"bioeggmaker",false);
     public static final BlockBase LIT_BIOEGGMAKER = new BioEggMakerBlock(Material.CACTUS,"lit_bioeggmaker",true).setCreativeTab(null);
     public static final BlockBase BIOFLESHCLONER = new BioFleshClonerBlock(Material.CACTUS,"biofleshcloner",false);
