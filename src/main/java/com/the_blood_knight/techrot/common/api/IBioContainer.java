@@ -1,5 +1,7 @@
 package com.the_blood_knight.techrot.common.api;
 
-public interface IBioContainer {
+import net.minecraft.item.ItemStack;
 
+public interface IBioContainer {
+    ItemStack getExtractItem();
 }

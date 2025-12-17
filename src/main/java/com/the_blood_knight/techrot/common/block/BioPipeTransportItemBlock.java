@@ -2,8 +2,10 @@ package com.the_blood_knight.techrot.common.block;
 
 import com.the_blood_knight.techrot.Techrot;
 import com.the_blood_knight.techrot.common.TRSounds;
-import com.the_blood_knight.techrot.common.tile_block.BioPipeExtractTileBlock;
+import com.the_blood_knight.techrot.common.tile_block.BioPipeTransportItemTileBlock;
+import com.the_blood_knight.techrot.common.tile_block.BioPipeTransportItemTileBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockChest;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -23,6 +25,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
+import java.util.HashMap;
 import java.util.Map;
 
 public class BioPipeTransportItemBlock extends BlockTileBase{
@@ -58,7 +61,7 @@ public class BioPipeTransportItemBlock extends BlockTileBase{
     @Nullable
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new BioPipeExtractTileBlock();
+        return new BioPipeTransportItemTileBlock();
     }
 
 
@@ -98,7 +101,7 @@ public class BioPipeTransportItemBlock extends BlockTileBase{
         Pipe newPipe = this.updateDir(worldIn, pos, this.getStateFromMeta(meta), true,false);
         IBlockState state = newPipe.state;
         IBlockState sourceBlock = worldIn.getBlockState(pos.offset(facing.getOpposite()));
-        if (sourceBlock.getBlock() instanceof BlockTileBase){
+        if (sourceBlock.getBlock() instanceof BlockTileBase || sourceBlock.getBlock() instanceof BlockChest){
             if(sourceBlock.getBlock() instanceof BioPipeTransportItemBlock){
                 Pipe pipe = (new BioPipeTransportItemBlock.Pipe(worldIn, pos.offset(facing.getOpposite()), sourceBlock));
                 pipe.connectFacing(facing);
@@ -107,8 +110,6 @@ public class BioPipeTransportItemBlock extends BlockTileBase{
             pipeSource.connectToPipe(pos.offset(facing.getOpposite()),facing);
             state = pipeSource.state;
             return worldIn.isRemote ? state : pipeSource.state;
-        }else {
-            //state = ;
         }
 
         worldIn.playSound(null,pos.getX(),pos.getY(),pos.getZ(), TRSounds.BIOPIPE_BLOCK_PLACE,SoundCategory.PLAYERS,1.0F,1.0F);
@@ -187,18 +188,20 @@ public class BioPipeTransportItemBlock extends BlockTileBase{
     }
     public static boolean isBlockValid(World level,EnumFacing facing, BlockPos pos, int maxValue){
         IBlockState state = level.getBlockState(pos);
-
+        if(state.getBlock() instanceof BlockChest){
+            return true;
+        }
         if(!(state.getBlock() instanceof BlockTileBase)){
             return false;
         }
 
         if(((BlockTileBase)state.getBlock()).validConnectPipe(state,facing)){
-
             return true;
         }
+
         if(!isPipeBlock(level.getBlockState(pos)))return false;
-        BioPipeExtractTileBlock bioPipe = (BioPipeExtractTileBlock)level.getTileEntity(pos) ;
-        return isPipeBlock(state) && bioPipe.getCountConnection()<=maxValue;
+        BioPipeTransportItemTileBlock bioPipe = (BioPipeTransportItemTileBlock)level.getTileEntity(pos) ;
+        return bioPipe.getCountConnection()<=maxValue;
     }
 
     private static boolean isCore(World level, BlockPos pos) {
@@ -208,10 +211,13 @@ public class BioPipeTransportItemBlock extends BlockTileBase{
     public static boolean isPipeValid(World level, BlockPos pos, int maxValue){
         IBlockState state = level.getBlockState(pos);
 
+        if(state.getBlock() instanceof BlockChest){
+            return true;
+        }
         if(!(state.getBlock() instanceof BioPipeTransportItemBlock)){
             return false;
         }
-        BioPipeExtractTileBlock bioPipe = (BioPipeExtractTileBlock) level.getTileEntity(pos);
+        BioPipeTransportItemTileBlock bioPipe = (BioPipeTransportItemTileBlock) level.getTileEntity(pos);
         return isPipeBlock(state) && bioPipe.getCountConnection()<=maxValue;
     }
 
@@ -226,14 +232,14 @@ public class BioPipeTransportItemBlock extends BlockTileBase{
         private final BlockPos pos;
         private final BioPipeTransportItemBlock block;
         private IBlockState state;
-        private final BioPipeExtractTileBlock pipe;
+        private final BioPipeTransportItemTileBlock pipe;
         public Pipe(World worldIn, BlockPos pos, IBlockState state)
         {
             this.world = worldIn;
             this.pos = pos;
             this.state = state;
             this.block = (BioPipeTransportItemBlock)state.getBlock();
-            this.pipe = (BioPipeExtractTileBlock) worldIn.getTileEntity(pos);
+            this.pipe = (BioPipeTransportItemTileBlock) worldIn.getTileEntity(pos);
         }
 
 
@@ -271,42 +277,32 @@ public class BioPipeTransportItemBlock extends BlockTileBase{
             boolean south = false;
             boolean up = false;
             boolean down = false;
-            Map<EnumFacing,BlockPos> map = Techrot.main.getMapEmpty();
-            map.put(facing,sourcePos);
             if(ns){
                 if(isBlockValid(world,EnumFacing.SOUTH,posNorth, 6)){
-                    map.put(EnumFacing.NORTH,posNorth);
                     north = true;
                 }
                 if(isBlockValid(world,EnumFacing.NORTH,posSouth, 6)){
-                    map.put(EnumFacing.SOUTH,posSouth);
                     south = true;
                 }
             }
             if(we){
                 if(isBlockValid(world,EnumFacing.EAST,posWest, 6)){
-                    map.put(EnumFacing.WEST,posWest);
                     west = true;
                 }
                 if(isBlockValid(world,EnumFacing.WEST,posEast, 6)){
-                    map.put(EnumFacing.EAST,posEast);
                     east = true;
                 }
             }
             if(du){
                 if(isBlockValid(world,EnumFacing.UP,posDown, 6)){
-                    map.put(EnumFacing.DOWN,posDown);
                     down = true;
                 }
                 if(isBlockValid(world,EnumFacing.DOWN,posUp, 6)){
-                    map.put(EnumFacing.UP,posUp);
                     up = true;
                 }
             }
             this.state = this.state.withProperty(EAST,east).withProperty(WEST,west).withProperty(NORTH,north).withProperty(SOUTH,south).withProperty(UP,up).withProperty(DOWN,down);
             this.world.setBlockState(pos,state,3);
-
-            ((BioPipeExtractTileBlock)world.getTileEntity(pos)).connections=map;
         }
         public void connectFacing(EnumFacing facing) {
             boolean north = this.state.getValue(NORTH);
@@ -315,8 +311,6 @@ public class BioPipeTransportItemBlock extends BlockTileBase{
             boolean east = this.state.getValue(EAST);
             boolean up = this.state.getValue(UP);
             boolean down = this.state.getValue(DOWN);
-            Map<EnumFacing,BlockPos> map = ((BioPipeExtractTileBlock)this.world.getTileEntity(pos)).connections;
-            map.put(facing,this.pos.offset(facing));
             if(this.pipe.getCountConnection()<1){
                 if(facing == EnumFacing.EAST || facing == EnumFacing.WEST){
                     west = true;
@@ -365,8 +359,6 @@ public class BioPipeTransportItemBlock extends BlockTileBase{
 
             this.state = this.state.withProperty(EAST,east).withProperty(WEST,west).withProperty(NORTH,north).withProperty(SOUTH,south).withProperty(UP,up).withProperty(DOWN,down);
             this.world.setBlockState(pos,state,3);
-
-            ((BioPipeExtractTileBlock)world.getTileEntity(pos)).connections=map;
 
 
         }
@@ -581,7 +573,7 @@ public class BioPipeTransportItemBlock extends BlockTileBase{
             this.world.setBlockState(pos,state,3);
 
 
-            ((BioPipeExtractTileBlock)this.world.getTileEntity(pos)).connections=map;
+            
         }
 
         private boolean hasNeighborPipe(BlockPos posIn,EnumFacing facing,boolean canConnect) {
@@ -613,9 +605,6 @@ public class BioPipeTransportItemBlock extends BlockTileBase{
             }
         }
 
-        private boolean hasNeighborBioBlock(BlockPos posIn) {
-            return world.getBlockState(posIn).getBlock() instanceof BioFurnaceBlock;
-        }
 
         public BioPipeTransportItemBlock.Pipe place(boolean canConnect, boolean initialPlacement) {
             BlockPos blockposNorth = this.pos.north();
@@ -667,7 +656,6 @@ public class BioPipeTransportItemBlock extends BlockTileBase{
                     }
                 }
             }
-            ((BioPipeExtractTileBlock)world.getTileEntity(pos)).connections=map;
             return this;
         }
 
@@ -684,8 +672,6 @@ public class BioPipeTransportItemBlock extends BlockTileBase{
             boolean up = this.state.getValue(UP);
             boolean down = this.state.getValue(DOWN);
             if(this.pipe.getCountConnection()<2)return;
-            Map<EnumFacing,BlockPos> map = this.pipe.connections;
-            map.put(facing.getOpposite(),null);
             if(facing == EnumFacing.EAST){
                 west = false;
             }
@@ -707,7 +693,6 @@ public class BioPipeTransportItemBlock extends BlockTileBase{
             this.state = this.state.withProperty(EAST,east).withProperty(WEST,west).withProperty(NORTH,north).withProperty(SOUTH,south).withProperty(UP,up).withProperty(DOWN,down);
             this.world.setBlockState(this.pos, this.state, 3);
 
-            ((BioPipeExtractTileBlock)this.world.getTileEntity(pos)).connections = map;
         }
 
 

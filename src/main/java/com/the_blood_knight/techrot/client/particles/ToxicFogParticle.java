@@ -92,37 +92,37 @@ public class ToxicFogParticle extends Particle {
     public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks,
                                float rotationX, float rotationZ, float rotationYZ,
                                float rotationXY, float rotationXZ) {
+        GlStateManager.color(1F, 1F, 1F, 1F);
 
-        // ==== CONFIG DE RENDER ====
+
         GlStateManager.enableDepth();
         GlStateManager.depthMask(false);
         GlStateManager.enableBlend();
-        GlStateManager.blendFunc(
+
+        GlStateManager.tryBlendFuncSeparate(
                 GlStateManager.SourceFactor.SRC_ALPHA,
-                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA
+                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
+                GlStateManager.SourceFactor.ONE,
+                GlStateManager.DestFactor.ZERO
         );
 
         Minecraft.getMinecraft().getTextureManager().bindTexture(tex);
-
         int brightness = this.getBrightnessForRender(partialTicks);
         int lx = brightness >> 16 & 65535;
         int ly = brightness & 65535;
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lx, ly);
 
-        // ==========================
 
         Tessellator tess = Tessellator.getInstance();
         BufferBuilder vb = tess.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
 
-        // POSICIÓN INTERPOLADA
         double x = this.prevPosX + (this.posX - this.prevPosX) * partialTicks - interpPosX;
         double y = this.prevPosY + (this.posY - this.prevPosY) * partialTicks - interpPosY;
         double z = this.prevPosZ + (this.posZ - this.prevPosZ) * partialTicks - interpPosZ;
 
         float size = this.particleScale;
 
-        // ======== ROTACIÓN + FLIP ========
         Entity cam = Minecraft.getMinecraft().getRenderViewEntity();
 
         Vec3d toCamera = new Vec3d(
@@ -154,8 +154,6 @@ public class ToxicFogParticle extends Particle {
 
         float rx4 = x4 * cos - z4 * sin;
         float rz4 = x4 * sin + z4 * cos;
-
-        // ======== RENDER QUAD HORIZONTAL ========
         vb.pos(x + rx1, y, z + rz1).tex(0, 1)
                 .color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha)
                 .lightmap(lx, ly).endVertex();

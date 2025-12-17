@@ -3,6 +3,7 @@ package com.the_blood_knight.techrot.common.tile_block;
 import com.google.common.collect.Lists;
 import com.the_blood_knight.techrot.Techrot;
 import com.the_blood_knight.techrot.common.TRegistry;
+import com.the_blood_knight.techrot.common.api.IBioContainer;
 import com.the_blood_knight.techrot.common.api.INutritionBlock;
 import com.the_blood_knight.techrot.common.block.BioFleshClonerBlock;
 import com.the_blood_knight.techrot.common.block.BioFurnaceBlock;
@@ -28,7 +29,7 @@ import net.minecraft.util.math.BlockPos;
 import java.util.HashSet;
 import java.util.List;
 
-public class BioFleshClonerTileBlock extends TileEntityLockable implements ITickable, ISidedInventory, INutritionBlock {
+public class BioFleshClonerTileBlock extends TileEntityLockable implements ITickable, IBioContainer, ISidedInventory, INutritionBlock {
     private static final int[] SLOTS_TOP = new int[] {0};
     private static final int[] SLOTS_BOTTOM = new int[] {2, 1};
     private static final int[] SLOTS_SIDES = new int[] {1};
@@ -376,5 +377,10 @@ public class BioFleshClonerTileBlock extends TileEntityLockable implements ITick
             else
                 return (T) handlerSide;
         return super.getCapability(capability, facing);
+    }
+
+    @Override
+    public ItemStack getExtractItem() {
+        return this.container.get(2);
     }
 }

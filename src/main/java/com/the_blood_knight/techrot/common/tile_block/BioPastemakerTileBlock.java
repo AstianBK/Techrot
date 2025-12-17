@@ -3,8 +3,10 @@ package com.the_blood_knight.techrot.common.tile_block;
 import com.google.common.collect.Lists;
 import com.the_blood_knight.techrot.Techrot;
 import com.the_blood_knight.techrot.common.api.INutritionBlock;
+import com.the_blood_knight.techrot.common.block.BioFurnaceBlock;
 import com.the_blood_knight.techrot.common.block.BioPastemakerBlock;
 import com.the_blood_knight.techrot.common.container.BioPastemakerContainer;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
@@ -23,6 +25,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 public class BioPastemakerTileBlock extends TileEntityLockable implements ITickable, ISidedInventory {
@@ -33,6 +37,7 @@ public class BioPastemakerTileBlock extends TileEntityLockable implements ITicka
     private int currentNutrition = 0;
     private int eatTime = 0;
     private int totalEatTime = 0;
+    private int extractTime = 0;
     private NonNullList<ItemStack> container = NonNullList.<ItemStack>withSize(3, ItemStack.EMPTY);
     private List<BlockPos> parents = new ArrayList<>();
     private List<Item> foods = Lists.newArrayList(Items.BEEF,Items.MUTTON,Items.SPIDER_EYE,Items.CHICKEN,Items.FISH,Items.PORKCHOP,Items.EGG,Items.ROTTEN_FLESH,Items.RABBIT, Items.RABBIT_FOOT);
@@ -46,9 +51,14 @@ public class BioPastemakerTileBlock extends TileEntityLockable implements ITicka
         boolean flag1 = false;
         if(!this.isHungry())return;
         if (!this.world.isRemote) {
+            this.extractTime++;
             ItemStack itemstack = getEatItem();
             if(this.isEating() && this.eatTime%10==0){
                 Techrot.damageTick(world,pos,7);
+            }
+            if(extractTime==10){
+                extractTime=0;
+                this.extractFood();
             }
             if (this.isEating() || !itemstack.isEmpty()) {
 
@@ -90,6 +100,104 @@ public class BioPastemakerTileBlock extends TileEntityLockable implements ITicka
         }
     }
 
+    private void extractFood() {
+        if(this.container.get(0).getCount()==64 && this.container.get(1).getCount()==64 && this.container.get(2).getCount()==64){
+            return;
+        }
+        for (EnumFacing facing : getValidFacingConnect()){
+            BlockPos offset = pos.offset(facing);
+            TileEntity tile = world.getTileEntity(offset);
+            if(tile instanceof BioPipeTransportItemTileBlock){
+                if(!((BioPipeTransportItemTileBlock)tile).getConnectionFacing().contains(facing.getOpposite()))continue;
+                boolean isEmpty0 = this.container.get(0).isEmpty();
+                boolean isEmpty1 = this.container.get(1).isEmpty();
+                boolean isEmpty2 = this.container.get(2).isEmpty();
+                ItemStack currentItem = ((BioPipeTransportItemTileBlock)tile).requestNutrients(null,new HashSet<>(), this.foods);
+
+                if(isEmpty0){
+                    ItemStack copy = new ItemStack(currentItem.getItem());
+                    copy.setCount(1);
+                    currentItem.shrink(1);
+                    this.container.set(0,copy);
+                    return;
+                }else {
+                    if(this.container.get(0).getCount()<64){
+                        ItemStack slot0=((BioPipeTransportItemTileBlock)tile).requestNutrients(null,new HashSet<>(), Arrays.asList(this.container.get(0).getItem()));
+                        if (!slot0.isEmpty()){
+                            this.container.get(0).grow(1);
+                            slot0.shrink(1);
+                            return;
+                        }
+                    }
+                }
+
+                if(isEmpty1){
+                    ItemStack copy = new ItemStack(currentItem.getItem());
+                    currentItem.shrink(1);
+                    this.container.set(1,copy);
+                    return;
+                }else {
+
+                    if(this.container.get(1).getCount()<64){
+                        ItemStack slot1=((BioPipeTransportItemTileBlock)tile).requestNutrients(null,new HashSet<>(), Arrays.asList(this.container.get(1).getItem()));
+
+                        if(!slot1.isEmpty()){
+                            this.container.get(1).grow(1);
+                            slot1.shrink(1);
+                            return;
+                        }
+                    }
+
+                }
+
+                if(isEmpty2){
+                    ItemStack copy = new ItemStack(currentItem.getItem());
+                    copy.setCount(1);
+                    currentItem.shrink(1);
+                    this.container.set(2,copy);
+                    return;
+                }else {
+                    if(this.container.get(2).getCount()<64){
+                        ItemStack slot2=((BioPipeTransportItemTileBlock)tile).requestNutrients(null,new HashSet<>(), Arrays.asList(this.container.get(2).getItem()));
+                        if(!slot2.isEmpty()){
+                            this.container.get(2).grow(1);
+                            slot2.shrink(1);
+                            return;
+                        }
+                    }
+                }
+                if(this.container.get(0).getCount()==64 && this.container.get(1).getCount()==64 && this.container.get(2).getCount()==64){
+                    return;
+                }
+            }
+        }
+
+    }
+
+    public List<EnumFacing> getValidFacingConnect(){
+        IBlockState state = this.world.getBlockState(this.pos);
+        switch (state.getValue(BioFurnaceBlock.FACING)){
+            case EAST:{
+
+                return Lists.newArrayList(EnumFacing.WEST,EnumFacing.SOUTH,EnumFacing.NORTH);
+            }
+            case WEST:{
+                return Lists.newArrayList(EnumFacing.EAST,EnumFacing.SOUTH,EnumFacing.NORTH);
+
+            }
+            case SOUTH:{
+                return Lists.newArrayList(EnumFacing.WEST,EnumFacing.EAST,EnumFacing.NORTH);
+
+            }
+            case NORTH:{
+                return Lists.newArrayList(EnumFacing.WEST,EnumFacing.SOUTH,EnumFacing.EAST);
+
+            }
+            default:{
+                return Lists.newArrayList();
+            }
+        }
+    }
 
     public int extractNutrients(int amount) {
         if (amount <= 0) return 0;
@@ -179,7 +287,7 @@ public class BioPastemakerTileBlock extends TileEntityLockable implements ITicka
             flag = true;
         }
         if(flag){
-            this.currentNutrition=Math.min(this.maxNutrition,this.currentNutrition+1000);
+            this.currentNutrition=Math.min(this.maxNutrition,this.currentNutrition+200);
 
         }
     }
