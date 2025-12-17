@@ -1,4 +1,9 @@
 {
+    "block_interact": {
+        "sounds": [
+            "techrot:block_interact"
+        ]
+    },
     "implantedplayer_breathe": {
         "sounds": [
             "techrot:implantedplayer_breathe"

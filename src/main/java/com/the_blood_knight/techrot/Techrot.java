@@ -183,10 +183,12 @@ public class Techrot
             }
         }
         @SubscribeEvent
-        public void onPlayerChat(ServerChatEvent event) {
-            net.minecraft.entity.player.EntityPlayerMP player = event.getPlayer();
+        public static void onPlayerChat(ServerChatEvent event) {
+            EntityPlayerMP player = event.getPlayer();
 
-            player.world.playSound(
+            if (!Util.hasTechrotHead(player)) return;
+
+            player.getServerWorld().playSound(
                     null,
                     player.posX,
                     player.posY,

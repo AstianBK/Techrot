@@ -14,6 +14,14 @@ public class TRSounds {
 
     public static final SoundEvent TOXICLAUNCHER_SHOOT = createSoundEvent("toxiclauncher_shoot");
 
+    public static final SoundEvent BLOCK_INTERACT = createSoundEvent("block_interact");
+
+    public static final SoundEvent ROTPLATE_BLOCK_PLACE = createSoundEvent("rotplate_block_place");
+
+    public static final SoundEvent ROTPLATE_BLOCK_STEP = createSoundEvent("rotplate_block_step");
+
+    public static final SoundEvent ROTPLATE_BLOCK_BREAK = createSoundEvent("rotplate_block_break");
+
     public static final SoundEvent BIO_EXTRACTOR_USE = createSoundEvent("bio_extractor_use");
 
     public static final SoundEvent BIOFLESHCLONER_ACTIVE = createSoundEvent("biofleshcloner_active");
@@ -35,6 +43,6 @@ public class TRSounds {
 
     public static void registerSound(RegistryEvent.Register<SoundEvent> event){
         event.getRegistry().registerAll(IMPLANTEDPLAYER_BREATHE,IMPLANTEDPLAYER_TALK,TOXICLAUNCHER_SHOOT,BIOFLESHCLONER_ACTIVE,BIOPASTEMAKER_ACTIVE,
-                BIOFURNACE_ACTIVE,BIOIMPLANTER_USE,BIOPIPE_BLOCK_BREAK,BIOPIPE_BLOCK_PLACE,BIO_EXTRACTOR_USE);
+                BIOFURNACE_ACTIVE,BIOIMPLANTER_USE,BIOPIPE_BLOCK_BREAK,BIOPIPE_BLOCK_PLACE,BIO_EXTRACTOR_USE,BLOCK_INTERACT,ROTPLATE_BLOCK_BREAK,ROTPLATE_BLOCK_PLACE,ROTPLATE_BLOCK_STEP);
     }
 }

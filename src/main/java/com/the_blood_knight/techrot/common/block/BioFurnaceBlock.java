@@ -152,9 +152,30 @@ public class BioFurnaceBlock extends BlockTileBase {
             TileEntity tileentity = worldIn.getTileEntity(pos);
 
             if (tileentity instanceof BioFurnaceTileBlock) {
-                playerIn.openGui(Techrot.main,0,worldIn,pos.getX(),pos.getY(),pos.getZ());
+
+                worldIn.playSound(
+                        null,
+                        pos.getX() + 0.5,
+                        pos.getY() + 0.5,
+                        pos.getZ() + 0.5,
+                        TRSounds.BLOCK_INTERACT,
+                        SoundCategory.BLOCKS,
+                        1.0F,
+                        1.0F
+                );
+
+                playerIn.openGui(
+                        Techrot.main,
+                        0,
+                        worldIn,
+                        pos.getX(),
+                        pos.getY(),
+                        pos.getZ()
+                );
+
                 playerIn.addStat(StatList.FURNACE_INTERACTION);
             }
+
 
             return true;
         }

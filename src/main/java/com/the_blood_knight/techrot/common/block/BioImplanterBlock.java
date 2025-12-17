@@ -57,8 +57,21 @@ public class BioImplanterBlock extends BlockTileBase{
 
 
             if (tileentity instanceof BioImplanterTileBlock) {
+
+                worldIn.playSound(
+                        null,
+                        pos.getX() + 0.5,
+                        pos.getY() + 0.5,
+                        pos.getZ() + 0.5,
+                        TRSounds.BLOCK_INTERACT,
+                        SoundCategory.BLOCKS,
+                        1.0F,
+                        1.0F
+                );
+
+
                 playerIn.openGui(Techrot.main,5,worldIn,pos.getX(),pos.getY(),pos.getZ());
-                //playerIn.addStat(StatList.FURNACE_INTERACTION);
+
             }
 
             return true;
