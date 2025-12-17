@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "gig",
+    "DND",
+    "gSg"
+  ],
+  "key": {
+    "g": {
+      "item": "techrot:rotplate"
+    },
+    "i": {
+      "item": "techrot:comp_screaming_core"
+    },
+    "D": {
+      "item": "techrot:comp_necrotic_coil"
+    },
+    "N": {
+      "item": "minecraft:nether_star"
+    },
+    "S": {
+      "item": "techrot:comp_agony_synapse"
+    }
+  },
+  "result": {
+    "item": "techrot:comp_unstable",
+    "count": 1
+  }
+}

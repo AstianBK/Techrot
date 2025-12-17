@@ -93,35 +93,26 @@ public class TRegistry {
     public static final ItemBase ROTPLATE = new ItemBase("rotplate");
 
     public static final ItemBase BIO_WRENCH = new ItemBase("bio_wrench"); // CUT-CONTENT
-
     public static final ToxicCanister TOXIC_CANISTER = new ToxicCanister("toxic_canister",true);
-
     public static final ToxicCanister TOXIC_CANISTER_EMPTY = new ToxicCanister("toxic_canister_empty",false);
     public static final ToxicLaucheritem TOXICLAUNCHER = new ToxicLaucheritem("toxiclauncher");
-
     public static final RotrendReaverItem ROTCLAWS = new RotrendReaverItem("rotclaws");
 
     //COMPONENTS
 
     public static final ItemBase COMP_AGONY_SYNAPSE = new ItemBase("comp_agony_synapse");
-
     public static final ItemBase COMP_NECROTIC_COIL = new ItemBase("comp_necrotic_coil");
-
     public static final ItemBase COMP_SCREAMING_CORE = new ItemBase("comp_screaming_core");
-
-    //IMPLANTS
+    public static final CompUnstableItem COMP_UNSTABLE = new CompUnstableItem("comp_unstable");
 
 // IMPLANTS
 
     public static final ImplantItemBase ROTPLATE_HEAD =
             new ImplantItemBase("rotplate_head1", 2);
-
     public static final ImplantItemBase ROTPLATE_CHEST =
             new ImplantItemBase("rotplate_chest1", 6);
-
     public static final ImplantItemBase ROTPLATE_ARM =
             new ImplantItemBase("rotplate_arm1", 2);
-
 
     //EFFECT
     public static Potion TECHROT_EFFECT = new TechRotEffect();
@@ -153,7 +144,7 @@ public class TRegistry {
 
 
     public static void registerItems(IForgeRegistry<Item> registry) {
-        registry.registerAll(BIO_EXTRACTOR,BIO_CUBE,BIO_CHUNK,COMP_AGONY_SYNAPSE,COMP_NECROTIC_COIL,COMP_SCREAMING_CORE,ROTPLATE,ROTPLATE_HEAD,ROTPLATE_CHEST,ROTPLATE_ARM,TOXICLAUNCHER,ROTCLAWS,TOXIC_CANISTER,TOXIC_CANISTER_EMPTY);
+        registry.registerAll(BIO_EXTRACTOR,BIO_CUBE,BIO_CHUNK,COMP_AGONY_SYNAPSE,COMP_NECROTIC_COIL,COMP_SCREAMING_CORE,COMP_UNSTABLE,ROTPLATE,ROTPLATE_HEAD,ROTPLATE_CHEST,ROTPLATE_ARM,TOXICLAUNCHER,ROTCLAWS,TOXIC_CANISTER,TOXIC_CANISTER_EMPTY);
     }
 
     public static void registerMobEffect(RegistryEvent.Register<Potion> potionRegister){

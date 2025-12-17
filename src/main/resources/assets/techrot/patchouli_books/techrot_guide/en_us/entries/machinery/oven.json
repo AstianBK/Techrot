@@ -7,7 +7,7 @@
     {
       "type": "crafting",
       "recipe": "techrot:biofurnace",
-      "text": "Increases it's skin temperature to dangerous levels rapidly cooking anything inside it."
+      "text": "Rapidly elevates its internal skin temperature, turning the chamber into a living furnace that violently cooks and destroys anything trapped within."
     }
   ]
 }

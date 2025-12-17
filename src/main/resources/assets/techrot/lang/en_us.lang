@@ -25,6 +25,7 @@ item.bio_chunk.name=Rot Chunk
 item.comp_agony_synapse.name=Agony Synapse
 item.comp_necrotic_coil.name=Necrotic Coil
 item.comp_screaming_core.name=Screaming Core
+item.comp_unstable.name=Collapsing Anguish Node
 
 item.techrot.rotplate_head1.name=Rotpiercer Skullplate
 item.techrot.rotplate_head1.tooltip=Allows breathing inside of techrot clouds & prevents vision impairment.

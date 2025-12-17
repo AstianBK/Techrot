@@ -1,0 +1,13 @@
+{
+  "name": "Collapsing Anguish Node",
+  "category": "components",
+  "icon": "techrot:comp_unstable",
+  "priority": false,
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "techrot:comp_unstable",
+      "text": "The netherite star amplifies every surge, converting raw emotional stress into catastrophic energy output capable of sustaining systems that would otherwise be impossible."
+    }
+  ]
+}

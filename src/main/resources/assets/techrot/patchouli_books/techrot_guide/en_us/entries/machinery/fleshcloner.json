@@ -7,7 +7,7 @@
     {
       "type": "crafting",
       "recipe": "techrot:biofleshcloner",
-      "text": "Transforms rot cubes into the deposited genome's raw meat, tastes and looks identical to the real deal."
+      "text": "Consumes rot cubes and the given genome to reconstruct flesh, producing raw meat that perfectly matches the donor in texture smell and taste."
     }
   ]
 }
