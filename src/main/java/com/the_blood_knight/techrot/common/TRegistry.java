@@ -101,13 +101,12 @@ public class TRegistry {
     public static final RotrendReaverItem ROTCLAWS = new RotrendReaverItem("rotclaws");
 
     //COMPONENTS
-
     public static final ItemBase COMP_AGONY_SYNAPSE = new ItemBase("comp_agony_synapse");
     public static final ItemBase COMP_NECROTIC_COIL = new ItemBase("comp_necrotic_coil");
     public static final ItemBase COMP_SCREAMING_CORE = new ItemBase("comp_screaming_core");
     public static final CompUnstableItem COMP_UNSTABLE = new CompUnstableItem("comp_unstable");
 
-// IMPLANTS
+    // IMPLANTS
 
     public static final ImplantItemBase ROTPLATE_HEAD =
             new ImplantItemBase("rotplate_head1", 2);

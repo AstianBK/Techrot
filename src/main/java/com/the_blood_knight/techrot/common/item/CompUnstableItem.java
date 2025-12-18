@@ -63,7 +63,6 @@ public class CompUnstableItem extends ItemBase {
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
         tooltip.add(TextFormatting.DARK_RED + "Highly Unstable: will detonate violently after 7 seconds.");
-
     }
 
 }

@@ -101,6 +101,8 @@ public class BioPipeTransportItemBlock extends BlockTileBase{
         Pipe newPipe = this.updateDir(worldIn, pos, this.getStateFromMeta(meta), true,false);
         IBlockState state = newPipe.state;
         IBlockState sourceBlock = worldIn.getBlockState(pos.offset(facing.getOpposite()));
+        worldIn.playSound(null,pos.getX(),pos.getY(),pos.getZ(), TRSounds.BIOPIPE_BLOCK_PLACE,SoundCategory.PLAYERS,1.0F,1.0F);
+
         if (sourceBlock.getBlock() instanceof BlockTileBase || sourceBlock.getBlock() instanceof BlockChest){
             if(sourceBlock.getBlock() instanceof BioPipeTransportItemBlock){
                 Pipe pipe = (new BioPipeTransportItemBlock.Pipe(worldIn, pos.offset(facing.getOpposite()), sourceBlock));
@@ -112,7 +114,6 @@ public class BioPipeTransportItemBlock extends BlockTileBase{
             return worldIn.isRemote ? state : pipeSource.state;
         }
 
-        worldIn.playSound(null,pos.getX(),pos.getY(),pos.getZ(), TRSounds.BIOPIPE_BLOCK_PLACE,SoundCategory.PLAYERS,1.0F,1.0F);
 
         return state;
     }
