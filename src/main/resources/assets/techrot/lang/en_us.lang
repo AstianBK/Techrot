@@ -36,6 +36,9 @@ item.techrot.rotplate_arm1.tooltip=Allows operation of rotplate weaponry & incre
 item.techrot.rotplate_chest1.name=Pneumic Reactor
 item.techrot.rotplate_chest1.tooltip=Heals decaying hearts while inside techrot clouds, and grants infinite water breathing.
 
+item.techrot.rotplate_chest2.name=Rotplate Wings
+item.techrot.rotplate_chest2.tooltip=Experimental spinal wing assembly.
+
 tile.rotplate_ore.name=Rotplate Ore
 
 tile.biocube_block.name=Rot Cube

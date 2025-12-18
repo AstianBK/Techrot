@@ -116,6 +116,9 @@ public class TRegistry {
     public static final ImplantItemBase ROTPLATE_ARM =
             new ImplantItemBase("rotplate_arm1", 2);
 
+    public static final ImplantItemBase ROTPLATE_WINGS =
+            new ImplantItemBase("rotplate_chest2", 8);
+
     //EFFECT
     public static Potion TECHROT_EFFECT = new TechRotEffect();
 
@@ -146,7 +149,7 @@ public class TRegistry {
 
 
     public static void registerItems(IForgeRegistry<Item> registry) {
-        registry.registerAll(BIO_EXTRACTOR,BIO_CUBE,BIO_CHUNK,COMP_AGONY_SYNAPSE,COMP_NECROTIC_COIL,COMP_SCREAMING_CORE,COMP_UNSTABLE,ROTPLATE,ROTPLATE_HEAD,ROTPLATE_CHEST,ROTPLATE_ARM,TOXICLAUNCHER,ROTCLAWS,TOXIC_CANISTER,TOXIC_CANISTER_EMPTY);
+        registry.registerAll(BIO_EXTRACTOR,BIO_CUBE,BIO_CHUNK,COMP_AGONY_SYNAPSE,COMP_NECROTIC_COIL,COMP_SCREAMING_CORE,COMP_UNSTABLE,ROTPLATE,ROTPLATE_HEAD,ROTPLATE_CHEST,ROTPLATE_ARM,ROTPLATE_WINGS,TOXICLAUNCHER,ROTCLAWS,TOXIC_CANISTER,TOXIC_CANISTER_EMPTY);
     }
 
     public static void registerMobEffect(RegistryEvent.Register<Potion> potionRegister){

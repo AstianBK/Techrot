@@ -2,6 +2,7 @@ package com.the_blood_knight.techrot.client.layer;
 
 import com.the_blood_knight.techrot.Techrot;
 import com.the_blood_knight.techrot.client.model.TechrotArmImplant;
+import com.the_blood_knight.techrot.client.model.TechrotPackImplant;
 import com.the_blood_knight.techrot.common.TRegistry;
 import com.the_blood_knight.techrot.common.api.ITechRotPlayer;
 import net.minecraft.client.Minecraft;
@@ -21,6 +22,8 @@ public class ImplantLayer<T extends EntityPlayer> implements LayerRenderer<T> {
     public static final ResourceLocation TEXTURE = new ResourceLocation(Techrot.MODID,"textures/entity/bioarmors.png");
 
     public final TechrotArmImplant modelArm = new TechrotArmImplant();
+    public final TechrotPackImplant modelWings = new TechrotPackImplant();
+
     public final RenderPlayer renderer;
     public ImplantLayer(RenderPlayer renderer){
         this.renderer = renderer;
@@ -72,6 +75,32 @@ public class ImplantLayer<T extends EntityPlayer> implements LayerRenderer<T> {
 
                     GlStateManager.enableLighting();
                     GlStateManager.disableBlend();
+                }
+                if (stack.getItem() == TRegistry.ROTPLATE_WINGS) {
+                    Minecraft.getMinecraft().getTextureManager().bindTexture(TEXTURE);
+
+                    GlStateManager.pushMatrix();
+                    this.renderer.getMainModel().bipedBody.postRender(scale);
+
+                    modelWings.torsopack.render(scale);
+
+                    GlStateManager.enableBlend();
+
+                    int frame = (int) ((0.25F * (partialTicks + entitylivingbaseIn.ticksExisted)) % 7);
+                    ResourceLocation location = new ResourceLocation(
+                            Techrot.MODID,
+                            "textures/entity/bioglowing_" + frame + ".png"
+                    );
+                    Minecraft.getMinecraft().getTextureManager().bindTexture(location);
+
+                    GlStateManager.blendFunc(GL11.GL_ONE, GL11.GL_ONE);
+                    GlStateManager.disableLighting();
+
+                    modelWings.torsopack.render(scale);
+
+                    GlStateManager.enableLighting();
+                    GlStateManager.disableBlend();
+                    GlStateManager.popMatrix();
                 }
                 if(stack.getItem() == TRegistry.ROTPLATE_HEAD){
                     Minecraft.getMinecraft().getTextureManager().bindTexture(TEXTURE);

@@ -41,7 +41,9 @@ public class BioImplanterContainer extends Container {
         this.addSlotToContainer(new Slot(furnaceInventory, 2,112 ,18 ){
             @Override
             public boolean isItemValid(ItemStack stack) {
-                return stack.getItem() == TRegistry.ROTPLATE_CHEST;
+                return stack.getItem() == TRegistry.ROTPLATE_CHEST
+                        || stack.getItem() == TRegistry.ROTPLATE_WINGS;
+
             }
         });
         this.addSlotToContainer(new Slot(furnaceInventory, 3, 108,56 ){
@@ -104,6 +106,16 @@ public class BioImplanterContainer extends Container {
         this.currentNutrition = this.tileFurnace.getField(0);
     }
 
+    private int findFreeChestSlot(ITechRotPlayer cap) {
+        for (int i = 2; i < cap.getInventory().getSlots(); i++) {
+            if (cap.getInventory().getStackInSlot(i).isEmpty()) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
     {
         ItemStack itemstack = ItemStack.EMPTY;
@@ -129,13 +141,15 @@ public class BioImplanterContainer extends Container {
                     {
                         return ItemStack.EMPTY;
                     }
-                }else if (itemstack1.getItem() == TRegistry.ROTPLATE_CHEST)
+                }else if (itemstack1.getItem() == TRegistry.ROTPLATE_CHEST
+                        || itemstack1.getItem() == TRegistry.ROTPLATE_WINGS)
                 {
                     if (!this.mergeItemStack(itemstack1, 2, 3, false))
                     {
                         return ItemStack.EMPTY;
                     }
                 }
+
                 else if (index >= 4 && index < 32)
                 {
                     if (!this.mergeItemStack(itemstack1, 32, 41, false))
@@ -184,23 +198,38 @@ public class BioImplanterContainer extends Container {
 
             for (int i = 0; i < 6; i++) {
                 ItemStack stack = this.tileFurnace.getStackInSlot(i);
+                if (stack.isEmpty()) continue;
 
-                if (cap.getInventory().getStackInSlot(i).isEmpty() && !stack.isEmpty()) {
-                    cap.getInventory().setStackInSlot(i, stack.copy());
+                int targetSlot = -1;
 
-                    if (stack.getItem() == TRegistry.ROTPLATE_HEAD) {
-                        rot += 2;
-                    }
-                    if (stack.getItem() == TRegistry.ROTPLATE_ARM) {
-                        rot += 2;
-                    }
-                    if (stack.getItem() == TRegistry.ROTPLATE_CHEST) {
-                        rot += 6;
-                    }
 
+                if (stack.getItem() == TRegistry.ROTPLATE_HEAD) {
+                    targetSlot = 0;
+                    rot += 2;
+                }
+
+
+                else if (stack.getItem() == TRegistry.ROTPLATE_ARM) {
+                    targetSlot = 1;
+                    rot += 2;
+                }
+
+                // CHEST IMPLANTS
+                else if (stack.getItem() == TRegistry.ROTPLATE_CHEST) {
+                    targetSlot = findFreeChestSlot(cap);
+                    rot += 6;
+                }
+                else if (stack.getItem() == TRegistry.ROTPLATE_WINGS) {
+                    targetSlot = findFreeChestSlot(cap);
+                    rot += 8;
+                }
+
+                if (targetSlot != -1 && cap.getInventory().getStackInSlot(targetSlot).isEmpty()) {
+                    cap.getInventory().setStackInSlot(targetSlot, stack.copy());
                     stack.shrink(1);
                 }
             }
+
 
             if (rot > 0) {
                 cap.setHeartRot(rot + currentRot);
@@ -227,6 +256,8 @@ public class BioImplanterContainer extends Container {
 
         }
     }
+
+
 }
 
 

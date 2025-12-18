@@ -33,7 +33,10 @@ public abstract class RenderPlayerMixin {
                 }
                 if(stack.getItem() == TRegistry.ROTPLATE_HEAD){
 
+                }if(stack.getItem() == TRegistry.ROTPLATE_WINGS){
+
                 }
+
             }
         }
     }
