@@ -14,8 +14,8 @@ public class BioImplanterTopBlock extends BlockTileBase {
 
     public BioImplanterTopBlock(Material material, String name) {
         super(material, name);
-        setHardness(3.0F);
-        setResistance(10.0F);
+        setHardness(85.0F);
+        setResistance(85.0F);
     }
 
     @Override

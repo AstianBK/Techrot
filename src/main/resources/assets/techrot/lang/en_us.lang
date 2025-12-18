@@ -30,14 +30,14 @@ item.comp_unstable.name=Collapsing Anguish Node
 item.techrot.rotplate_head1.name=Rotpiercer Skullplate
 item.techrot.rotplate_head1.tooltip=Allows breathing inside of techrot clouds & prevents vision impairment.
 
-item.techrot.rotplate_arm1.name=Torq-Rot Armature
+item.techrot.rotplate_arm1.name=Torq-Rot Arm
 item.techrot.rotplate_arm1.tooltip=Allows operation of rotplate weaponry & increases melee damage.
 
 item.techrot.rotplate_chest1.name=Pneumic Reactor
 item.techrot.rotplate_chest1.tooltip=Heals decaying hearts while inside techrot clouds, and grants infinite water breathing.
 
 item.techrot.rotplate_chest2.name=Seraphic Blight-Propulsor
-item.techrot.rotplate_chest2.tooltip=Grants constant high-speed flight.
+item.techrot.rotplate_chest2.tooltip=Grants constant high-speed flight while spewing out toxic fumes.
 
 tile.rotplate_ore.name=Rotplate Ore
 
