@@ -123,6 +123,7 @@ public class TechrotPlayer implements ITechRotPlayer {
                 if (this.fly) {
 
                     if(this.soundWings++>102){
+                        this.soundWings = 0;
                         player.playSound(TRSounds.ROTPLATE_WINGS_LOOP,1.0f,1.0f);
                     }
                     float rotY = (float) Math.toRadians(player.renderYawOffset);
