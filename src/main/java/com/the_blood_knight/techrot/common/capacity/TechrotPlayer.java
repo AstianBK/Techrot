@@ -78,7 +78,7 @@ public class TechrotPlayer implements ITechRotPlayer {
 
 
                     for (EntityLivingBase entity : player.world.getEntitiesWithinAABB(EntityLivingBase.class, this.flyingFog.getEntityBoundingBox())) {
-                        if (entity == player) continue; // skip owner explicitly
+                        if (entity == player) continue;
                         if (entity instanceof EntityPlayer && Util.hasTechrotHead((EntityPlayer) entity)) continue; // skip head-implanted players
                         if (!this.flyingFog.reapplicationDelayMap.containsKey(entity)) {
                             entity.addPotionEffect(new PotionEffect(TRegistry.TECHROT_EFFECT, 50, 0, false, true));
@@ -106,8 +106,6 @@ public class TechrotPlayer implements ITechRotPlayer {
                     this.firstSpace = player.ticksExisted;
                 }
 
-
-                // Flight motion & visual trail
                 if (this.fly) {
 
                     float rotY = (float) Math.toRadians(player.renderYawOffset);

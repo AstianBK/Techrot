@@ -73,20 +73,20 @@ public class TRegistry {
 
     //FUNCTIONAL-BLOCKS
 
-    public static final BlockBase BIOIMPLANTER = new BioImplanterBlock(Material.ROCK,"bioimplanter",false);
-    public static final BlockTileBase BIOIMPLANTER_TOP = new BioImplanterTopBlock(Material.ROCK,"bioimplantertop");
-    public static final BlockBase BIOFURNACE = new BioFurnaceBlock(false,Material.ROCK,"biofurnace");
-    public static final BlockBase LIT_BIOFURNACE = new BioFurnaceBlock(true,Material.ROCK,"lit_biofurnace").setCreativeTab(null);
-    public static final BlockBase BIOPASTEMAKER = new BioPastemakerBlock(Material.CACTUS,"biopastemaker",false);
-    public static final BlockBase LIT_BIOPASTEMAKER = new BioPastemakerBlock(Material.CACTUS,"lit_biopastemaker",true).setCreativeTab(null);
+    public static final BlockBase BIOIMPLANTER = new BioImplanterBlock(Material.IRON,"bioimplanter",false);
+    public static final BlockTileBase BIOIMPLANTER_TOP = new BioImplanterTopBlock(Material.IRON,"bioimplantertop");
+    public static final BlockBase BIOFURNACE = new BioFurnaceBlock(false,Material.IRON,"biofurnace");
+    public static final BlockBase LIT_BIOFURNACE = new BioFurnaceBlock(true,Material.IRON,"lit_biofurnace").setCreativeTab(null);
+    public static final BlockBase BIOPASTEMAKER = new BioPastemakerBlock(Material.IRON,"biopastemaker",false);
+    public static final BlockBase LIT_BIOPASTEMAKER = new BioPastemakerBlock(Material.IRON,"lit_biopastemaker",true).setCreativeTab(null);
 
-    public static final BlockBase BIOPIPE = new BioPipeBlock(Material.CACTUS,"biopipe");
-    public static final BlockBase BIOPIPE_TRANSPORT = new BioPipeTransportItemBlock(Material.CACTUS,"biopipe_transport");
+    public static final BlockBase BIOPIPE = new BioPipeBlock(Material.IRON,"biopipe");
 
-    public static final BlockBase BIOEGGMAKER = new BioEggMakerBlock(Material.CACTUS,"bioeggmaker",false);
-    public static final BlockBase LIT_BIOEGGMAKER = new BioEggMakerBlock(Material.CACTUS,"lit_bioeggmaker",true).setCreativeTab(null);
-    public static final BlockBase BIOFLESHCLONER = new BioFleshClonerBlock(Material.CACTUS,"biofleshcloner",false);
-    public static final BlockBase LIT_BIOFLESHCLONER = new BioFleshClonerBlock(Material.CACTUS,"lit_biofleshcloner",true).setCreativeTab(null);
+    // CUT-CONTENT public static final BlockBase BIOPIPE_TRANSPORT = new BioPipeTransportItemBlock(Material.CACTUS,"biopipe_transport");
+    public static final BlockBase BIOEGGMAKER = new BioEggMakerBlock(Material.IRON,"bioeggmaker",false);
+    public static final BlockBase LIT_BIOEGGMAKER = new BioEggMakerBlock(Material.IRON,"lit_bioeggmaker",true).setCreativeTab(null);
+    public static final BlockBase BIOFLESHCLONER = new BioFleshClonerBlock(Material.IRON,"biofleshcloner",false);
+    public static final BlockBase LIT_BIOFLESHCLONER = new BioFleshClonerBlock(Material.IRON,"lit_biofleshcloner",true).setCreativeTab(null);
 
     //ITEMS
     public static final BioExtractorItem BIO_EXTRACTOR = new BioExtractorItem("bio_extractor");
@@ -94,7 +94,7 @@ public class TRegistry {
     public static final ItemBase BIO_CHUNK = new ItemBase("bio_chunk");
     public static final ItemBase ROTPLATE = new ItemBase("rotplate");
 
-    public static final ItemBase BIO_WRENCH = new ItemBase("bio_wrench"); // CUT-CONTENT
+    // CUT-CONTENT public static final ItemBase BIO_WRENCH = new ItemBase("bio_wrench");
     public static final ToxicCanister TOXIC_CANISTER = new ToxicCanister("toxic_canister",true);
     public static final ToxicCanister TOXIC_CANISTER_EMPTY = new ToxicCanister("toxic_canister_empty",false);
     public static final ToxicLaucheritem TOXICLAUNCHER = new ToxicLaucheritem("toxiclauncher");
