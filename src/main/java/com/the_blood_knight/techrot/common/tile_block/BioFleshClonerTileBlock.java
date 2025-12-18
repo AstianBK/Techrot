@@ -60,7 +60,7 @@ public class BioFleshClonerTileBlock extends TileEntityLockable implements ITick
                     flag = true;
                     this.maxClonerTimer = 200;
                 }else {
-                    if(this.clonerTimer%10 == 0){
+                    if(this.clonerTimer%10 == 0  && this.clonerTimer>0){
                         this.currentNutrient-=5;
                     }
                     this.clonerTimer++;

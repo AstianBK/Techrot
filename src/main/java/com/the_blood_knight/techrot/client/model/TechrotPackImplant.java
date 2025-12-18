@@ -10,7 +10,7 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
 public class TechrotPackImplant extends ModelBase {
-	private final ModelRenderer truemain;
+	public final ModelRenderer truemain;
 	public final ModelRenderer head;
 	private final ModelRenderer cube_r1;
 	private final ModelRenderer cube_r2;
@@ -88,7 +88,7 @@ public class TechrotPackImplant extends ModelBase {
 		cube_r4.cubeList.add(new ModelBox(cube_r4, 112, 4, 0.0F, -2.0F, -4.0F, 0, 4, 8, 0.0F, true));
 
 		torsopack = new ModelRenderer(this);
-		torsopack.setRotationPoint(1.201F, -10.559F, -3.925F);
+		torsopack.setRotationPoint(0.0F, 0.0F, 24.0F);
 		truemain.addChild(torsopack);
 		
 
@@ -222,7 +222,47 @@ public class TechrotPackImplant extends ModelBase {
 	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
 		truemain.render(f5);
-		humanbody.render(f5);
+	}
+
+	public void renderRightArm(ModelRenderer arm){
+		this.right_arm.rotationPointX = arm.rotationPointX;
+		this.right_arm.rotationPointY = arm.rotationPointY;
+		this.right_arm.rotationPointZ = arm.rotationPointZ;
+
+		this.right_arm.offsetX = arm.offsetX;
+		this.right_arm.offsetY = arm.offsetY;
+		this.right_arm.offsetZ = arm.offsetZ;
+
+		this.right_arm.rotateAngleX = arm.rotateAngleX;
+		this.right_arm.rotateAngleY = arm.rotateAngleY;
+		this.right_arm.rotateAngleZ = arm.rotateAngleZ;
+	}
+
+	public void renderChest(ModelRenderer chest){
+		this.torso.rotationPointX = chest.rotationPointX;
+		this.torso.rotationPointY = chest.rotationPointY;
+		this.torso.rotationPointZ = chest.rotationPointZ;
+
+		this.torso.offsetX = chest.offsetX;
+		this.torso.offsetY = chest.offsetY;
+		this.torso.offsetZ = chest.offsetZ;
+
+		this.torso.rotateAngleX = chest.rotateAngleX;
+		this.torso.rotateAngleY = chest.rotateAngleY;
+		this.torso.rotateAngleZ = chest.rotateAngleZ;
+	}
+	public void renderHead(ModelRenderer head){
+		this.head.rotationPointX = head.rotationPointX;
+		this.head.rotationPointY = head.rotationPointY;
+		this.head.rotationPointZ = head.rotationPointZ;
+
+		this.head.offsetX = head.offsetX;
+		this.head.offsetY = head.offsetY;
+		this.head.offsetZ = head.offsetZ;
+
+		this.head.rotateAngleX = head.rotateAngleX;
+		this.head.rotateAngleY = head.rotateAngleY;
+		this.head.rotateAngleZ = head.rotateAngleZ;
 	}
 
 	public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
@@ -231,5 +271,18 @@ public class TechrotPackImplant extends ModelBase {
 		modelRenderer.rotateAngleZ = z;
 	}
 
+	public void copyPose(ModelRenderer bone,boolean isSneaking){
+		this.torsopack.rotationPointX = bone.rotationPointX;
+		this.torsopack.rotationPointY = bone.rotationPointY;
+		this.torsopack.rotationPointZ = bone.rotationPointZ;
+
+		this.torsopack.offsetX = bone.offsetX-0.45F;
+		this.torsopack.offsetY = bone.offsetY+(isSneaking ? 0.0F : 0.35F);
+		this.torsopack.offsetZ = bone.offsetZ+0.2F;
+
+		this.torsopack.rotateAngleX = bone.rotateAngleX;
+		this.torsopack.rotateAngleY = bone.rotateAngleY;
+		this.torsopack.rotateAngleZ = bone.rotateAngleZ;
+	}
 
 }

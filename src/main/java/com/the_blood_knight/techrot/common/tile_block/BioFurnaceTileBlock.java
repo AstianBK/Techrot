@@ -203,7 +203,7 @@ public class BioFurnaceTileBlock extends TileEntityLockable implements IBioConta
                 if (this.currentNutrition>0 && this.canSmelt()) {
                     ++this.cookTime;
 
-                    if(this.cookTime%10 == 0){
+                    if(this.cookTime%10 == 0  && this.cookTime>0){
                         this.currentNutrition-=5;
                     }
 

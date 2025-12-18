@@ -27,16 +27,8 @@ public abstract class RenderPlayerMixin {
                 ItemStack stack = cap.getInventory().getStackInSlot(i);
                 if(stack.getItem() == TRegistry.ROTPLATE_ARM){
                     getMainModel().bipedRightArm.showModel = false;
+                    return;
                 }
-                if(stack.getItem() == TRegistry.ROTPLATE_CHEST){
-
-                }
-                if(stack.getItem() == TRegistry.ROTPLATE_HEAD){
-
-                }if(stack.getItem() == TRegistry.ROTPLATE_WINGS){
-
-                }
-
             }
         }
     }

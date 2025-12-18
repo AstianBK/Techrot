@@ -43,8 +43,8 @@ public class ImplantLayer<T extends EntityPlayer> implements LayerRenderer<T> {
 
                 if(stack.getItem() == TRegistry.ROTPLATE_ARM){
                     Minecraft.getMinecraft().getTextureManager().bindTexture(TEXTURE);
-                    modelArm.renderRightArm(this.renderer.getMainModel().bipedRightArm);
-                    modelArm.right_arm.render(scale);
+                    modelWings.renderRightArm(this.renderer.getMainModel().bipedRightArm);
+                    modelWings.right_arm.render(scale);
                     hasArm = true;
                     GlStateManager.enableBlend();
                     int frame = (int) ((0.25F * (partialTicks+entitylivingbaseIn.ticksExisted)) % 7);
@@ -54,15 +54,15 @@ public class ImplantLayer<T extends EntityPlayer> implements LayerRenderer<T> {
                     GlStateManager.blendFunc(GL11.GL_ONE, GL11.GL_ONE); // additive glow
                     GlStateManager.disableLighting();
 
-                    modelArm.right_arm.render(scale);
+                    modelWings.right_arm.render(scale);
 
                     GlStateManager.enableLighting();
                     GlStateManager.disableBlend();
                 }
                 if(stack.getItem() == TRegistry.ROTPLATE_CHEST){
                     Minecraft.getMinecraft().getTextureManager().bindTexture(TEXTURE);
-                    modelArm.renderChest(this.renderer.getMainModel().bipedBody);
-                    modelArm.torso.render(scale);
+                    modelWings.renderChest(this.renderer.getMainModel().bipedBody);
+                    modelWings.torso.render(scale);
                     GlStateManager.enableBlend();
                     int frame = (int) ((0.25F * (partialTicks+entitylivingbaseIn.ticksExisted)) % 7);
                     ResourceLocation location = new ResourceLocation(Techrot.MODID,"textures/entity/bioglowing_"+frame+".png");
@@ -71,7 +71,7 @@ public class ImplantLayer<T extends EntityPlayer> implements LayerRenderer<T> {
                     GlStateManager.blendFunc(GL11.GL_ONE, GL11.GL_ONE); // additive glow
                     GlStateManager.disableLighting();
 
-                    modelArm.torso.render(scale);
+                    modelWings.torso.render(scale);
 
                     GlStateManager.enableLighting();
                     GlStateManager.disableBlend();
@@ -79,18 +79,18 @@ public class ImplantLayer<T extends EntityPlayer> implements LayerRenderer<T> {
                 if (stack.getItem() == TRegistry.ROTPLATE_WINGS) {
                     Minecraft.getMinecraft().getTextureManager().bindTexture(TEXTURE);
 
-                    GlStateManager.pushMatrix();
-                    this.renderer.getMainModel().bipedBody.postRender(scale);
+
+
+                    modelWings.copyPose(this.renderer.getMainModel().bipedBody,entitylivingbaseIn.isSneaking());
 
                     modelWings.torsopack.render(scale);
 
                     GlStateManager.enableBlend();
 
-                    int frame = (int) ((0.25F * (partialTicks + entitylivingbaseIn.ticksExisted)) % 7);
-                    ResourceLocation location = new ResourceLocation(
-                            Techrot.MODID,
-                            "textures/entity/bioglowing_" + frame + ".png"
-                    );
+                    int frame = (int) ((0.25F * (partialTicks+entitylivingbaseIn.ticksExisted)) % 7);
+
+                    ResourceLocation location = new ResourceLocation(Techrot.MODID,"textures/entity/bioglowing_"+frame+".png");
+
                     Minecraft.getMinecraft().getTextureManager().bindTexture(location);
 
                     GlStateManager.blendFunc(GL11.GL_ONE, GL11.GL_ONE);
@@ -100,13 +100,13 @@ public class ImplantLayer<T extends EntityPlayer> implements LayerRenderer<T> {
 
                     GlStateManager.enableLighting();
                     GlStateManager.disableBlend();
-                    GlStateManager.popMatrix();
+
                 }
                 if(stack.getItem() == TRegistry.ROTPLATE_HEAD){
                     Minecraft.getMinecraft().getTextureManager().bindTexture(TEXTURE);
 
-                    modelArm.renderHead(this.renderer.getMainModel().bipedHead);
-                    modelArm.head.render(scale);
+                    modelWings.renderHead(this.renderer.getMainModel().bipedHead);
+                    modelWings.head.render(scale);
                     GlStateManager.enableBlend();
 
                     int frame = (int) ((0.25F * (partialTicks+entitylivingbaseIn.ticksExisted)) % 7);
@@ -118,7 +118,7 @@ public class ImplantLayer<T extends EntityPlayer> implements LayerRenderer<T> {
                     GlStateManager.blendFunc(GL11.GL_ONE, GL11.GL_ONE); // additive glow
                     GlStateManager.disableLighting();
 
-                    modelArm.head.render(scale);
+                    modelWings.head.render(scale);
 
                     GlStateManager.enableLighting();
                     GlStateManager.disableBlend();
@@ -138,7 +138,7 @@ public class ImplantLayer<T extends EntityPlayer> implements LayerRenderer<T> {
                 GlStateManager.translate(0.0F, 0.2F, 0.0F);
             }
 
-            this.modelArm.right_arm.postRender(0.0625F);
+            this.modelWings.right_arm.postRender(0.0625F);
             GlStateManager.rotate(-90.0F, 1.0F, 0.0F, 0.0F);
             GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
             boolean flag = p_renderHeldItem_4_ == EnumHandSide.LEFT;

@@ -65,7 +65,7 @@ public class BioEggMakerTileBlock extends TileEntityLockable implements IBioCont
                     flag = true;
                     this.maxClonerTimer = 200;
                 }else {
-                    if(this.clonerTimer%10 == 0){
+                    if(this.clonerTimer % 10 == 0 && this.clonerTimer>0){
                         this.currentNutrient-=5;
                     }
                     this.clonerTimer++;
