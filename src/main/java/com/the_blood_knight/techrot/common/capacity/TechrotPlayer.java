@@ -9,6 +9,8 @@ import com.the_blood_knight.techrot.common.entity.ToxicFogEntity;
 import com.the_blood_knight.techrot.messager.PacketHandler;
 import com.the_blood_knight.techrot.messager.SyncDataPacket;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleFlame;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -108,7 +110,6 @@ public class TechrotPlayer implements ITechRotPlayer {
             if (Util.hasTechrotWings(player) && !player.capabilities.isCreativeMode) {
                 boolean jumpPressed = Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown();
 
-                // Start flying
                 if (jumpPressed && !this.fly) {
                     if (this.firstSpace - player.ticksExisted < 10) {
                         this.fly = true;
@@ -117,7 +118,6 @@ public class TechrotPlayer implements ITechRotPlayer {
                         player.capabilities.setFlySpeed(0.04F);
                         player.sendPlayerAbilities();
 
-                        // Start wing loop sound on client
                         if (player.world.isRemote && (wingLoopSound == null || wingLoopSound.isDonePlaying())) {
                             wingLoopSound = new WingLoopSound(player, TRSounds.ROTPLATE_WINGS_LOOP);
                             Minecraft.getMinecraft().getSoundHandler().playSound(wingLoopSound);
@@ -130,7 +130,6 @@ public class TechrotPlayer implements ITechRotPlayer {
                     this.firstSpace = player.ticksExisted;
                 }
 
-                // Flight logic + particles
                 if (this.fly) {
                     float rotY = (float) Math.toRadians(player.renderYawOffset);
                     double cos = MathHelper.cos(rotY);
@@ -139,14 +138,18 @@ public class TechrotPlayer implements ITechRotPlayer {
                     double zOffset = -cos * 0.43F;
 
                     Vec3d delta = new Vec3d(player.motionX, 0, player.motionZ).normalize().scale(0.1F);
+                    Particle particle = Minecraft.getMinecraft().effectRenderer.spawnEffectParticle(EnumParticleTypes.FLAME.getParticleID(), player.posX + xOffset, player.posY + 0.65F, player.posZ + zOffset, -delta.x, -0.1F, -delta.z);
 
                     for (int i = 0; i < 4; i++) {
+                        if(particle!=null){
+                            particle.setRBGColorF(125.0f/255.0F,252.0f/255.0F,15.0f/255.0F);
+                            Minecraft.getMinecraft().effectRenderer.addEffect(particle);
+                        }
                         player.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, player.posX + xOffset, player.posY + 0.65F, player.posZ + zOffset, -delta.x, -0.1F, -delta.z);
-                        player.world.spawnParticle(EnumParticleTypes.FLAME, player.posX + xOffset, player.posY + 0.65F, player.posZ + zOffset, -delta.x, -0.1F, -delta.z);
+
                     }
                 }
 
-                // Stop flying
                 if (!jumpPressed || player.onGround) {
                     if (this.fly) {
                         this.fly = false;
@@ -155,7 +158,6 @@ public class TechrotPlayer implements ITechRotPlayer {
                         player.capabilities.setFlySpeed(0.05F);
                         player.sendPlayerAbilities();
 
-                        // Stop wing loop sound
                         if (wingLoopSound != null) {
                             wingLoopSound.stop();
                             wingLoopSound = null;
