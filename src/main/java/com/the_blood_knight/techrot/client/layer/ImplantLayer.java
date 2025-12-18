@@ -85,22 +85,23 @@ public class ImplantLayer<T extends EntityPlayer> implements LayerRenderer<T> {
 
                     modelWings.torsopack.render(scale);
 
-                    GlStateManager.enableBlend();
+                    if(cap.isFly()){
+                        GlStateManager.enableBlend();
 
-                    int frame = (int) ((0.25F * (partialTicks+entitylivingbaseIn.ticksExisted)) % 7);
+                        int frame = (int) ((0.25F * (partialTicks+entitylivingbaseIn.ticksExisted)) % 7);
 
-                    ResourceLocation location = new ResourceLocation(Techrot.MODID,"textures/entity/bioglowing_"+frame+".png");
+                        ResourceLocation location = new ResourceLocation(Techrot.MODID,"textures/entity/bioglowing_"+frame+".png");
 
-                    Minecraft.getMinecraft().getTextureManager().bindTexture(location);
+                        Minecraft.getMinecraft().getTextureManager().bindTexture(location);
 
-                    GlStateManager.blendFunc(GL11.GL_ONE, GL11.GL_ONE);
-                    GlStateManager.disableLighting();
+                        GlStateManager.blendFunc(GL11.GL_ONE, GL11.GL_ONE);
+                        GlStateManager.disableLighting();
 
-                    modelWings.torsopack.render(scale);
+                        modelWings.torsopack.render(scale);
 
-                    GlStateManager.enableLighting();
-                    GlStateManager.disableBlend();
-
+                        GlStateManager.enableLighting();
+                        GlStateManager.disableBlend();
+                    }
                 }
                 if(stack.getItem() == TRegistry.ROTPLATE_HEAD){
                     Minecraft.getMinecraft().getTextureManager().bindTexture(TEXTURE);
