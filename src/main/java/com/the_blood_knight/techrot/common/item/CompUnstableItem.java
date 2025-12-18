@@ -15,7 +15,7 @@ package com.the_blood_knight.techrot.common.item;
 
 public class CompUnstableItem extends ItemBase {
 
-    private static final int DETONATION_TICKS = 155;
+    private static final int DETONATION_TICKS = 130;
 
     public CompUnstableItem(String name) {
         super(name);
