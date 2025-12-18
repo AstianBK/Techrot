@@ -92,7 +92,7 @@ public class TechrotPlayer implements ITechRotPlayer {
                     }
                 }
                 if(!Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown() || player.onGround){
-                    if(player.capabilities.isFlying && this.fly){
+                    if(this.fly){
                         this.fly = false;
                         player.capabilities.isFlying = false;
                         player.capabilities.allowFlying = false;
