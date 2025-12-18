@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "gRg",
+    "gEg",
+    "gNg"
+  ],
+  "key": {
+    "g": {
+      "item": "techrot:rotplate"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "E": {
+      "item": "minecraft:elytra"
+    },
+    "N": {
+      "item": "techrot:comp_unstable"
+    }
+  },
+  "result": {
+    "item": "techrot:rotplate_chest2",
+    "count": 1
+  }
+}

@@ -4,6 +4,11 @@
             "techrot:block_interact"
         ]
     },
+    "rotplate_wings_loop": {
+        "sounds": [
+            "techrot:rotplate_wings_loop"
+        ]
+    },
     "implantedplayer_breathe": {
         "sounds": [
             "techrot:implantedplayer_breathe"

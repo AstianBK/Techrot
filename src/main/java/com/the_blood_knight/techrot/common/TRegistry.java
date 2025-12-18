@@ -114,7 +114,6 @@ public class TRegistry {
             new ImplantItemBase("rotplate_chest1", 6);
     public static final ImplantItemBase ROTPLATE_ARM =
             new ImplantItemBase("rotplate_arm1", 2);
-
     public static final ImplantItemBase ROTPLATE_WINGS =
             new ImplantItemBase("rotplate_chest2", 8);
 
