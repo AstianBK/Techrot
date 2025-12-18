@@ -41,6 +41,18 @@ public class TechrotPlayer implements ITechRotPlayer {
     public ToxicFogEntity flyingFog = null;
     public boolean dirty = false;
     public int firstSpace = 0;
+    public boolean startFly = false;
+    public int soundWings = 0;
+    @Override
+    public ToxicFogEntity getFog() {
+        return this.flyingFog;
+    }
+
+    @Override
+    public void clearFog() {
+        this.flyingFog = null;
+    }
+
     @Override
     public ItemStackHandler getInventory() {
         return inventory;
@@ -59,10 +71,10 @@ public class TechrotPlayer implements ITechRotPlayer {
                 PacketHandler.sendTo(new SyncDataPacket(tag), (EntityPlayerMP) player);
             }
             if (this.regTimer > 0) this.regTimer--;
-            if (this.fly) player.fallDistance = 0.0F;
 
 
-            if (this.fly && !player.world.isRemote) {
+            if (this.fly ) {
+                player.fallDistance = 0.0F;
                 if (this.flyingFog == null || this.flyingFog.isDead) {
                     this.flyingFog = new ToxicFogEntity(player.world, player.posX, player.posY, player.posZ, player);
                     this.flyingFog.setRadius(3.0F);
@@ -88,17 +100,19 @@ public class TechrotPlayer implements ITechRotPlayer {
                     }
                 }
             }
-
+        }else{
             if (Util.hasTechrotWings(player) && !player.capabilities.isCreativeMode) {
                 boolean jumpPressed = Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown();
 
-                if (jumpPressed && !this.fly) {
+                if (Minecraft.getMinecraft().gameSettings.keyBindJump.isPressed() && !this.fly) {
                     if (this.firstSpace - player.ticksExisted < 10) {
                         this.fly = true;
                         player.capabilities.isFlying = true;
                         player.capabilities.allowFlying = true;
                         player.capabilities.setFlySpeed(0.04F);
                         player.sendPlayerAbilities();
+
+                        player.playSound(TRSounds.ROTPLATE_WINGS_LOOP,1.0f,1.0f);
 
                         this.setDirty();
                         PacketHandler.sendToServer(new SyncDataPacket(getData()));
@@ -108,6 +122,9 @@ public class TechrotPlayer implements ITechRotPlayer {
 
                 if (this.fly) {
 
+                    if(this.soundWings++>102){
+                        player.playSound(TRSounds.ROTPLATE_WINGS_LOOP,1.0f,1.0f);
+                    }
                     float rotY = (float) Math.toRadians(player.renderYawOffset);
                     double cos = MathHelper.cos(rotY);
                     double sin = MathHelper.sin(rotY);
@@ -129,15 +146,8 @@ public class TechrotPlayer implements ITechRotPlayer {
                         player.capabilities.allowFlying = false;
                         player.capabilities.setFlySpeed(0.05F);
                         player.sendPlayerAbilities();
-
-                        this.setDirty();
                         PacketHandler.sendToServer(new SyncDataPacket(getData()));
 
-                        if (!player.world.isRemote && this.flyingFog != null && !this.flyingFog.isDead) {
-                            this.flyingFog.setRadiusPerTick(-0.05F);
-                            this.flyingFog.setDuration(60);
-                            this.flyingFog = null;
-                        }
                     }
                 }
             }

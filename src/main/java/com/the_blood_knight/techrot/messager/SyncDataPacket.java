@@ -51,11 +51,18 @@ public class SyncDataPacket implements IMessage {
                 EntityPlayerMP playerMP = ctx.getServerHandler().player;
                 ITechRotPlayer cap = playerMP.getCapability(Techrot.CapabilityRegistry.PLAYER_UPGRADES, null);
 
+                boolean change = cap.isFly();
                 cap.getInventory().deserializeNBT(message.data.getCompoundTag("Inv"));
                 cap.setHeartRot(message.data.getInteger("rotHealth"));
                 cap.setFly(message.data.getBoolean("fly"));
                 cap.setCombustible(message.data.getInteger("combustible"));
-
+                if(!cap.isFly() && cap.isFly()!=change){
+                    if (cap.getFog() != null && !cap.getFog().isDead) {
+                        cap.getFog().setRadiusPerTick(-0.05F);
+                        cap.getFog().setDuration(60);
+                        cap.clearFog();
+                    }
+                }
             }
             return null;
         }
