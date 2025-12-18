@@ -2,25 +2,25 @@
   "multipart": [
 
     {   "when": { "east": "true"},
-      "apply": { "model": "techrot:bioeast", "uvlock": false }
+      "apply": { "model": "techrot:extractbioeast", "uvlock": false }
     },
     {   "when": { "west": "true" },
-      "apply": { "model": "techrot:biowest", "uvlock": false }
+      "apply": { "model": "techrot:extractbiowest", "uvlock": false }
     },
     {   "when": { "north": "true"},
-      "apply": { "model": "techrot:bionorth", "uvlock": false }
+      "apply": { "model": "techrot:extractbionorth", "uvlock": false }
     },
     {   "when": {"south": "true"},
-      "apply": { "model": "techrot:biosouth", "uvlock": false }
+      "apply": { "model": "techrot:extractbiosouth", "uvlock": false }
     },
     {   "when": { "up": "true"},
-      "apply": { "model": "techrot:biopipeup", "uvlock": false }
+      "apply": { "model": "techrot:extractbiopipeup", "uvlock": false }
     },
     {   "when": {"down" :  "true"},
-      "apply": { "model": "techrot:biopipedown", "uvlock": false }
+      "apply": { "model": "techrot:extractbiopipedown", "uvlock": false }
     },
     {
-      "apply": { "model": "techrot:biomiddle", "uvlock": false }
+      "apply": { "model": "techrot:extractbiomiddle", "uvlock": false }
     }
   ]
 }

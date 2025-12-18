@@ -19,6 +19,13 @@ public class Util {
         }
         return false;
     }
+    public static boolean hasTechrotWings(EntityPlayer player){
+        ITechRotPlayer cap = player.getCapability(Techrot.CapabilityRegistry.PLAYER_UPGRADES,null);
+        if(cap!=null){
+            return findItem(cap.getInventory(), TRegistry.ROTPLATE_WINGS);
+        }
+        return false;
+    }
     public static boolean hasTechrotHead(EntityPlayer player){
         ITechRotPlayer cap = player.getCapability(Techrot.CapabilityRegistry.PLAYER_UPGRADES,null);
         if(cap!=null){

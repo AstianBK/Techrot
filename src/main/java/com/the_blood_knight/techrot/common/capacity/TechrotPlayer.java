@@ -1,6 +1,7 @@
 package com.the_blood_knight.techrot.common.capacity;
 
 import com.the_blood_knight.techrot.Techrot;
+import com.the_blood_knight.techrot.Util;
 import com.the_blood_knight.techrot.common.TRSounds;
 import com.the_blood_knight.techrot.common.api.ITechRotPlayer;
 import com.the_blood_knight.techrot.messager.PacketHandler;
@@ -23,9 +24,10 @@ public class TechrotPlayer implements ITechRotPlayer {
         }
 
     };
+    public int combustibleAmount = 0;
     public int regTimer = 0;
     public int heartRot = 0;
-
+    public boolean fly = false;
     public boolean dirty = false;
 
     @Override
@@ -45,6 +47,9 @@ public class TechrotPlayer implements ITechRotPlayer {
             }
             if(this.regTimer>0){
                 this.regTimer--;
+            }
+            if(Util.hasTechrotWings(player)){
+
             }
         }
     }
@@ -89,6 +94,9 @@ public class TechrotPlayer implements ITechRotPlayer {
         this.heartRot = value;
     }
 
+    public boolean canStartFly(){
+        return this.combustibleAmount >10;
+    }
     public static class TechrotPlayerStorage implements Capability.IStorage<ITechRotPlayer>{
         @Override
         public NBTBase writeNBT(Capability<ITechRotPlayer> capability, ITechRotPlayer instance, EnumFacing side) {
