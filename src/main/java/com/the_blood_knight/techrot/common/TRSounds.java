@@ -8,7 +8,7 @@ import net.minecraftforge.event.RegistryEvent;
 
 @SuppressWarnings("EmptyMethod")
 public class TRSounds {
-    public static final SoundEvent ROTPLATE_WINGS_LOOP = createSoundEvent("rotplate_wings_loop");
+    public static final SoundEvent ROTPLATE_WINGS_LOOP = new SoundEvent(new ResourceLocation("techrot:rotplate_wings_loop")).setRegistryName("rotplate_wings_loop");
     public static final SoundEvent IMPLANTEDPLAYER_BREATHE = createSoundEvent("implantedplayer_breathe");
 
     public static final SoundEvent IMPLANTEDPLAYER_TALK = createSoundEvent("implantedplayer_talk");

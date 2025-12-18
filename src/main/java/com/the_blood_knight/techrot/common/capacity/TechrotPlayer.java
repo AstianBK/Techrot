@@ -43,6 +43,10 @@ public class TechrotPlayer implements ITechRotPlayer {
     public int firstSpace = 0;
     public boolean startFly = false;
     public int soundWings = 0;
+
+    private WingLoopSound wingLoopSound = null;
+
+
     @Override
     public ToxicFogEntity getFog() {
         return this.flyingFog;
@@ -104,7 +108,8 @@ public class TechrotPlayer implements ITechRotPlayer {
             if (Util.hasTechrotWings(player) && !player.capabilities.isCreativeMode) {
                 boolean jumpPressed = Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown();
 
-                if (Minecraft.getMinecraft().gameSettings.keyBindJump.isPressed() && !this.fly) {
+                // Start flying
+                if (jumpPressed && !this.fly) {
                     if (this.firstSpace - player.ticksExisted < 10) {
                         this.fly = true;
                         player.capabilities.isFlying = true;
@@ -112,7 +117,12 @@ public class TechrotPlayer implements ITechRotPlayer {
                         player.capabilities.setFlySpeed(0.04F);
                         player.sendPlayerAbilities();
 
-                        player.playSound(TRSounds.ROTPLATE_WINGS_LOOP,1.0f,1.0f);
+                        // Start wing loop sound on client
+                        if (player.world.isRemote && (wingLoopSound == null || wingLoopSound.isDonePlaying())) {
+                            wingLoopSound = new WingLoopSound(player, TRSounds.ROTPLATE_WINGS_LOOP);
+                            Minecraft.getMinecraft().getSoundHandler().playSound(wingLoopSound);
+                        }
+
 
                         this.setDirty();
                         PacketHandler.sendToServer(new SyncDataPacket(getData()));
@@ -120,12 +130,8 @@ public class TechrotPlayer implements ITechRotPlayer {
                     this.firstSpace = player.ticksExisted;
                 }
 
+                // Flight logic + particles
                 if (this.fly) {
-
-                    if(this.soundWings++>102){
-                        this.soundWings = 0;
-                        player.playSound(TRSounds.ROTPLATE_WINGS_LOOP,1.0f,1.0f);
-                    }
                     float rotY = (float) Math.toRadians(player.renderYawOffset);
                     double cos = MathHelper.cos(rotY);
                     double sin = MathHelper.sin(rotY);
@@ -140,6 +146,7 @@ public class TechrotPlayer implements ITechRotPlayer {
                     }
                 }
 
+                // Stop flying
                 if (!jumpPressed || player.onGround) {
                     if (this.fly) {
                         this.fly = false;
@@ -147,8 +154,15 @@ public class TechrotPlayer implements ITechRotPlayer {
                         player.capabilities.allowFlying = false;
                         player.capabilities.setFlySpeed(0.05F);
                         player.sendPlayerAbilities();
-                        PacketHandler.sendToServer(new SyncDataPacket(getData()));
 
+                        // Stop wing loop sound
+                        if (wingLoopSound != null) {
+                            wingLoopSound.stop();
+                            wingLoopSound = null;
+                        }
+
+
+                        PacketHandler.sendToServer(new SyncDataPacket(getData()));
                     }
                 }
             }
