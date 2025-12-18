@@ -215,6 +215,7 @@ public class BioFurnaceBlock extends BlockTileBase {
 
 
     public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+        worldIn.playSound(null,pos.getX(),pos.getY(),pos.getZ(), TRSounds.ROTPLATE_BLOCK_BREAK,SoundCategory.BLOCKS,1.0F,1.0F);
         return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
     }
 
@@ -247,7 +248,7 @@ public class BioFurnaceBlock extends BlockTileBase {
                 worldIn.updateComparatorOutputLevel(pos, this);
             }
         }
-
+        worldIn.playSound(null,pos.getX(),pos.getY(),pos.getZ(), TRSounds.ROTPLATE_BLOCK_PLACE,SoundCategory.BLOCKS,1.0F,1.0F);
         super.breakBlock(worldIn, pos, state);
     }
 
