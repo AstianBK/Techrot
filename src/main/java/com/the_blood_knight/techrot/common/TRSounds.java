@@ -8,6 +8,7 @@ import net.minecraftforge.event.RegistryEvent;
 
 @SuppressWarnings("EmptyMethod")
 public class TRSounds {
+    public static final SoundEvent ROTPLATE_WINGS_LOOP = createSoundEvent("rotplate_wings_loop");
     public static final SoundEvent IMPLANTEDPLAYER_BREATHE = createSoundEvent("implantedplayer_breathe");
 
     public static final SoundEvent IMPLANTEDPLAYER_TALK = createSoundEvent("implantedplayer_talk");
@@ -43,6 +44,6 @@ public class TRSounds {
 
     public static void registerSound(RegistryEvent.Register<SoundEvent> event){
         event.getRegistry().registerAll(IMPLANTEDPLAYER_BREATHE,IMPLANTEDPLAYER_TALK,TOXICLAUNCHER_SHOOT,BIOFLESHCLONER_ACTIVE,BIOPASTEMAKER_ACTIVE,
-                BIOFURNACE_ACTIVE,BIOIMPLANTER_USE,BIOPIPE_BLOCK_BREAK,BIOPIPE_BLOCK_PLACE,BIO_EXTRACTOR_USE,BLOCK_INTERACT,ROTPLATE_BLOCK_BREAK,ROTPLATE_BLOCK_PLACE,ROTPLATE_BLOCK_STEP);
+                BIOFURNACE_ACTIVE,BIOIMPLANTER_USE,BIOPIPE_BLOCK_BREAK,BIOPIPE_BLOCK_PLACE,BIO_EXTRACTOR_USE,BLOCK_INTERACT,ROTPLATE_BLOCK_BREAK,ROTPLATE_BLOCK_PLACE,ROTPLATE_BLOCK_STEP,ROTPLATE_WINGS_LOOP);
     }
 }

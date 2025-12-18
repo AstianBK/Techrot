@@ -6,11 +6,13 @@ import com.the_blood_knight.techrot.common.TRegistry;
 import com.the_blood_knight.techrot.common.entity.ToxicBombEntity;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.*;
@@ -31,51 +33,91 @@ public class ToxicLaucheritem extends ItemBase{
         this.setMaxStackSize(1);
     }
 
+
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityPlayer, EnumHand hand) {
-        ItemStack handItem = entityPlayer.getHeldItem(hand);
-        if(handItem.getItem() == this) {
-            if(Util.hasTechrotArm(entityPlayer)){
-                ItemStack stack = getBullet(entityPlayer);
-                if(!stack.isEmpty()){
-                    world.playSound((EntityPlayer)null, entityPlayer.posX, entityPlayer.posY, entityPlayer.posZ,
-                            TRSounds.TOXICLAUNCHER_SHOOT, SoundCategory.NEUTRAL,
-                            1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 0.8F));
-
-                    if (!entityPlayer.capabilities.isCreativeMode) {
-                        stack.shrink(1);
-                        entityPlayer.getCooldownTracker().setCooldown(handItem.getItem(),20);
-                    }
-
-                    if(!world.isRemote){
-                        ToxicBombEntity bullet = new ToxicBombEntity(world,entityPlayer);
-                        bullet.shoot(entityPlayer,entityPlayer.rotationPitch ,entityPlayer.rotationYaw,0.0F,1.5F,1.0F);
-                        world.spawnEntity(bullet);
-                    }
-
-                    return ActionResult.newResult(EnumActionResult.SUCCESS,handItem);
-
-                } else {
-
-                    world.playSound(
-                            (EntityPlayer)null,
-                            entityPlayer.posX,
-                            entityPlayer.posY,
-                            entityPlayer.posZ,
-                            SoundEvents.ITEM_FLINTANDSTEEL_USE,
-                            SoundCategory.PLAYERS,
-                            1.0F,
-                            1.0F
-                    );
-                }
-
-            }else {
-                entityPlayer.sendMessage(new TextComponentString("I don't know how to use this"));
-            }
-
-        }
-        return new ActionResult<>(EnumActionResult.PASS,handItem);
+    public EnumAction getItemUseAction(ItemStack stack) {
+        return EnumAction.BOW;
     }
+
+    @Override
+    public int getMaxItemUseDuration(ItemStack stack) {
+        return 72000; // same as bow
+    }
+
+
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+        ItemStack stack = player.getHeldItem(hand);
+
+        if (!Util.hasTechrotArm(player)) {
+            if (!world.isRemote) {
+                player.sendMessage(new TextComponentString("I don't know how to use this"));
+            }
+            return new ActionResult<>(EnumActionResult.FAIL, stack);
+        }
+
+        ItemStack ammo = getBullet(player);
+        if (ammo.isEmpty()) {
+            world.playSound(
+                    null,
+                    player.posX,
+                    player.posY,
+                    player.posZ,
+                    SoundEvents.ITEM_FLINTANDSTEEL_USE,
+                    SoundCategory.PLAYERS,
+                    1.0F,
+                    1.0F
+            );
+            return new ActionResult<>(EnumActionResult.FAIL, stack);
+        }
+
+        player.setActiveHand(hand);
+        return new ActionResult<>(EnumActionResult.SUCCESS, stack);
+    }
+
+    @Override
+    public void onPlayerStoppedUsing(ItemStack stack, World world,
+                                     EntityLivingBase entityLiving, int timeLeft) {
+
+        if (!(entityLiving instanceof EntityPlayer)) return;
+
+        EntityPlayer player = (EntityPlayer) entityLiving;
+
+        if (!Util.hasTechrotArm(player)) return;
+
+        ItemStack ammo = getBullet(player);
+        if (ammo.isEmpty()) return;
+
+        world.playSound(
+                null,
+                player.posX,
+                player.posY,
+                player.posZ,
+                TRSounds.TOXICLAUNCHER_SHOOT,
+                SoundCategory.PLAYERS,
+                1.0F,
+                1.0F / (itemRand.nextFloat() * 0.4F + 0.8F)
+        );
+
+        if (!player.capabilities.isCreativeMode) {
+            ammo.shrink(1);
+            player.getCooldownTracker().setCooldown(this, 20);
+        }
+
+        if (!world.isRemote) {
+            ToxicBombEntity bullet = new ToxicBombEntity(world, player);
+            bullet.shoot(
+                    player,
+                    player.rotationPitch,
+                    player.rotationYaw,
+                    0.0F,
+                    1.5F,
+                    1.0F
+            );
+            world.spawnEntity(bullet);
+        }
+    }
+
 
     @Override
     public String getItemStackDisplayName(ItemStack stack) {

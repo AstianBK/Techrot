@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "techrot:item/bio_wrench"
+    "layer0": "techrot:item/rotplate_chest2"
   }
 }

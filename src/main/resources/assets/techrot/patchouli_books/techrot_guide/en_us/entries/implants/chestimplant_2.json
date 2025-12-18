@@ -1,0 +1,13 @@
+{
+  "name": "Seraphic Blight-Propulsor",
+  "category": "implants",
+  "icon": "techrot:rotplate_chest2",
+  "priority": false,
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "techrot:rotplate_chest2",
+      "text": "Encases elytras in rotplate, and with the help of the Anguish Node's power output it grants constant high-speed flight."
+    }
+  ]
+}
