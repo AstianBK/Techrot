@@ -45,10 +45,10 @@ public class ToxicFogEntity extends EntityAreaEffectCloud {
     private static final DataParameter<Integer> PARTICLE_PARAM_2;
     private PotionType potion;
     private final List<PotionEffect> effects;
-    private final Map<Entity, Integer> reapplicationDelayMap;
+    public final Map<Entity, Integer> reapplicationDelayMap;
     private int duration;
     private int waitTime;
-    private int reapplicationDelay;
+    public int reapplicationDelay;
     private boolean colorSet;
     private int durationOnUse;
     private float radiusOnUse;

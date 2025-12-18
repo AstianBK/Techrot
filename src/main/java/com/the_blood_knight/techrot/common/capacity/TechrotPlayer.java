@@ -3,14 +3,19 @@ package com.the_blood_knight.techrot.common.capacity;
 import com.the_blood_knight.techrot.Techrot;
 import com.the_blood_knight.techrot.Util;
 import com.the_blood_knight.techrot.common.TRSounds;
+import com.the_blood_knight.techrot.common.TRegistry;
 import com.the_blood_knight.techrot.common.api.ITechRotPlayer;
+import com.the_blood_knight.techrot.common.entity.ToxicFogEntity;
 import com.the_blood_knight.techrot.messager.PacketHandler;
 import com.the_blood_knight.techrot.messager.SyncDataPacket;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
@@ -32,6 +37,8 @@ public class TechrotPlayer implements ITechRotPlayer {
     public int regTimer = 0;
     public int heartRot = 0;
     public boolean fly = false;
+
+    public ToxicFogEntity flyingFog = null;
     public boolean dirty = false;
     public int firstSpace = 0;
     @Override
@@ -41,70 +48,104 @@ public class TechrotPlayer implements ITechRotPlayer {
 
     @Override
     public void tick(EntityPlayer player) {
-        if(!player.world.isRemote){
-            if(this.dirty){
-                this.dirty=false;
+        if (!player.world.isRemote) {
+            if (this.dirty) {
+                this.dirty = false;
                 NBTTagCompound tag = new NBTTagCompound();
                 tag.setTag("Inv", this.getInventory().serializeNBT());
-                tag.setInteger("rotHealth",this.getHeartRot());
-                tag.setBoolean("fly",this.isFly());
-                tag.setInteger("combustible",this.combustibleAmount);
+                tag.setInteger("rotHealth", this.getHeartRot());
+                tag.setBoolean("fly", this.isFly());
+                tag.setInteger("combustible", this.combustibleAmount);
                 PacketHandler.sendTo(new SyncDataPacket(tag), (EntityPlayerMP) player);
             }
-            if(this.regTimer>0){
-                this.regTimer--;
-            }
-            if(this.fly){
-                player.fallDistance = 0.0F;
-            }
+            if (this.regTimer > 0) this.regTimer--;
+            if (this.fly) player.fallDistance = 0.0F;
 
-        }else {
-            if(Util.hasTechrotWings(player) && !player.capabilities.isCreativeMode){
-                if(Minecraft.getMinecraft().gameSettings.keyBindJump.isPressed()){
-                    if(!this.fly){
-                        if(this.firstSpace-player.ticksExisted < 10){
-                            this.fly = true;
-                            player.capabilities.isFlying = true;
-                            player.capabilities.allowFlying = true;
-                            player.capabilities.setFlySpeed(0.01F);
-                            player.sendPlayerAbilities();
 
-                            PacketHandler.sendToServer(new SyncDataPacket(getData()));
+            if (this.fly && !player.world.isRemote) {
+                if (this.flyingFog == null || this.flyingFog.isDead) {
+                    this.flyingFog = new ToxicFogEntity(player.world, player.posX, player.posY, player.posZ, player);
+                    this.flyingFog.setRadius(3.0F);
+                    this.flyingFog.setDuration(9999);
+                    this.flyingFog.setRadiusPerTick(0.0F);
+                    player.world.spawnEntity(this.flyingFog);
+                } else {
+
+                    this.flyingFog.setLocationAndAngles(player.posX, player.posY, player.posZ, 0, 0);
+
+
+                    this.flyingFog.setEntityBoundingBox(this.flyingFog.getEntityBoundingBox().expand(0.5, 1.0, 0.5));
+
+
+                    for (EntityLivingBase entity : player.world.getEntitiesWithinAABB(EntityLivingBase.class, this.flyingFog.getEntityBoundingBox())) {
+                        if (entity == player) continue; // skip owner explicitly
+                        if (entity instanceof EntityPlayer && Util.hasTechrotHead((EntityPlayer) entity)) continue; // skip head-implanted players
+                        if (!this.flyingFog.reapplicationDelayMap.containsKey(entity)) {
+                            entity.addPotionEffect(new PotionEffect(TRegistry.TECHROT_EFFECT, 50, 0, false, true));
+                            entity.attackEntityFrom(DamageSource.GENERIC, 1);
+                            this.flyingFog.reapplicationDelayMap.put(entity, this.flyingFog.ticksExisted + this.flyingFog.reapplicationDelay);
                         }
-                        this.firstSpace = player.ticksExisted;
                     }
+                }
+            }
 
+            if (Util.hasTechrotWings(player) && !player.capabilities.isCreativeMode) {
+                boolean jumpPressed = Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown();
+
+                if (jumpPressed && !this.fly) {
+                    if (this.firstSpace - player.ticksExisted < 10) {
+                        this.fly = true;
+                        player.capabilities.isFlying = true;
+                        player.capabilities.allowFlying = true;
+                        player.capabilities.setFlySpeed(0.04F);
+                        player.sendPlayerAbilities();
+
+                        this.setDirty();
+                        PacketHandler.sendToServer(new SyncDataPacket(getData()));
+                    }
+                    this.firstSpace = player.ticksExisted;
                 }
 
-                if(this.fly){
+
+                // Flight motion & visual trail
+                if (this.fly) {
+
                     float rotY = (float) Math.toRadians(player.renderYawOffset);
                     double cos = MathHelper.cos(rotY);
                     double sin = MathHelper.sin(rotY);
-                    double xOffset = sin*0.43F;
-                    double zOffset = -cos*0.43F;
+                    double xOffset = sin * 0.43F;
+                    double zOffset = -cos * 0.43F;
 
-                    Vec3d delta = new Vec3d(player.motionX,0,player.motionZ).normalize().scale(0.1F);
+                    Vec3d delta = new Vec3d(player.motionX, 0, player.motionZ).normalize().scale(0.1F);
 
-                    for (int i = 0 ; i < 4 ; i++){
-                        player.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL,player.posX+xOffset,player.posY + 0.65F,player.posZ+zOffset,-delta.x,-0.1F,-delta.z);
-                        player.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL,player.posX+xOffset,player.posY + 0.65F,player.posZ+zOffset,-delta.x,-0.1F,-delta.z);
-                        player.world.spawnParticle(EnumParticleTypes.FLAME,player.posX+xOffset,player.posY + 0.65F,player.posZ+zOffset,-delta.x,-0.1F,-delta.z);
+                    for (int i = 0; i < 4; i++) {
+                        player.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, player.posX + xOffset, player.posY + 0.65F, player.posZ + zOffset, -delta.x, -0.1F, -delta.z);
+                        player.world.spawnParticle(EnumParticleTypes.FLAME, player.posX + xOffset, player.posY + 0.65F, player.posZ + zOffset, -delta.x, -0.1F, -delta.z);
                     }
                 }
-                if(!Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown() || player.onGround){
-                    if(this.fly){
+
+                if (!jumpPressed || player.onGround) {
+                    if (this.fly) {
                         this.fly = false;
                         player.capabilities.isFlying = false;
                         player.capabilities.allowFlying = false;
                         player.capabilities.setFlySpeed(0.05F);
                         player.sendPlayerAbilities();
+
+                        this.setDirty();
                         PacketHandler.sendToServer(new SyncDataPacket(getData()));
+
+                        if (!player.world.isRemote && this.flyingFog != null && !this.flyingFog.isDead) {
+                            this.flyingFog.setRadiusPerTick(-0.05F);
+                            this.flyingFog.setDuration(60);
+                            this.flyingFog = null;
+                        }
                     }
                 }
-
             }
         }
     }
+
     public NBTTagCompound getData(){
         NBTTagCompound tag = new NBTTagCompound();
 
