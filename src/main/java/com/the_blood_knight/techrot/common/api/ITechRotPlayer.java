@@ -8,7 +8,11 @@ public interface ITechRotPlayer {
     void tick(EntityPlayer player);
     void setDirty();
     int getHeartRot();
+    int getCombustible();
     int getRegTimer();
+    boolean isFly();
     void reg(EntityPlayer player);
     void setHeartRot(int value);
+    void setCombustible(int value);
+    void setFly(boolean value);
 }

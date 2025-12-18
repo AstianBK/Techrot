@@ -6,12 +6,16 @@ import com.the_blood_knight.techrot.common.TRSounds;
 import com.the_blood_knight.techrot.common.api.ITechRotPlayer;
 import com.the_blood_knight.techrot.messager.PacketHandler;
 import com.the_blood_knight.techrot.messager.SyncDataPacket;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.items.ItemStackHandler;
@@ -29,7 +33,7 @@ public class TechrotPlayer implements ITechRotPlayer {
     public int heartRot = 0;
     public boolean fly = false;
     public boolean dirty = false;
-
+    public int firstSpace = 0;
     @Override
     public ItemStackHandler getInventory() {
         return inventory;
@@ -43,15 +47,72 @@ public class TechrotPlayer implements ITechRotPlayer {
                 NBTTagCompound tag = new NBTTagCompound();
                 tag.setTag("Inv", this.getInventory().serializeNBT());
                 tag.setInteger("rotHealth",this.getHeartRot());
+                tag.setBoolean("fly",this.isFly());
+                tag.setInteger("combustible",this.combustibleAmount);
                 PacketHandler.sendTo(new SyncDataPacket(tag), (EntityPlayerMP) player);
             }
             if(this.regTimer>0){
                 this.regTimer--;
             }
-            if(Util.hasTechrotWings(player)){
+            if(this.fly){
+                player.fallDistance = 0.0F;
+            }
+
+        }else {
+            if(Util.hasTechrotWings(player) && !player.capabilities.isCreativeMode){
+                if(Minecraft.getMinecraft().gameSettings.keyBindJump.isPressed()){
+                    if(!this.fly){
+                        if(this.firstSpace-player.ticksExisted < 10){
+                            this.fly = true;
+                            player.capabilities.isFlying = true;
+                            player.capabilities.allowFlying = true;
+                            player.capabilities.setFlySpeed(0.01F);
+                            player.sendPlayerAbilities();
+
+                            PacketHandler.sendToServer(new SyncDataPacket(getData()));
+                        }
+                        this.firstSpace = player.ticksExisted;
+                    }
+
+                }
+
+                if(this.fly){
+                    float rotY = (float) Math.toRadians(player.renderYawOffset);
+                    double cos = MathHelper.cos(rotY);
+                    double sin = MathHelper.sin(rotY);
+                    double xOffset = sin*0.43F;
+                    double zOffset = -cos*0.43F;
+
+                    Vec3d delta = new Vec3d(player.motionX,0,player.motionZ).normalize().scale(0.1F);
+
+                    for (int i = 0 ; i < 4 ; i++){
+                        player.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL,player.posX+xOffset,player.posY + 0.65F,player.posZ+zOffset,-delta.x,-0.1F,-delta.z);
+                        player.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL,player.posX+xOffset,player.posY + 0.65F,player.posZ+zOffset,-delta.x,-0.1F,-delta.z);
+                        player.world.spawnParticle(EnumParticleTypes.FLAME,player.posX+xOffset,player.posY + 0.65F,player.posZ+zOffset,-delta.x,-0.1F,-delta.z);
+                    }
+                }
+                if(!Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown() || player.onGround){
+                    if(player.capabilities.isFlying && this.fly){
+                        this.fly = false;
+                        player.capabilities.isFlying = false;
+                        player.capabilities.allowFlying = false;
+                        player.capabilities.setFlySpeed(0.05F);
+                        player.sendPlayerAbilities();
+                        PacketHandler.sendToServer(new SyncDataPacket(getData()));
+                    }
+                }
 
             }
         }
+    }
+    public NBTTagCompound getData(){
+        NBTTagCompound tag = new NBTTagCompound();
+
+        tag.setTag("Inv", this.getInventory().serializeNBT());
+        tag.setInteger("rotHealth",this.getHeartRot());
+        tag.setBoolean("fly",this.isFly());
+        tag.setInteger("combustible",this.combustibleAmount);
+        return tag;
     }
     @Override
     public void setDirty() {
@@ -64,8 +125,18 @@ public class TechrotPlayer implements ITechRotPlayer {
     }
 
     @Override
+    public int getCombustible() {
+        return this.combustibleAmount;
+    }
+
+    @Override
     public int getRegTimer() {
         return this.regTimer;
+    }
+
+    @Override
+    public boolean isFly() {
+        return this.fly;
     }
 
     @Override
@@ -94,6 +165,16 @@ public class TechrotPlayer implements ITechRotPlayer {
         this.heartRot = value;
     }
 
+    @Override
+    public void setCombustible(int value) {
+        this.combustibleAmount = value;
+    }
+
+    @Override
+    public void setFly(boolean value) {
+        this.fly = value;
+    }
+
     public boolean canStartFly(){
         return this.combustibleAmount >10;
     }
@@ -103,6 +184,7 @@ public class TechrotPlayer implements ITechRotPlayer {
             NBTTagCompound tag = new NBTTagCompound();
             tag.setTag("Inv", instance.getInventory().serializeNBT());
             tag.setInteger("rotHealth",instance.getHeartRot());
+            tag.setBoolean("fly",instance.isFly());
             return tag;
         }
 
@@ -111,6 +193,7 @@ public class TechrotPlayer implements ITechRotPlayer {
             NBTTagCompound tag = (NBTTagCompound) nbt;
             instance.getInventory().deserializeNBT(tag.getCompoundTag("Inv"));
             instance.setHeartRot(tag.getInteger("rotHealth"));
+            instance.setFly(tag.getBoolean("fly"));
             instance.setDirty();
         }
     }

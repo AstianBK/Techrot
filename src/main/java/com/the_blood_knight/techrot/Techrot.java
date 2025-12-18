@@ -227,7 +227,7 @@ public class Techrot
         }
         @SubscribeEvent
         public static void onTick(TickEvent.PlayerTickEvent event) {
-            if (event.side != Side.SERVER) return;
+            if (event.phase == TickEvent.Phase.START) return;
 
             EntityPlayer player = event.player;
 
