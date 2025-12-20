@@ -252,6 +252,44 @@ public class RotGui extends Gui {
             }
         }
     }
+
+    @SubscribeEvent
+    public void onArmorPre(RenderGameOverlayEvent.Pre event) {
+        if (event.getType() != RenderGameOverlayEvent.ElementType.ARMOR) return;
+
+        event.setCanceled(true);
+
+        Minecraft mc = Minecraft.getMinecraft();
+        EntityPlayer player = mc.player;
+        if (player == null) return;
+
+        ScaledResolution sr = event.getResolution();
+        int left = sr.getScaledWidth() / 2 - 91;
+
+        int top = sr.getScaledHeight() - 49;
+
+        int armor = player.getTotalArmorValue();
+        mc.getTextureManager().bindTexture(Gui.ICONS);
+
+        for (int i = 0; i < 10; ++i) {
+            int x = left + i * 8;
+            int y = top;
+
+            if (armor > 0) {
+                if (armor >= 2) {
+                    drawTexturedModalRect(x, y, 34, 9, 9, 9);
+                    armor -= 2;
+                } else {
+                    drawTexturedModalRect(x, y, 25, 9, 9, 9);
+                    armor--;
+                }
+            } else {
+                drawTexturedModalRect(x, y, 16, 9, 9, 9);
+            }
+        }
+    }
+
+
     public static int ceil(float pValue) {
         int i = (int)pValue;
         return pValue > (float)i ? i + 1 : i;
